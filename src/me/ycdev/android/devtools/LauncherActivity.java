@@ -1,4 +1,4 @@
-package me.tyc.android.devtools;
+package me.ycdev.android.devtools;
 
 import android.app.Activity;
 import android.os.Bundle;
