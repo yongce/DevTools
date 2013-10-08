@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DevTools</string>
+
+    <string name="module_device_info">Device Info</string>
+
+    <string name="elapsed_time_hours">"%1$dh%2$dm"</string>
+    <string name="elapsed_time_minutes">"%1$dm%2$ds"</string>
+    <string name="elapsed_time_seconds">"%1$ds"</string>
 </resources>

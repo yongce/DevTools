@@ -1,0 +1,4 @@
+[submodule "submodules/AndroidInternalApis"]
+	path = submodules/AndroidInternalApis
+	url = https://github.com/yongce/AndroidInternalApis.git
+	branch = master
