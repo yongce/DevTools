@@ -3,7 +3,7 @@ package me.ycdev.android.devtools.device;
 import java.lang.reflect.Method;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.utils.Logger;
+import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.devtools.utils.ViewHelper;
 import me.ycdev.androidlib.internalapi.android.os.EnvironmentIA;
 import me.ycdev.androidlib.internalapi.android.os.SystemPropertiesIA;
@@ -155,7 +155,7 @@ public class DeviceInfoActivity extends Activity {
                         new Class[] { Point.class });
                 getRealSizeMethod.invoke(screen, new Object[] { pt });
             } catch (Exception e) {
-                Logger.w(TAG, "Unexpected exception: ", e);
+                AppLogger.w(TAG, "Unexpected exception: ", e);
                 screen.getSize(pt); // exclude window decor size (eg, statusbar)
             }
         } else {

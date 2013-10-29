@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="grid_padding">4dp</dimen>
+    <dimen name="grid_spacing">4dp</dimen>
+    <dimen name="list_padding_horizontal">6dp</dimen>
+    <dimen name="list_padding_vertical">4dp</dimen>
+</resources>

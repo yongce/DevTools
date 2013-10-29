@@ -1,4 +1,8 @@
-[submodule "submodules/AndroidInternalApis"]
-	path = submodules/AndroidInternalApis
-	url = https://github.com/yongce/AndroidInternalApis.git
-	branch = master
+[submodule "submodules/android-support-v7"]
+	path = submodules/android-support-v7
+    url = https://github.com/yongce/android-support-v7.git
+    branch = master
+[submodule "submodules/AndroidLib"]
+	path = submodules/AndroidLib
+    url = https://github.com/yongce/AndroidLib.git
+    branch = master

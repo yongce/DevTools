@@ -5,7 +5,7 @@ import java.io.StringWriter;
 
 import android.util.Log;
 
-public class Logger {
+public class AppLogger {
     public static final String  TAG = "DevTools";
 
     public static void d(String subTag, String msg) {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="grid_item_bkg_normal">#007777</color>
+    <color name="grid_item_bkg_focused">#008888</color>
+    <color name="grid_item_bkg_pressed">#00aaaa</color>
+    <color name="shared_uid_color">#00aa00</color>
+    <color name="sys_app_color">#aa0000</color>
+</resources>

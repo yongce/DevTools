@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/AppTheme.ListViewItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/app_uid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/app_name"
+        android:layout_marginLeft="10dp" />
+    <TextView
+        android:id="@+id/shared_uid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/app_uid"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/shared_uid_color"
+        android:gravity="right" />
+    <TextView
+        android:id="@+id/pkg_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_name" />
+</RelativeLayout>
