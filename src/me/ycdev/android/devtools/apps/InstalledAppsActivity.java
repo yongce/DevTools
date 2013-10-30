@@ -69,6 +69,8 @@ public class InstalledAppsActivity extends Activity implements AdapterView.OnIte
                 item.sharedUid = pkgInfo.sharedUserId;
                 item.isSysApp = (pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
                 item.appName = pkgInfo.applicationInfo.loadLabel(pm).toString();
+                item.versionName = pkgInfo.versionName;
+                item.versionCode = pkgInfo.versionCode;
                 result.add(item);
             }
             return result;
@@ -88,6 +90,8 @@ class AppInfoItem {
     public String sharedUid;
     public boolean isSysApp;
     public String appName;
+    public String versionName;
+    public int versionCode;
 
     @Override
     public String toString() {
@@ -97,6 +101,8 @@ class AppInfoItem {
         sb.append(", sharedUid: " + sharedUid);
         sb.append(", isSysApp: " + isSysApp);
         sb.append(", appName: " + appName);
+        sb.append(", versionName: " + versionName);
+        sb.append(", versionCode: " + versionCode);
         return sb.toString();
     }
 }
@@ -150,6 +156,8 @@ class InstalledAppsAdapter extends BaseAdapter {
             holder.sharedUidView.setTextColor(mSharedAppColor);
             holder.pkgNameView.setTextColor(mNormalAppColor);
         }
+        holder.versionNameView.setText(item.versionName);
+        holder.versionCodeView.setText(String.valueOf(item.versionCode));
         return holder.rootView;
     }
 
@@ -159,6 +167,8 @@ class InstalledAppsAdapter extends BaseAdapter {
         public TextView appUidView;
         public TextView sharedUidView;
         public TextView pkgNameView;
+        public TextView versionNameView;
+        public TextView versionCodeView;
 
         public ViewHolder(View convertView) {
             rootView = convertView;
@@ -166,6 +176,8 @@ class InstalledAppsAdapter extends BaseAdapter {
             appUidView = (TextView) rootView.findViewById(R.id.app_uid);
             sharedUidView = (TextView) rootView.findViewById(R.id.shared_uid);
             pkgNameView = (TextView) rootView.findViewById(R.id.pkg_name);
+            versionNameView = (TextView) rootView.findViewById(R.id.version_name);
+            versionCodeView = (TextView) rootView.findViewById(R.id.version_code);
         }
 
         public static ViewHolder get(View convertView, ViewGroup parent, LayoutInflater inflater) {
