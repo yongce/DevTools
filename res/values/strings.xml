@@ -19,4 +19,6 @@
     <string name="elapsed_time_hours">"%1$dh%2$dm"</string>
     <string name="elapsed_time_minutes">"%1$dm%2$ds"</string>
     <string name="elapsed_time_seconds">"%1$ds"</string>
+
+    <string name="apps_app_state">Disabled: %1$s, uninstalled: %2$s</string>
 </resources>
