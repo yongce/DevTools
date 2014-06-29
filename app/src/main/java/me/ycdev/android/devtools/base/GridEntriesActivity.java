@@ -5,11 +5,11 @@ import java.util.List;
 import me.ycdev.android.devtools.R;
 import me.ycdev.androidlib.utils.IntentUtils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +19,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public abstract class GridEntriesActivity extends Activity implements AdapterView.OnItemClickListener,
+public abstract class GridEntriesActivity extends ActionBarActivity implements AdapterView.OnItemClickListener,
         AdapterView.OnItemLongClickListener {
     public static class ActivityEntry {
         public Intent intent;

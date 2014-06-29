@@ -9,7 +9,6 @@ import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.androidlib.compat.ViewsCompat;
 import me.ycdev.androidlib.utils.PackageUtils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -17,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +26,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class InstalledAppsActivity extends Activity implements AdapterView.OnItemClickListener {
+public class InstalledAppsActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
     private static final String TAG = "InstalledAppsActivity";
 
     private ListView mListView;
