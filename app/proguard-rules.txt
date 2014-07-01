@@ -1,0 +1,6 @@
+# DevTools proguard-rules.txt
+
+-repackageclasses 'devtools'
+-allowaccessmodification
+
+-keepattributes SourceFile,LineNumberTable

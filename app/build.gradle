@@ -9,9 +9,24 @@ android {
         minSdkVersion 7
     }
 
+    signingConfigs {
+        androidTestKey {
+            storeFile file("apk.keystore")
+            storePassword "android"
+            keyAlias "android.testkey"
+            keyPassword "android"
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig signingConfigs.androidTestKey
+        }
+
         release {
-            runProguard false
+            signingConfig signingConfigs.androidTestKey
+
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
