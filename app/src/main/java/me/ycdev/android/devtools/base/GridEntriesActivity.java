@@ -71,11 +71,7 @@ public abstract class GridEntriesActivity extends ActionBarActivity implements A
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ActivityEntry item = mAdapter.getItem(position);
-        if (IntentUtils.canStartActivity(this, item.intent)) {
-            startActivity(item.intent);
-        } else {
-            Toast.makeText(this, item.desc, Toast.LENGTH_LONG).show();
-        }
+        onItemClicked(item);
     }
 
     @Override
@@ -94,6 +90,14 @@ public abstract class GridEntriesActivity extends ActionBarActivity implements A
     }
 
     protected abstract List<ActivityEntry> getIntents();
+
+    protected void onItemClicked(ActivityEntry item) {
+        if (IntentUtils.canStartActivity(this, item.intent)) {
+            startActivity(item.intent);
+        } else {
+            Toast.makeText(this, item.desc, Toast.LENGTH_LONG).show();
+        }
+    }
 
     protected static class SystemEntriesAdapter extends BaseAdapter {
         private LayoutInflater mInflater;

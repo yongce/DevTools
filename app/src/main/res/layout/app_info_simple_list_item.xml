@@ -16,21 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/icon" />
     <TextView
-        android:id="@+id/app_uid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/app_name"
-        android:layout_marginLeft="10dp" />
-    <TextView
-        android:id="@+id/shared_uid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/app_uid"
-        android:layout_marginLeft="10dp"
-        android:layout_alignParentRight="true"
-        android:textColor="@color/apps_shared_uid_color"
-        android:gravity="right" />
-    <TextView
         android:id="@+id/pkg_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

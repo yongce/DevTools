@@ -6,6 +6,7 @@ import java.util.List;
 
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.utils.AppLogger;
+import me.ycdev.android.devtools.utils.StringHelper;
 import me.ycdev.androidlib.compat.ViewsCompat;
 import me.ycdev.androidlib.utils.PackageUtils;
 
@@ -65,7 +66,7 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
         @Override
         protected List<AppInfoItem> doInBackground(Void... params) {
             PackageManager pm = mContext.getPackageManager();
-            List<PackageInfo> installedApps = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+            List<PackageInfo> installedApps = pm.getInstalledPackages(0);
             List<AppInfoItem> result = new ArrayList<AppInfoItem>(installedApps.size());
             for (PackageInfo pkgInfo : installedApps) {
                 AppInfoItem item = new AppInfoItem();
@@ -80,6 +81,8 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
                 item.icon = pkgInfo.applicationInfo.loadIcon(pm);
                 item.disabled = !PackageUtils.isPkgEnabled(mContext, pkgInfo.packageName);
                 item.uninstalled = !new File(pkgInfo.applicationInfo.sourceDir).exists();
+                item.installTime = pkgInfo.firstInstallTime;
+                item.updateTime = pkgInfo.lastUpdateTime;
                 result.add(item);
             }
             return result;
@@ -105,6 +108,8 @@ class AppInfoItem {
     public Drawable icon;
     public boolean disabled;
     public boolean uninstalled;
+    public long installTime;
+    public long updateTime;
 
     @Override
     public String toString() {
@@ -119,6 +124,8 @@ class AppInfoItem {
         sb.append(", apkPath: ").append(apkPath);
         sb.append(", disabled: ").append(disabled);
         sb.append(", uninstalled: ").append(uninstalled);
+        sb.append(", installTime: ").append(StringHelper.formatDateTime(installTime));
+        sb.append(", updateTime: ").append(StringHelper.formatDateTime(updateTime));
         return sb.toString();
     }
 }

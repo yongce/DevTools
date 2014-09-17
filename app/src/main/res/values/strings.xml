@@ -8,6 +8,8 @@
     <string name="module_system_utilities_desc">Explore the system utilities</string>
     <string name="module_installed_apps_title">Apps List</string>
     <string name="module_installed_apps_desc">Explore the installed apps info</string>
+    <string name="module_broadcast_tester_title">Broadcast Tester</string>
+    <string name="module_broadcast_tester_desc">Test system broadcasts</string>
 
     <string name="module_apps_ops_title">Apps Ops</string>
     <string name="module_apps_ops_desc">Supported by Android 4.3+, hidden in Settings</string>
@@ -21,4 +23,18 @@
     <string name="elapsed_time_seconds">"%1$ds"</string>
 
     <string name="apps_app_state">Disabled: %1$s, uninstalled: %2$s</string>
+
+    <string name="apps_sampler_module_title">Apps Sampler</string>
+    <string name="apps_sampler_module_desc">Sample apps CPU, memory and traffic usage</string>
+    <string name="apps_sampler_start_sampling">Start</string>
+    <string name="apps_sampler_start_sampling_toast">It\'s sampling now</string>
+    <string name="apps_sampler_stop_sampling">Stop</string>
+    <string name="apps_sampler_stop_sampling_toast">Sampling was stopped</string>
+    <string name="apps_sampler_clear_logs">Clear</string>
+    <string name="apps_sampler_clear_logs_toast">The logs were cleared</string>
+    <string name="apps_sampler_sample_interval">"Sample interval (seconds): "</string>
+    <string name="apps_sampler_sample_interval_input_toast">Please input valid sample interval!</string>
+    <string name="apps_sampler_apps_list_header">Apps to sample memory usage:</string>
+    <string name="apps_sampler_apps_list_select_toast">Please select apps which to sample!</string>
+
 </resources>
