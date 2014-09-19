@@ -143,7 +143,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
         builder.setOngoing(true);
         builder.setAutoCancel(false);
         builder.setWhen(System.currentTimeMillis());
-        //builder.setLargeIcon(icon)
+        //builder.setLargeIcon(appIcon)
         builder.setSmallIcon(R.drawable.ic_launcher);
         return builder.build();
     }

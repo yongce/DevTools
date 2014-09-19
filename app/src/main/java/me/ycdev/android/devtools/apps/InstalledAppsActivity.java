@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.ycdev.android.devtools.R;
+import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.devtools.utils.AppLogger;
-import me.ycdev.android.devtools.utils.StringHelper;
 import me.ycdev.androidlib.compat.ViewsCompat;
 import me.ycdev.androidlib.utils.PackageUtils;
 
@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -52,11 +51,11 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        AppInfoItem item = mAdapter.getItem(position);
+        AppInfo item = mAdapter.getItem(position);
         AppLogger.i(TAG, "clicked item: " + item.toString());
     }
 
-    private class AppsLoader extends AsyncTask<Void, Void, List<AppInfoItem>> {
+    private class AppsLoader extends AsyncTask<Void, Void, List<AppInfo>> {
         private Context mContext;
 
         public AppsLoader(Context cxt) {
@@ -64,12 +63,12 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
         }
 
         @Override
-        protected List<AppInfoItem> doInBackground(Void... params) {
+        protected List<AppInfo> doInBackground(Void... params) {
             PackageManager pm = mContext.getPackageManager();
             List<PackageInfo> installedApps = pm.getInstalledPackages(0);
-            List<AppInfoItem> result = new ArrayList<AppInfoItem>(installedApps.size());
+            List<AppInfo> result = new ArrayList<AppInfo>(installedApps.size());
             for (PackageInfo pkgInfo : installedApps) {
-                AppInfoItem item = new AppInfoItem();
+                AppInfo item = new AppInfo();
                 item.pkgName = pkgInfo.packageName;
                 item.appUid = pkgInfo.applicationInfo.uid;
                 item.sharedUid = pkgInfo.sharedUserId;
@@ -78,9 +77,9 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
                 item.versionName = pkgInfo.versionName;
                 item.versionCode = pkgInfo.versionCode;
                 item.apkPath = pkgInfo.applicationInfo.sourceDir;
-                item.icon = pkgInfo.applicationInfo.loadIcon(pm);
-                item.disabled = !PackageUtils.isPkgEnabled(mContext, pkgInfo.packageName);
-                item.uninstalled = !new File(pkgInfo.applicationInfo.sourceDir).exists();
+                item.appIcon = pkgInfo.applicationInfo.loadIcon(pm);
+                item.isDisabled = !PackageUtils.isPkgEnabled(mContext, pkgInfo.packageName);
+                item.isUninstalled = !new File(pkgInfo.applicationInfo.sourceDir).exists();
                 item.installTime = pkgInfo.firstInstallTime;
                 item.updateTime = pkgInfo.lastUpdateTime;
                 result.add(item);
@@ -89,45 +88,11 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
         }
 
         @Override
-        protected void onPostExecute(List<AppInfoItem> result) {
+        protected void onPostExecute(List<AppInfo> result) {
             mAdapter.setData(result);
         }
     }
 
-}
-
-class AppInfoItem {
-    public String pkgName;
-    public int appUid;
-    public String sharedUid;
-    public boolean isSysApp;
-    public String appName;
-    public String versionName;
-    public int versionCode;
-    public String apkPath;
-    public Drawable icon;
-    public boolean disabled;
-    public boolean uninstalled;
-    public long installTime;
-    public long updateTime;
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("pkgName: ").append(pkgName);
-        sb.append(", appUid: ").append(appUid);
-        sb.append(", sharedUid: ").append(sharedUid);
-        sb.append(", isSysApp: ").append(isSysApp);
-        sb.append(", appName: ").append(appName);
-        sb.append(", versionName: ").append(versionName);
-        sb.append(", versionCode: ").append(versionCode);
-        sb.append(", apkPath: ").append(apkPath);
-        sb.append(", disabled: ").append(disabled);
-        sb.append(", uninstalled: ").append(uninstalled);
-        sb.append(", installTime: ").append(StringHelper.formatDateTime(installTime));
-        sb.append(", updateTime: ").append(StringHelper.formatDateTime(updateTime));
-        return sb.toString();
-    }
 }
 
 class InstalledAppsAdapter extends BaseAdapter {
@@ -136,7 +101,7 @@ class InstalledAppsAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mInflater;
-    private List<AppInfoItem> mList;
+    private List<AppInfo> mList;
     private int mSysAppColor;
     private int mNormalAppColor;
     private int mSharedAppColor;
@@ -151,7 +116,7 @@ class InstalledAppsAdapter extends BaseAdapter {
         mUnavailableColor = cxt.getResources().getColor(R.color.apps_unavailable_color);
     }
 
-    public void setData(List<AppInfoItem> list) {
+    public void setData(List<AppInfo> list) {
         mList = list;
         notifyDataSetChanged();
     }
@@ -162,7 +127,7 @@ class InstalledAppsAdapter extends BaseAdapter {
     }
 
     @Override
-    public AppInfoItem getItem(int position) {
+    public AppInfo getItem(int position) {
         return mList.get(position);
     }
 
@@ -173,9 +138,9 @@ class InstalledAppsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        AppInfoItem item = getItem(position);
+        AppInfo item = getItem(position);
         ViewHolder holder = ViewHolder.get(convertView, parent, mInflater);
-        holder.iconView.setImageDrawable(item.icon);
+        holder.iconView.setImageDrawable(item.appIcon);
         holder.appNameView.setText(item.appName);
         holder.appUidView.setText(String.valueOf(item.appUid));
         holder.sharedUidView.setText(item.sharedUid);
@@ -191,9 +156,9 @@ class InstalledAppsAdapter extends BaseAdapter {
         holder.apkPathView.setText(item.apkPath);
 
         String stateStr = mContext.getString(R.string.apps_app_state,
-                String.valueOf(item.disabled), String.valueOf(item.uninstalled));
+                String.valueOf(item.isDisabled), String.valueOf(item.isUninstalled));
         holder.stateView.setText(stateStr);
-        if (item.disabled || item.uninstalled) {
+        if (item.isDisabled || item.isUninstalled) {
             ViewsCompat.setImageViewAlpha(holder.iconView, ALPHA_DISABLED);
             holder.stateView.setTextColor(mUnavailableColor);
         } else {
