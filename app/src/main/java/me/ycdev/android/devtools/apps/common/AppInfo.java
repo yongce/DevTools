@@ -18,6 +18,7 @@ public class AppInfo {
     public boolean isSysApp;
     public boolean isDisabled;
     public boolean isUninstalled;
+    public boolean isSelected;
 
     @Override
     public String toString() {
@@ -35,6 +36,7 @@ public class AppInfo {
         sb.append(", isSysApp: ").append(isSysApp);
         sb.append(", isDisabled: ").append(isDisabled);
         sb.append(", isUninstalled: ").append(isUninstalled);
+        sb.append(", isSelected: ").append(isSelected);
         sb.append("]");
         return sb.toString();
     }

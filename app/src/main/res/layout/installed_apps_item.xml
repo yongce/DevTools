@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/app_icon"
         android:layout_width="@dimen/app_icon_size"
         android:layout_height="@dimen/app_icon_size"
         android:layout_marginRight="4dp"
@@ -14,7 +14,7 @@
         android:id="@+id/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/icon" />
+        android:layout_toRightOf="@id/app_icon" />
     <TextView
         android:id="@+id/app_uid"
         android:layout_width="wrap_content"

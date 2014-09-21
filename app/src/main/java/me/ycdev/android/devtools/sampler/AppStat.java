@@ -8,7 +8,7 @@ import me.ycdev.android.devtools.sampler.cpu.AppCpuStat;
 import me.ycdev.android.devtools.sampler.mem.AppMemStat;
 import me.ycdev.android.devtools.sampler.traffic.AppTrafficStat;
 
-public class AppStat {
+class AppStat {
     public String pkgName;
     public int uid;
     public HashSet<Integer> pidsSet = new HashSet<Integer>();

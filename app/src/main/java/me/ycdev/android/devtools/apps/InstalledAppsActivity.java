@@ -182,7 +182,7 @@ class InstalledAppsAdapter extends BaseAdapter {
 
         public ViewHolder(View convertView) {
             rootView = convertView;
-            iconView = (ImageView) rootView.findViewById(R.id.icon);
+            iconView = (ImageView) rootView.findViewById(R.id.app_icon);
             appNameView = (TextView) rootView.findViewById(R.id.app_name);
             appUidView = (TextView) rootView.findViewById(R.id.app_uid);
             sharedUidView = (TextView) rootView.findViewById(R.id.shared_uid);

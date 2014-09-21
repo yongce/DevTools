@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <TextView
         android:id="@+id/status"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <GridView
-        android:id="@+id/apps"
-        style="@style/AppTheme.GridView"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        tools:text="5 apps are selected" />
+
+    <View style="@style/AppTheme.HorizontalDivider" />
+
+    <ListView
+        android:id="@+id/list"
+        style="@style/AppTheme.ListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <View style="@style/AppTheme.HorizontalDivider" />
+
+    <Button
+        android:id="@+id/select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/apps_selector_btn_select" />
 </LinearLayout>

@@ -29,4 +29,10 @@
         <item name="android:paddingTop">@dimen/list_padding_vertical</item>
         <item name="android:paddingBottom">@dimen/list_padding_vertical</item>
     </style>
+
+    <style name="AppTheme.HorizontalDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/common_divider_color</item>
+    </style>
 </resources>

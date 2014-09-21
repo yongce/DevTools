@@ -24,6 +24,12 @@
 
     <string name="apps_app_state">Disabled: %1$s, uninstalled: %2$s</string>
 
+    <string name="apps_selector_title">Apps Selector</string>
+    <string name="apps_selector_status_no_apps_selected">No apps are selected</string>
+    <string name="apps_selector_status_one_app_selected">\"%1$s\" is selected</string>
+    <string name="apps_selector_status_multiple_apps_selected">%1$d apps are selected</string>
+    <string name="apps_selector_btn_select">Select</string>
+
     <string name="apps_sampler_module_title">Apps Sampler</string>
     <string name="apps_sampler_module_desc">Sample apps CPU, memory and traffic usage</string>
     <string name="apps_sampler_start_sampling">Start</string>
@@ -34,7 +40,9 @@
     <string name="apps_sampler_clear_logs_toast">The logs were cleared</string>
     <string name="apps_sampler_sample_interval">"Sample interval (seconds): "</string>
     <string name="apps_sampler_sample_interval_input_toast">Please input valid sample interval!</string>
-    <string name="apps_sampler_apps_list_header">Apps to sample memory usage:</string>
-    <string name="apps_sampler_apps_list_select_toast">Please select apps which to sample!</string>
+    <string name="apps_sampler_apps_list_header">The apps selected to sample:</string>
+    <string name="apps_sampler_apps_list_select">Select apps</string>
+    <string name="apps_sampler_no_apps_toast">Please select apps which to sample!</string>
+    <string name="apps_sampler_notification_ticker">Sampling the apps…</string>
 
 </resources>

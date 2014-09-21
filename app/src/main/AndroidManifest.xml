@@ -51,8 +51,14 @@
             android:label="@string/module_broadcast_tester_title" />
         <activity
             android:name=".sampler.AppsSamplerActivity"
-            android:label="@string/apps_sampler_module_title" />
+            android:label="@string/apps_sampler_module_title"
+            android:configChanges="orientation|screenSize" />
         <service android:name=".sampler.AppsSamplerService" />
+
+        <activity
+            android:name=".apps.selector.AppsSelectorActivity"
+            android:label="@string/apps_selector_title"
+            android:configChanges="orientation|screenSize" />
     </application>
 
 </manifest>

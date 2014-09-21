@@ -6,4 +6,6 @@
     <color name="apps_shared_uid_color">#008800</color>
     <color name="apps_sys_app_color">#0088ff</color>
     <color name="apps_unavailable_color">#880000</color>
+
+    <color name="common_divider_color">#00aaaa</color>
 </resources>

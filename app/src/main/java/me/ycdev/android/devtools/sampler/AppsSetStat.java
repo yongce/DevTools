@@ -15,7 +15,7 @@ import me.ycdev.android.devtools.sampler.mem.MemoryUtils;
 import me.ycdev.android.devtools.sampler.mem.ProcMemStat;
 import me.ycdev.android.devtools.sampler.traffic.TrafficUtils;
 
-public class AppsSetStat {
+class AppsSetStat {
     public long sampleTime; // in System.currentTimeMillis()
     public long clockTime; //
     public HashSet<String> targetApps = new HashSet<String>();
