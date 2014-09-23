@@ -19,11 +19,11 @@
             android:layout_margin="10dp"
             android:text="@string/apps_sampler_stop_sampling" />
         <Button
-            android:id="@+id/clear"
+            android:id="@+id/create_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="@string/apps_sampler_clear_logs" />
+            android:text="@string/apps_sampler_create_report" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,6 +42,11 @@
             android:singleLine="true"
             android:inputType="number" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/sample_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <View style="@style/AppTheme.HorizontalDivider" />
 

@@ -20,12 +20,12 @@ public class AppMemStat {
         return totalPss;
     }
 
-    public int getTotalRss() {
+    public int getTotalPrivate() {
         int totalRss = 0;
         final int N = procSetStats.size();
         for (int i = 0; i < N; i++) {
             ProcMemStat pidStat = procSetStats.valueAt(i);
-            totalRss += pidStat.memRss;
+            totalRss += pidStat.memPrivate;
         }
         return totalRss;
     }

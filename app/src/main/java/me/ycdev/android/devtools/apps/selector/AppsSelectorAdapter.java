@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -63,6 +64,12 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {
             return it.next();
         }
         return null;
+    }
+
+    @Override
+    public void setData(List<AppInfo> data) {
+        super.setData(data);
+        Collections.sort(mList, new AppInfo.AppNameComparator());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.ycdev.android.devtools.sampler;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 class SampleTaskInfo {
@@ -8,5 +9,9 @@ class SampleTaskInfo {
     public long startTime;
     public long sampleClockTime;
     public int sampleCount;
+
     public boolean isSampling;
+    public ArrayList<FileWriter> fileWriters;
+    public AppsSetStat preAppsSetStat;
+
 }

@@ -18,7 +18,7 @@ public class MemoryUtils {
             Debug.MemoryInfo memInfo = pidsMemInfo[i];
             pidsMemStat[i] = new ProcMemStat(pid);
             pidsMemStat[i].memPss = memInfo.getTotalPss();
-            pidsMemStat[i].memRss = memInfo.getTotalPrivateDirty();
+            pidsMemStat[i].memPrivate = memInfo.getTotalPrivateDirty();
         }
         return pidsMemStat;
     }

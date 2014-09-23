@@ -4,5 +4,6 @@ public class Constants {
     // Notification IDs
     public static final int NOTIFICATION_ID_PROC_MEM_SAMPLER = 1;
 
-    public static String EXTERNAL_STORAGE_PATH_APP_ROOT = "yc/devtools";
+    public static final String EXTERNAL_STORAGE_PATH_APP_ROOT = "yc/devtools";
+    public static final String EXTERNAL_STORAGE_PATH_APPS_SAMPLER = EXTERNAL_STORAGE_PATH_APP_ROOT + "/sampler";
 }

@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -19,7 +20,7 @@ import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.androidlib.utils.PackageUtils;
 
-public class AppsSelectorActivity extends Activity implements AppsSelectorAdapter.SelectedAppsChangeListener,
+public class AppsSelectorActivity extends ActionBarActivity implements AppsSelectorAdapter.SelectedAppsChangeListener,
         View.OnClickListener {
     /** Type: boolean, default value: {@value #DEFAULT_MULTICHOICE} */
     public static final String EXTRA_MULTICHOICE = "extra.multichoice";

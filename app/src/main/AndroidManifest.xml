@@ -52,7 +52,8 @@
         <activity
             android:name=".sampler.AppsSamplerActivity"
             android:label="@string/apps_sampler_module_title"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden" />
         <service android:name=".sampler.AppsSamplerService" />
 
         <activity

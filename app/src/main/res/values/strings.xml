@@ -38,11 +38,14 @@
     <string name="apps_sampler_stop_sampling_toast">Sampling was stopped</string>
     <string name="apps_sampler_clear_logs">Clear</string>
     <string name="apps_sampler_clear_logs_toast">The logs were cleared</string>
+    <string name="apps_sampler_create_report">Report</string>
+    <string name="apps_sampler_create_report_toast">To create sample report</string>
     <string name="apps_sampler_sample_interval">"Sample interval (seconds): "</string>
     <string name="apps_sampler_sample_interval_input_toast">Please input valid sample interval!</string>
     <string name="apps_sampler_apps_list_header">The apps selected to sample:</string>
     <string name="apps_sampler_apps_list_select">Select apps</string>
     <string name="apps_sampler_no_apps_toast">Please select apps which to sample!</string>
     <string name="apps_sampler_notification_ticker">Sampling the apps…</string>
+    <string name="apps_sampler_sample_status">Start time: %1$s\nClock time (s): %2$d\nSample count: %3$d</string>
 
 </resources>

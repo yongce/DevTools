@@ -1,27 +1,39 @@
 package me.ycdev.android.devtools.sampler;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
+import me.ycdev.android.devtools.utils.StringHelper;
+import me.ycdev.androidlib.utils.WeakHandler;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
-
-public class AppsSamplerActivity extends Activity implements View.OnClickListener {
+public class AppsSamplerActivity extends ActionBarActivity implements View.OnClickListener, WeakHandler.MessageHandler {
     private static final int REQUEST_CODE_APPS_SELECTOR = 1;
+
+    private static final int MSG_REFRESH_SAMPLE_STATUS = 100;
 
     private Button mStartBtn;
     private Button mStopBtn;
-    private Button mClearBtn;
+    private Button mCreateReportBtn;
     private EditText mIntervalView;
+    private TextView mSampleStatusView;
     private ListView mListView;
     private Button mAppsSelectBtn;
 
@@ -29,6 +41,8 @@ public class AppsSamplerActivity extends Activity implements View.OnClickListene
 
     private ArrayList<String> mPkgNames = new ArrayList<String>();
     private int mInterval = 5; // seconds
+
+    private Handler mHandler = new WeakHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +63,12 @@ public class AppsSamplerActivity extends Activity implements View.OnClickListene
         mStartBtn.setOnClickListener(this);
         mStopBtn = (Button) findViewById(R.id.stop);
         mStopBtn.setOnClickListener(this);
-        mClearBtn = (Button) findViewById(R.id.clear);
-        mClearBtn.setOnClickListener(this);
+        mCreateReportBtn = (Button) findViewById(R.id.create_report);
+        mCreateReportBtn.setOnClickListener(this);
 
         mIntervalView = (EditText) findViewById(R.id.interval);
         mIntervalView.setText(String.valueOf(mInterval));
+        mSampleStatusView = (TextView) findViewById(R.id.sample_status);
 
         mListView = (ListView) findViewById(R.id.list);
         mAdapter = new AppsSelectedAdapter(getLayoutInflater());
@@ -61,24 +76,55 @@ public class AppsSamplerActivity extends Activity implements View.OnClickListene
         mAppsSelectBtn = (Button) findViewById(R.id.apps_select);
         mAppsSelectBtn.setOnClickListener(this);
 
-        refreshSamplingState(taskInfo != null && taskInfo.isSampling);
         if (mPkgNames.size() > 0) {
             updateSelectedApps(mPkgNames);
         }
+        refreshButtonsState(taskInfo != null && taskInfo.isSampling);
+        refreshSamplingInfo();
     }
 
-    private void refreshSamplingState(boolean isSampling) {
+    private void refreshButtonsState(boolean isSampling) {
         if (isSampling) {
             mStopBtn.setEnabled(true);
             mStartBtn.setEnabled(false);
-            mClearBtn.setEnabled(false);
             mAppsSelectBtn.setEnabled(false);
         } else {
             mStartBtn.setEnabled(true);
-            mClearBtn.setEnabled(true);
             mAppsSelectBtn.setEnabled(true);
             mStopBtn.setEnabled(false);
         }
+    }
+
+    private void refreshSamplingInfo() {
+        SampleTaskInfo taskInfo = AppsSamplerService.getLastSampleTask();
+        if (taskInfo != null && taskInfo.isSampling) {
+            String status = getString(R.string.apps_sampler_sample_status,
+                    StringHelper.formatDateTime(taskInfo.startTime),
+                    taskInfo.sampleClockTime / 1000,
+                    taskInfo.sampleCount);
+            mSampleStatusView.setText(status);
+            mHandler.sendEmptyMessageDelayed(MSG_REFRESH_SAMPLE_STATUS, mInterval * 1000);
+        } else {
+            refreshButtonsState(false);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.apps_sampler_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.clear) {
+            AppsSamplerService.clearLogs(this);
+            Toast.makeText(this, R.string.apps_sampler_clear_logs_toast,
+                    Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -97,18 +143,20 @@ public class AppsSamplerActivity extends Activity implements View.OnClickListene
             }
 
             mInterval = Integer.parseInt(intervalStr);
-            AppsSamplerService.startSamplerService(this, mPkgNames, mInterval);
+            AppsSamplerService.startSampler(this, mPkgNames, mInterval);
             Toast.makeText(this, R.string.apps_sampler_start_sampling_toast,
                     Toast.LENGTH_SHORT).show();
-            refreshSamplingState(true);
+            refreshButtonsState(true);
+            mHandler.sendEmptyMessageDelayed(MSG_REFRESH_SAMPLE_STATUS, mInterval * 1000);
         } else if (v == mStopBtn) {
-            AppsSamplerService.stopSamplerService(this);
+            AppsSamplerService.createSampleReport(this);
+            AppsSamplerService.stopSampler(this);
             Toast.makeText(this, R.string.apps_sampler_stop_sampling_toast,
                     Toast.LENGTH_SHORT).show();
-            refreshSamplingState(false);
-        } else if (v == mClearBtn) {
-            AppsSamplerService.clearLogs();
-            Toast.makeText(this, R.string.apps_sampler_clear_logs_toast,
+            refreshButtonsState(false);
+        } else if (v == mCreateReportBtn) {
+            AppsSamplerService.createSampleReport(this);
+            Toast.makeText(this, R.string.apps_sampler_create_report_toast,
                     Toast.LENGTH_SHORT).show();
         } else if (v == mAppsSelectBtn) {
             Intent intent = new Intent(this, AppsSelectorActivity.class);
@@ -136,5 +184,18 @@ public class AppsSamplerActivity extends Activity implements View.OnClickListene
             appsList.add(item);
         }
         mAdapter.setData(appsList);
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+        if (msg.what == MSG_REFRESH_SAMPLE_STATUS) {
+            refreshSamplingInfo();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mHandler.removeMessages(MSG_REFRESH_SAMPLE_STATUS);
+        super.onDestroy();
     }
 }

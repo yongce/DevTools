@@ -2,6 +2,9 @@ package me.ycdev.android.devtools.apps.common;
 
 import android.graphics.drawable.Drawable;
 
+import java.text.Collator;
+import java.util.Comparator;
+
 import me.ycdev.android.devtools.utils.StringHelper;
 
 public class AppInfo {
@@ -39,5 +42,34 @@ public class AppInfo {
         sb.append(", isSelected: ").append(isSelected);
         sb.append("]");
         return sb.toString();
+    }
+
+    public static class AppNameComparator implements Comparator<AppInfo> {
+        private Collator mCollator = Collator.getInstance();
+
+        @Override
+        public int compare(AppInfo lhs, AppInfo rhs) {
+            return mCollator.compare(lhs.appName, rhs.appName);
+        }
+    }
+
+    public static class PkgNameComparator implements Comparator<AppInfo> {
+        @Override
+        public int compare(AppInfo lhs, AppInfo rhs) {
+            return lhs.pkgName.compareTo(rhs.pkgName);
+        }
+    }
+
+    public static class InstallTimeComparator implements Comparator<AppInfo> {
+        @Override
+        public int compare(AppInfo lhs, AppInfo rhs) {
+            if (lhs.installTime < rhs.installTime) {
+                return -1;
+            } else if (lhs.installTime == rhs.installTime) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
     }
 }
