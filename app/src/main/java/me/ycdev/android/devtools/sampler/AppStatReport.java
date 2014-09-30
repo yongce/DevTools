@@ -6,6 +6,8 @@ import java.io.Writer;
 import me.ycdev.androidlib.utils.DateTimeUtils;
 
 public class AppStatReport {
+    public String sysTimeStampStart;
+    public String sysTimeStampEnd;
     public String pkgName;
     public int sampleCount;
     public long totalTimeUsage;
@@ -25,6 +27,7 @@ public class AppStatReport {
     }
 
     public void dumpStat(Writer writer) throws IOException {
+        writer.append("System time: ").append(sysTimeStampStart).append(" ~ ").append(sysTimeStampEnd).append("\n");
         writer.append("Package name: " + pkgName).append("\n");
         writer.append("Sample count: " + sampleCount).append("\n");
         String timeUsageStr = DateTimeUtils.getReadeableTimeUsage(totalTimeUsage);

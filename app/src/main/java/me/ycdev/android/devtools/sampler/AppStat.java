@@ -76,6 +76,7 @@ class AppStat {
         }
         String[] columns = statLine.split(STAT_FILE_COLUMNS_SEP);
         StatFileLine entry = new StatFileLine();
+        entry.sysTimeStamp = columns[0];
         entry.timeUsage = Long.parseLong(columns[1]);
         entry.cpuTime = Long.parseLong(columns[2]);
         entry.processCount = Integer.parseInt(columns[3]);

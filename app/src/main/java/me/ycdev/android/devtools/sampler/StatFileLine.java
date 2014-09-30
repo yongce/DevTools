@@ -12,6 +12,7 @@ import me.ycdev.android.devtools.utils.Constants;
 import me.ycdev.androidlib.utils.DateTimeUtils;
 
 public class StatFileLine {
+    public String sysTimeStamp;
     public long timeUsage;
     public long cpuTime;
     public int processCount;

@@ -339,6 +339,11 @@ public class AppsSamplerService extends Service implements Handler.Callback {
                         continue; // skip header line
                     }
 
+                    if (appReport.sysTimeStampStart == null) {
+                        appReport.sysTimeStampStart = entry.sysTimeStamp;
+                    }
+                    appReport.sysTimeStampEnd = entry.sysTimeStamp;
+
                     appReport.sampleCount++;
                     appReport.totalTimeUsage += entry.timeUsage;
                     appReport.totalCpuTime += entry.cpuTime;
