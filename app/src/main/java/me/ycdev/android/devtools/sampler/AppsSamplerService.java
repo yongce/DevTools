@@ -195,9 +195,9 @@ public class AppsSamplerService extends Service implements Handler.Callback {
 
             case MSG_CREATE_REPORT: {
                 if (sTaskInfo != null && sTaskInfo.isSampling) {
-                    createSampleReport(sTaskInfo);
+                    createSampleReport(this, sTaskInfo);
                 } else {
-                    createAllReports();
+                    createAllReports(this);
                     stopSelf(msg.arg1);
                 }
                 break;
@@ -326,7 +326,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
         stopForeground(true);
     }
 
-    private static void createSampleReport(SampleTaskInfo taskInfo) {
+    private static void createSampleReport(Context cxt, SampleTaskInfo taskInfo) {
         File sdRoot = Environment.getExternalStorageDirectory();
         File appDir = new File(sdRoot, Constants.EXTERNAL_STORAGE_PATH_APPS_SAMPLER);
         appDir.mkdirs();
@@ -376,7 +376,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
                     appReport.totalTrafficSend += entry.trafficSend;
                 }
                 if (appReport.sampleCount > 0) {
-                    appReport.dumpStat(writer);
+                    appReport.dumpStat(cxt, writer);
                 } else {
                     AppLogger.w(TAG, "no stats for " + appReport.pkgName);
                 }
@@ -389,7 +389,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
         }
     }
 
-    private static void createAllReports() {
+    private static void createAllReports(Context cxt) {
         File sdRoot = Environment.getExternalStorageDirectory();
         File appDir = new File(sdRoot, Constants.EXTERNAL_STORAGE_PATH_APPS_SAMPLER);
         File[] allFiles = appDir.listFiles();
@@ -426,7 +426,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
 
         // create all reports
         for (SampleTaskInfo taskInfo : allTasks.values()) {
-            createSampleReport(taskInfo);
+            createSampleReport(cxt, taskInfo);
         }
     }
 

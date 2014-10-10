@@ -1,5 +1,10 @@
 package me.ycdev.android.devtools.sampler;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
+
 import java.io.IOException;
 import java.io.Writer;
 
@@ -26,9 +31,19 @@ public class AppStatReport {
         this.pkgName = pkgName;
     }
 
-    public void dumpStat(Writer writer) throws IOException {
+    public void dumpStat(Context cxt, Writer writer) throws IOException {
+        String versionInfo = null;
+        try {
+            PackageInfo pkgInfo = cxt.getPackageManager().getPackageInfo(pkgName, 0);
+            versionInfo = pkgInfo.versionName + " & " + pkgInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         writer.append("System time: ").append(sysTimeStampStart).append(" ~ ").append(sysTimeStampEnd).append("\n");
         writer.append("Package name: " + pkgName).append("\n");
+        writer.append("Version: " + versionInfo).append("\n");
+        writer.append("Phone model: " + Build.MODEL).append("\n");
+        writer.append("Android OS: " + Build.VERSION.RELEASE).append("\n");
         writer.append("Sample count: " + sampleCount).append("\n");
         String timeUsageStr = DateTimeUtils.getReadeableTimeUsage(totalTimeUsage);
         writer.append("Time usage (ms): " + totalTimeUsage).append(", str: ").append(timeUsageStr).append("\n");
