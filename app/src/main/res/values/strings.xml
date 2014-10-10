@@ -42,6 +42,7 @@
     <string name="apps_sampler_create_report_toast">To create sample report</string>
     <string name="apps_sampler_sample_interval">"Sample interval (seconds): "</string>
     <string name="apps_sampler_sample_interval_input_toast">Please input valid sample interval!</string>
+    <string name="apps_sampler_sample_period">"Sample period (minutes): "</string>
     <string name="apps_sampler_apps_list_header">The apps selected to sample:</string>
     <string name="apps_sampler_apps_list_select">Select apps</string>
     <string name="apps_sampler_no_apps_toast">Please select apps which to sample!</string>

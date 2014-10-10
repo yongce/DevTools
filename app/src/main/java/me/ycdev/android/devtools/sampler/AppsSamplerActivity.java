@@ -33,6 +33,7 @@ public class AppsSamplerActivity extends ActionBarActivity implements View.OnCli
     private Button mStopBtn;
     private Button mCreateReportBtn;
     private EditText mIntervalView;
+    private EditText mPeriodView;
     private TextView mSampleStatusView;
     private ListView mListView;
     private Button mAppsSelectBtn;
@@ -41,6 +42,7 @@ public class AppsSamplerActivity extends ActionBarActivity implements View.OnCli
 
     private ArrayList<String> mPkgNames = new ArrayList<String>();
     private int mInterval = 5; // seconds
+    private int mPeriod = 0; // minutes, forever by default
 
     private Handler mHandler = new WeakHandler(this);
 
@@ -56,6 +58,7 @@ public class AppsSamplerActivity extends ActionBarActivity implements View.OnCli
         SampleTaskInfo taskInfo = AppsSamplerService.getLastSampleTask();
         if (taskInfo != null) {
             mInterval = taskInfo.sampleInterval;
+            mPeriod = taskInfo.samplePeriod;
             mPkgNames.addAll(taskInfo.pkgNames);
         }
 
@@ -68,6 +71,8 @@ public class AppsSamplerActivity extends ActionBarActivity implements View.OnCli
 
         mIntervalView = (EditText) findViewById(R.id.interval);
         mIntervalView.setText(String.valueOf(mInterval));
+        mPeriodView = (EditText) findViewById(R.id.period);
+        mPeriodView.setText(String.valueOf(mPeriod));
         mSampleStatusView = (TextView) findViewById(R.id.sample_status);
 
         mListView = (ListView) findViewById(R.id.list);
@@ -142,8 +147,12 @@ public class AppsSamplerActivity extends ActionBarActivity implements View.OnCli
                 return;
             }
 
+            String periodStr = mPeriodView.getText().toString();
+            if (periodStr.length() > 0) {
+                mPeriod = Integer.parseInt(periodStr);
+            }
             mInterval = Integer.parseInt(intervalStr);
-            AppsSamplerService.startSampler(this, mPkgNames, mInterval);
+            AppsSamplerService.startSampler(this, mPkgNames, mInterval, mPeriod);
             Toast.makeText(this, R.string.apps_sampler_start_sampling_toast,
                     Toast.LENGTH_SHORT).show();
             refreshButtonsState(true);

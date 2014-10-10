@@ -27,7 +27,6 @@ import me.ycdev.android.devtools.utils.Constants;
 import me.ycdev.android.devtools.utils.StringHelper;
 import me.ycdev.androidlib.utils.DateTimeUtils;
 import me.ycdev.androidlib.utils.IoUtils;
-import me.ycdev.androidlib.utils.StorageUtils;
 
 public class AppsSamplerService extends Service implements Handler.Callback {
     private static final String TAG = "AppsSamplerService";
@@ -39,6 +38,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
 
     private static final String EXTRA_PKG_NAMES = "extra.pkgs"; // ArrayList
     private static final String EXTRA_INTERVAL = "extra.interval"; // seconds
+    private static final String EXTRA_PERIOD = "extra.period"; // minutes
 
     private static final String FILENAME_TAG_STATS = "-stats-";
     private static final String FILENAME_TAG_REPORT = "-report";
@@ -56,11 +56,12 @@ public class AppsSamplerService extends Service implements Handler.Callback {
     private static SampleTaskInfo sTaskInfo;
 
     public static void startSampler(Context cxt, ArrayList<String> pkgNames,
-            int intervalSeconds) {
+            int intervalSeconds, int periodMinutes) {
         Intent intent = new Intent(cxt, AppsSamplerService.class);
         intent.setAction(ACTION_START_SAMPLER);
         intent.putExtra(EXTRA_PKG_NAMES, pkgNames);
         intent.putExtra(EXTRA_INTERVAL, intervalSeconds);
+        intent.putExtra(EXTRA_PERIOD, periodMinutes);
         cxt.startService(intent);
     }
 
@@ -112,9 +113,11 @@ public class AppsSamplerService extends Service implements Handler.Callback {
 
         String action = intent.getAction();
         if (action.equals(ACTION_START_SAMPLER)) {
-            ArrayList<String> pkgNames = intent.getStringArrayListExtra(EXTRA_PKG_NAMES);
-            int sampleInterval = intent.getIntExtra(EXTRA_INTERVAL, 0);
-            mHandler.obtainMessage(MSG_START_SAMPLER, startId, sampleInterval, pkgNames).sendToTarget();
+            SampleTaskInfo taskInfo = new SampleTaskInfo();
+            taskInfo.pkgNames = intent.getStringArrayListExtra(EXTRA_PKG_NAMES);
+            taskInfo.sampleInterval = intent.getIntExtra(EXTRA_INTERVAL, 0);
+            taskInfo.samplePeriod = intent.getIntExtra(EXTRA_PERIOD, 0);
+            mHandler.obtainMessage(MSG_START_SAMPLER, startId, 0, taskInfo).sendToTarget();
         } else if (action.equals(ACTION_STOP_SAMPLER)) {
             mHandler.obtainMessage(MSG_STOP_SAMPLER, startId, 0).sendToTarget();
         } else if (action.equals(ACTION_CREATE_REPORT)) {
@@ -168,13 +171,19 @@ public class AppsSamplerService extends Service implements Handler.Callback {
         boolean done = true;
         switch (msg.what) {
             case MSG_START_SAMPLER: {
-                doStartSampler(msg.arg1, msg.arg2, (ArrayList<String>)msg.obj);
+                doStartSampler(msg.arg1, (SampleTaskInfo)msg.obj);
                 break;
             }
 
             case MSG_SAMPLE_STATS: {
                 doSampleSnapshot(sTaskInfo);
-                mHandler.sendEmptyMessageDelayed(MSG_SAMPLE_STATS, sTaskInfo.sampleInterval * 1000);
+                if (sTaskInfo.samplePeriod == 0 ||
+                        System.currentTimeMillis() - sTaskInfo.startTime < sTaskInfo.samplePeriod * (60 * 1000)) {
+                    mHandler.sendEmptyMessageDelayed(MSG_SAMPLE_STATS, sTaskInfo.sampleInterval * 1000);
+                } else {
+                    createSampleReport(this);
+                    stopSampler(this);
+                }
                 break;
             }
 
@@ -212,13 +221,15 @@ public class AppsSamplerService extends Service implements Handler.Callback {
         return done;
     }
 
-    private void doStartSampler(int startId, int sampleInterval, ArrayList<String> pkgNames) {
+    private void doStartSampler(int startId, SampleTaskInfo taskInfo) {
         if (sTaskInfo != null && sTaskInfo.isSampling) {
             AppLogger.i(TAG, "the sampler is running, igonre the new request");
             return;
         }
 
-        if (pkgNames == null || pkgNames.size() == 0 || sampleInterval <= 0) {
+        AppLogger.i(TAG, "try to start sampler, interval: " + taskInfo.sampleInterval
+                + ", period: " + taskInfo.samplePeriod);
+        if (taskInfo.pkgNames == null || taskInfo.pkgNames.size() == 0 || taskInfo.sampleInterval <= 0) {
             AppLogger.w(TAG, "cannot start sampler because of wrong parameters");
             stopSelf(startId);
             return;
@@ -232,14 +243,10 @@ public class AppsSamplerService extends Service implements Handler.Callback {
 
         AppLogger.d(TAG, "start sampler...");
 
-        SampleTaskInfo taskInfo = new SampleTaskInfo();
-        taskInfo.pkgNames = pkgNames;
-        taskInfo.sampleInterval = sampleInterval;
         taskInfo.startTime = System.currentTimeMillis();
-
         taskInfo.isSampling = true;
-        taskInfo.fileWriters = new ArrayList<FileWriter>(pkgNames.size());
-        for (String pkgName : pkgNames) {
+        taskInfo.fileWriters = new ArrayList<FileWriter>(taskInfo.pkgNames.size());
+        for (String pkgName : taskInfo.pkgNames) {
             try {
                 File sdRoot = Environment.getExternalStorageDirectory();
                 File appDir = new File(sdRoot, Constants.EXTERNAL_STORAGE_PATH_APPS_SAMPLER);

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 class SampleTaskInfo {
     public ArrayList<String> pkgNames;
     public int sampleInterval; // in seconds
+    public int samplePeriod; // in minutes
     public long startTime;
     public long sampleClockTime;
     public int sampleCount;

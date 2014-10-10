@@ -43,6 +43,23 @@
             android:inputType="number" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/apps_sampler_sample_period" />
+        <EditText
+            android:id="@+id/period"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="100dp"
+            android:singleLine="true"
+            android:inputType="number" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/sample_status"
         android:layout_width="match_parent"
