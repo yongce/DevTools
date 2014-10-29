@@ -72,4 +72,11 @@ public class AppInfo {
             }
         }
     }
+
+    public static class UidComparator implements Comparator<AppInfo> {
+        @Override
+        public int compare(AppInfo lhs, AppInfo rhs) {
+            return lhs.appUid - rhs.appUid;
+        }
+    }
 }

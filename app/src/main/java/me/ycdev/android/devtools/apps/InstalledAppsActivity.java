@@ -2,6 +2,7 @@ package me.ycdev.android.devtools.apps;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import me.ycdev.android.devtools.R;
@@ -84,6 +85,7 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
                 item.updateTime = pkgInfo.lastUpdateTime;
                 result.add(item);
             }
+            Collections.sort(result, new AppInfo.UidComparator());
             return result;
         }
 
