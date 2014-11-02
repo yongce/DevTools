@@ -37,6 +37,9 @@ android {
     lintOptions {
         textReport true
         textOutput 'stdout'
+
+        // disable category "Accessibility"
+        disable 'ClickableViewAccessibility','ContentDescription','LabelFor'
     }
 }
 

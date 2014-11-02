@@ -2,6 +2,7 @@ package me.ycdev.android.devtools.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import android.content.Context;
 
@@ -10,7 +11,7 @@ public class StringHelper {
 
     private static SimpleDateFormat getDefaultFormatInstance() {
         if (sDateTimeFormat == null) {
-            sDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         }
         return sDateTimeFormat;
     }

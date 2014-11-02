@@ -1,6 +1,7 @@
 package me.ycdev.android.devtools.sampler.traffic;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import me.ycdev.android.lib.common.utils.IoUtils;
 import me.ycdev.android.lib.common.utils.StringUtils;
@@ -16,11 +17,11 @@ public class TrafficUtils {
     public static AppTrafficStat getTrafficStat(int uid) {
         AppTrafficStat trafficStat = new AppTrafficStat(uid);
         try {
-            String rcvFile = String.format(DEV_UID_RCV_FILE, uid);
+            String rcvFile = String.format(Locale.US, DEV_UID_RCV_FILE, uid);
             String rcvData = IoUtils.readAllLines(rcvFile);
             trafficStat.recvBytes = StringUtils.parseLong(rcvData, 0);
 
-            String sndFile = String.format(DEV_UID_SND_FILE, uid);
+            String sndFile = String.format(Locale.US, DEV_UID_SND_FILE, uid);
             String sndData = IoUtils.readAllLines(sndFile);
             trafficStat.sendBytes = StringUtils.parseLong(sndData, 0);
 

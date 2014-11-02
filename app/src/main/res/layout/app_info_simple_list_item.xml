@@ -8,42 +8,50 @@
         android:layout_width="@dimen/app_icon_size"
         android:layout_height="@dimen/app_icon_size"
         android:layout_marginRight="4dp"
+        android:layout_marginEnd="4dp"
         android:scaleType="fitCenter"
         android:layout_centerVertical="true" />
     <TextView
         android:id="@+id/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/app_icon" />
+        android:layout_toRightOf="@id/app_icon"
+        android:layout_toEndOf="@id/app_icon" />
     <TextView
         android:id="@+id/pkg_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/app_name"
-        android:layout_alignLeft="@id/app_name" />
+        android:layout_alignLeft="@id/app_name"
+        android:layout_alignStart="@id/app_name" />
     <TextView
         android:id="@+id/version_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/pkg_name"
-        android:layout_alignLeft="@id/app_name" />
+        android:layout_alignLeft="@id/app_name"
+        android:layout_alignStart="@id/app_name" />
     <TextView
         android:id="@+id/version_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_toRightOf="@id/version_name"
+        android:layout_toEndOf="@id/version_name"
         android:layout_alignTop="@id/version_name" />
     <TextView
         android:id="@+id/apk_path"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/version_name"
-        android:layout_alignLeft="@id/app_name" />
+        android:layout_alignLeft="@id/app_name"
+        android:layout_alignStart="@id/app_name" />
     <TextView
         android:id="@+id/state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/apk_path"
-        android:layout_alignLeft="@id/app_name" />
+        android:layout_alignLeft="@id/app_name"
+        android:layout_alignStart="@id/app_name" />
 </RelativeLayout>

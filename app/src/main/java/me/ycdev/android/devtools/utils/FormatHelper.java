@@ -4,6 +4,8 @@ import me.ycdev.android.devtools.R;
 
 import android.content.Context;
 
+import java.util.Locale;
+
 public class FormatHelper {
     private static final int SECONDS_PER_MINUTE = 60;
     private static final int SECONDS_PER_HOUR = 60 * 60;
@@ -43,11 +45,11 @@ public class FormatHelper {
      */
     public static String formatBytes(Context context, long bytes) {
         if (bytes > 1000 * 1000) {
-            return String.format("%.2f MB", bytes / 1000 / 1000.0f);
+            return String.format(Locale.US, "%.2f MB", bytes / 1000 / 1000.0f);
         } else if (bytes > 1024) {
-            return String.format("%.2f KB", bytes / 10 / 100.0f);
+            return String.format(Locale.US, "%.2f KB", bytes / 10 / 100.0f);
         } else {
-            return String.format("%d B", (int) bytes);
+            return String.format(Locale.US, "%d B", (int) bytes);
         }
     }
 }

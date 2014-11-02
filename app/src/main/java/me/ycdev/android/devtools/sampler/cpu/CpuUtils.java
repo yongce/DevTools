@@ -3,6 +3,7 @@ package me.ycdev.android.devtools.sampler.cpu;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Locale;
 
 import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.lib.common.utils.IoUtils;
@@ -45,7 +46,7 @@ public class CpuUtils {
      * @return null may be returned if some unexpected things happens
      */
     public static ProcCpuStat getProcCpuStat(int pid) {
-        String file = String.format(FILE_PROC_CPU_STAT, pid);
+        String file = String.format(Locale.US, FILE_PROC_CPU_STAT, pid);
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(file));
