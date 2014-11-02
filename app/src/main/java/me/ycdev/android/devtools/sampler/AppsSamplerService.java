@@ -25,8 +25,8 @@ import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.devtools.utils.Constants;
 import me.ycdev.android.devtools.utils.StringHelper;
-import me.ycdev.androidlib.utils.DateTimeUtils;
-import me.ycdev.androidlib.utils.IoUtils;
+import me.ycdev.android.lib.common.utils.DateTimeUtils;
+import me.ycdev.android.lib.common.utils.IoUtils;
 
 public class AppsSamplerService extends Service implements Handler.Callback {
     private static final String TAG = "AppsSamplerService";

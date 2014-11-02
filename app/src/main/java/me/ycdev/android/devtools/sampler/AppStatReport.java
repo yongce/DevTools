@@ -8,7 +8,7 @@ import android.os.Build;
 import java.io.IOException;
 import java.io.Writer;
 
-import me.ycdev.androidlib.utils.DateTimeUtils;
+import me.ycdev.android.lib.common.utils.DateTimeUtils;
 
 public class AppStatReport {
     public String sysTimeStampStart;
