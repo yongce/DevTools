@@ -1,10 +1,9 @@
 package me.ycdev.android.devtools.sampler.traffic;
 
-import java.io.File;
 import java.io.IOException;
 
-import me.ycdev.androidlib.utils.IoUtils;
-import me.ycdev.androidlib.utils.StringUtils;
+import me.ycdev.android.lib.common.utils.IoUtils;
+import me.ycdev.android.lib.common.utils.StringUtils;
 
 public class TrafficUtils {
     private static final String DEV_UID_RCV_FILE = "/proc/uid_stat/%d/tcp_rcv";

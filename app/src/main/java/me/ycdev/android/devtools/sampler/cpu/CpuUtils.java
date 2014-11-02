@@ -5,8 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import me.ycdev.android.devtools.utils.AppLogger;
-import me.ycdev.androidlib.utils.IoUtils;
-import me.ycdev.androidlib.utils.StringUtils;
+import me.ycdev.android.lib.common.utils.IoUtils;
+import me.ycdev.android.lib.common.utils.StringUtils;
 
 public class CpuUtils {
     private static final String TAG = "CpuUtils";

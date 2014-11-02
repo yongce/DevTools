@@ -5,8 +5,8 @@ import java.lang.reflect.Method;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.devtools.utils.ViewHelper;
-import me.ycdev.androidlib.internalapi.android.os.EnvironmentIA;
-import me.ycdev.androidlib.internalapi.android.os.SystemPropertiesIA;
+import me.ycdev.android.lib.common.internalapi.android.os.EnvironmentIA;
+import me.ycdev.android.lib.common.internalapi.android.os.SystemPropertiesIA;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

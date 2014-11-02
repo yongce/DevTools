@@ -18,7 +18,7 @@ import java.util.List;
 
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.common.AppInfo;
-import me.ycdev.androidlib.utils.PackageUtils;
+import me.ycdev.android.lib.common.utils.PackageUtils;
 
 public class AppsSelectorActivity extends ActionBarActivity implements AppsSelectorAdapter.SelectedAppsChangeListener,
         View.OnClickListener {

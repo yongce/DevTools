@@ -8,8 +8,8 @@ import java.util.List;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.devtools.utils.AppLogger;
-import me.ycdev.androidlib.compat.ViewsCompat;
-import me.ycdev.androidlib.utils.PackageUtils;
+import me.ycdev.android.lib.common.compat.ViewsCompat;
+import me.ycdev.android.lib.common.utils.PackageUtils;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

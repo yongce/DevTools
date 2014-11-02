@@ -3,7 +3,7 @@ package me.ycdev.android.devtools.base;
 import java.util.List;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.androidlib.utils.IntentUtils;
+import me.ycdev.android.lib.common.utils.IntentUtils;
 
 import android.content.Context;
 import android.content.Intent;

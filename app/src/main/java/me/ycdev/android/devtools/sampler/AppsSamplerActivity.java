@@ -22,7 +22,7 @@ import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
 import me.ycdev.android.devtools.utils.StringHelper;
-import me.ycdev.androidlib.utils.WeakHandler;
+import me.ycdev.android.lib.common.utils.WeakHandler;
 
 public class AppsSamplerActivity extends ActionBarActivity implements View.OnClickListener, WeakHandler.MessageHandler {
     private static final int REQUEST_CODE_APPS_SELECTOR = 1;

@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.common.AppInfo;
-import me.ycdev.androidlib.ui.base.ListAdapterBase;
+import me.ycdev.android.lib.common.ui.base.ListAdapterBase;
 
 class AppsSelectedAdapter extends ListAdapterBase<AppInfo> {
     public AppsSelectedAdapter(LayoutInflater inflater) {
