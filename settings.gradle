@@ -1,2 +1,4 @@
 include ':app'
 include ':androidLib'
+
+project(':androidLib').projectDir = file('androidLib/lib')
