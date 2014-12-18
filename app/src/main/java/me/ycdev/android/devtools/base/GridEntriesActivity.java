@@ -21,12 +21,17 @@ import android.widget.Toast;
 
 public abstract class GridEntriesActivity extends ActionBarActivity implements AdapterView.OnItemClickListener,
         AdapterView.OnItemLongClickListener {
-    public static class ActivityEntry {
+    public static class IntentEntry {
+        public static final int TYPE_ACTIVITY = 1;
+        public static final int TYPE_BROADCAST = 2;
+
         public Intent intent;
         public String title;
         public String desc;
+        public int type = TYPE_ACTIVITY;
+        public String perm;
 
-        public ActivityEntry(Intent intent, String title, String desc) {
+        public IntentEntry(Intent intent, String title, String desc) {
             this.intent = intent;
             this.title = title;
             this.desc = desc;
@@ -52,14 +57,14 @@ public abstract class GridEntriesActivity extends ActionBarActivity implements A
 
     private void loadItems() {
         if (needLoadIntentsAsync()) {
-            new AsyncTask<Void, Void, List<ActivityEntry>>() {
+            new AsyncTask<Void, Void, List<IntentEntry>>() {
                 @Override
-                protected List<ActivityEntry> doInBackground(Void... params) {
+                protected List<IntentEntry> doInBackground(Void... params) {
                     return getIntents();
                 }
 
                 @Override
-                protected void onPostExecute(List<ActivityEntry> result) {
+                protected void onPostExecute(List<IntentEntry> result) {
                     mAdapter.setData(getIntents());
                 }
             }.execute();
@@ -70,13 +75,13 @@ public abstract class GridEntriesActivity extends ActionBarActivity implements A
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ActivityEntry item = mAdapter.getItem(position);
+        IntentEntry item = mAdapter.getItem(position);
         onItemClicked(item);
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        ActivityEntry item = mAdapter.getItem(position);
+        IntentEntry item = mAdapter.getItem(position);
         Toast.makeText(this, item.desc, Toast.LENGTH_LONG).show();
         return true;
     }
@@ -89,9 +94,9 @@ public abstract class GridEntriesActivity extends ActionBarActivity implements A
         return false;
     }
 
-    protected abstract List<ActivityEntry> getIntents();
+    protected abstract List<IntentEntry> getIntents();
 
-    protected void onItemClicked(ActivityEntry item) {
+    protected void onItemClicked(IntentEntry item) {
         if (IntentUtils.canStartActivity(this, item.intent)) {
             startActivity(item.intent);
         } else {
@@ -101,13 +106,13 @@ public abstract class GridEntriesActivity extends ActionBarActivity implements A
 
     protected static class SystemEntriesAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
-        private List<ActivityEntry> mList;
+        private List<IntentEntry> mList;
 
         public SystemEntriesAdapter(Context cxt) {
             mInflater = LayoutInflater.from(cxt);
         }
 
-        public void setData(List<ActivityEntry> list) {
+        public void setData(List<IntentEntry> list) {
             mList = list;
             notifyDataSetChanged();
         }
@@ -118,7 +123,7 @@ public abstract class GridEntriesActivity extends ActionBarActivity implements A
         }
 
         @Override
-        public ActivityEntry getItem(int position) {
+        public IntentEntry getItem(int position) {
             return mList.get(position);
         }
 
@@ -129,7 +134,7 @@ public abstract class GridEntriesActivity extends ActionBarActivity implements A
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ActivityEntry item = getItem(position);
+            IntentEntry item = getItem(position);
             ViewHolder holder = ViewHolder.get(convertView, parent, mInflater);
             holder.titleView.setText(item.title);
             return holder.rootView;

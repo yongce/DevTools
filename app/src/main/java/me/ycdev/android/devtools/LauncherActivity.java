@@ -19,21 +19,21 @@ public class LauncherActivity extends GridEntriesActivity {
     }
 
     @Override
-    protected List<ActivityEntry> getIntents() {
-        List<ActivityEntry> activities = new ArrayList<ActivityEntry>();
-        activities.add(new ActivityEntry(new Intent(this, DeviceInfoActivity.class),
+    protected List<IntentEntry> getIntents() {
+        List<IntentEntry> activities = new ArrayList<IntentEntry>();
+        activities.add(new IntentEntry(new Intent(this, DeviceInfoActivity.class),
                 getString(R.string.module_device_info_title),
                 getString(R.string.module_device_info_desc)));
-        activities.add(new ActivityEntry(new Intent(this, SystemUtilitiesActivity.class),
+        activities.add(new IntentEntry(new Intent(this, SystemUtilitiesActivity.class),
                 getString(R.string.module_system_utilities_title),
                 getString(R.string.module_system_utilities_desc)));
-        activities.add(new ActivityEntry(new Intent(this, InstalledAppsActivity.class),
+        activities.add(new IntentEntry(new Intent(this, InstalledAppsActivity.class),
                 getString(R.string.module_installed_apps_title),
                 getString(R.string.module_installed_apps_desc)));
-        activities.add(new ActivityEntry(new Intent(this, BroadcastTester.class),
+        activities.add(new IntentEntry(new Intent(this, BroadcastTester.class),
                 getString(R.string.module_broadcast_tester_title),
                 getString(R.string.module_broadcast_tester_desc)));
-        activities.add(new ActivityEntry(new Intent(this, AppsSamplerActivity.class),
+        activities.add(new IntentEntry(new Intent(this, AppsSamplerActivity.class),
                 getString(R.string.apps_sampler_module_title),
                 getString(R.string.apps_sampler_module_desc)));
         return activities;

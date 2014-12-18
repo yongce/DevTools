@@ -4,20 +4,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.ycdev.android.devtools.base.GridEntriesActivity;
+import me.ycdev.android.devtools.utils.Constants;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Telephony;
+import android.widget.Toast;
 
 public class BroadcastTester extends GridEntriesActivity {
     private String mTargetPkgName;
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(getApplicationContext(), "Received: " + intent.getAction(),
+                    Toast.LENGTH_LONG).show();
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.ACTION_DYNAMIC_BROADCAST_TEST);
+        registerReceiver(mReceiver, filter, Constants.PERM_DYNAMIC_BROADCAST, null);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mReceiver);
+    }
 
     @Override
     protected boolean needLoadIntentsAsync() {
@@ -25,8 +52,8 @@ public class BroadcastTester extends GridEntriesActivity {
     }
 
     @Override
-    protected List<ActivityEntry> getIntents() {
-        List<ActivityEntry> broadcasts = new ArrayList<ActivityEntry>();
+    protected List<IntentEntry> getIntents() {
+        List<IntentEntry> broadcasts = new ArrayList<IntentEntry>();
         mTargetPkgName = getPackageName();
         testDevTools(broadcasts);
         testPackageAdd(broadcasts);
@@ -49,10 +76,13 @@ public class BroadcastTester extends GridEntriesActivity {
     }
 
     @Override
-    protected void onItemClicked(ActivityEntry item) {
+    protected void onItemClicked(IntentEntry item) {
         try {
-            //sendBroadcast(item.intent);
-            startActivity(item.intent);
+            if (item.type == IntentEntry.TYPE_ACTIVITY) {
+                startActivity(item.intent);
+            } else if (item.type == IntentEntry.TYPE_BROADCAST) {
+                sendBroadcast(item.intent, item.perm);
+            }
         } catch (Exception e) {
             showCrashInfo(e);
             e.printStackTrace();
@@ -66,162 +96,164 @@ public class BroadcastTester extends GridEntriesActivity {
         builder.show();
     }
 
-    private void testDevTools(List<ActivityEntry> itemsList) {
-        Intent intent = new Intent("me.ycdev.devtools.action.test");
-        ActivityEntry item = new ActivityEntry(intent, "DevToolTest",
+    private void testDevTools(List<IntentEntry> itemsList) {
+        Intent intent = new Intent("me.ycdev.android.devtools.action.DYNAMIC_BROADCAST_TEST");
+        IntentEntry item = new IntentEntry(intent, "DevToolTest",
                 "Send DevTools test broadcast: " + intent.getAction());
+        item.type = IntentEntry.TYPE_BROADCAST;
+        item.perm = Constants.PERM_DYNAMIC_BROADCAST;
         itemsList.add(item);
     }
 
-    private void testPackageAdd(List<ActivityEntry> itemsList) {
+    private void testPackageAdd(List<IntentEntry> itemsList) {
         // SecurityException: protected-broadcast
         Intent intent = new Intent(Intent.ACTION_PACKAGE_ADDED);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "PackageAdded",
+        IntentEntry item = new IntentEntry(intent, "PackageAdded",
                 "Send package added broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testPackageReplaced(List<ActivityEntry> itemsList) {
+    private void testPackageReplaced(List<IntentEntry> itemsList) {
         // SecurityException: protected-broadcast
         Intent intent = new Intent(Intent.ACTION_PACKAGE_REPLACED);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "PackageReplaced",
+        IntentEntry item = new IntentEntry(intent, "PackageReplaced",
                 "Send package replaced broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testPackageRemoved(List<ActivityEntry> itemsList) {
+    private void testPackageRemoved(List<IntentEntry> itemsList) {
         // SecurityException: protected-broadcast
         Intent intent = new Intent(Intent.ACTION_PACKAGE_REMOVED);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "PackageRemoved",
+        IntentEntry item = new IntentEntry(intent, "PackageRemoved",
                 "Send package removed broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testPackageChanged(List<ActivityEntry> itemsList) {
+    private void testPackageChanged(List<IntentEntry> itemsList) {
         // SecurityException: protected-broadcast
         Intent intent = new Intent(Intent.ACTION_PACKAGE_CHANGED);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "PackageChanged",
+        IntentEntry item = new IntentEntry(intent, "PackageChanged",
                 "Send package changed broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testNewOutgoingCall(List<ActivityEntry> itemsList) {
+    private void testNewOutgoingCall(List<IntentEntry> itemsList) {
         // SecurityException: protected-broadcast
         Intent intent = new Intent(Intent.ACTION_NEW_OUTGOING_CALL);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "NewOutgoingCall",
+        IntentEntry item = new IntentEntry(intent, "NewOutgoingCall",
                 "Send new outgoing call broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private void testSmsReceived(List<ActivityEntry> itemsList) {
+    private void testSmsReceived(List<IntentEntry> itemsList) {
         // OK: the broadcast has no protection (last checked version: android-4.4_r1.1)
         Intent intent = new Intent(Telephony.Sms.Intents.SMS_RECEIVED_ACTION);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "SmsReceived",
+        IntentEntry item = new IntentEntry(intent, "SmsReceived",
                 "Send SMS received broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private void testSmsDeliver(List<ActivityEntry> itemsList) {
+    private void testSmsDeliver(List<IntentEntry> itemsList) {
         // Permission Denial: android.permission.BROADCAST_SMS (signature protection) (Supported by android-4.4)
         Intent intent = new Intent(Telephony.Sms.Intents.SMS_DELIVER_ACTION);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "SmsDeliver",
+        IntentEntry item = new IntentEntry(intent, "SmsDeliver",
                 "Send SMS deliver broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testConnectivityChange(List<ActivityEntry> itemsList) {
+    private void testConnectivityChange(List<IntentEntry> itemsList) {
         // a) OK: no protection (older versions than android-4.0.1_r1)
         // b) SecurityException: protected-broadcast (android-4.0.1_r1+)
         // Can be received even though the receiver is not exported!
         Intent intent = new Intent(ConnectivityManager.CONNECTIVITY_ACTION);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "ConnectChange",
+        IntentEntry item = new IntentEntry(intent, "ConnectChange",
                 "Send network connectivity change broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testWifiStateChange(List<ActivityEntry> itemsList) {
+    private void testWifiStateChange(List<IntentEntry> itemsList) {
         // a) OK: no protection (older versions than android-4.2.2_r1)
         // b) SecurityException: protected-broadcast (android-4.2.2_r1+)
         Intent intent = new Intent(WifiManager.WIFI_STATE_CHANGED_ACTION);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "WifiChange",
+        IntentEntry item = new IntentEntry(intent, "WifiChange",
                 "Send wifi state change broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testBootComplete(List<ActivityEntry> itemsList) {
+    private void testBootComplete(List<IntentEntry> itemsList) {
         // SecurityException: protected-broadcast
         Intent intent = new Intent(Intent.ACTION_BOOT_COMPLETED);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "BootCompleted",
+        IntentEntry item = new IntentEntry(intent, "BootCompleted",
                 "Send boot completed broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testShutdown(List<ActivityEntry> itemsList) {
+    private void testShutdown(List<IntentEntry> itemsList) {
         // SecurityException: protected-broadcast
         Intent intent = new Intent(Intent.ACTION_SHUTDOWN);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "Shutdown",
+        IntentEntry item = new IntentEntry(intent, "Shutdown",
                 "Send shutdown broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testTimeSet(List<ActivityEntry> itemsList) {
+    private void testTimeSet(List<IntentEntry> itemsList) {
         // a) OK: no protection (older versions than android-4.4_r0.7)
         // b) SecurityException: protected-broadcast (android-4.4_r0.7+)
         Intent intent = new Intent(Intent.ACTION_TIME_CHANGED);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "TimeSet",
+        IntentEntry item = new IntentEntry(intent, "TimeSet",
                 "Send time set broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testAppWidgetUpdate(List<ActivityEntry> itemsList) {
+    private void testAppWidgetUpdate(List<IntentEntry> itemsList) {
         // OK: no protection (last checked version: android-4.4_r1.1)
         Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "AppWidgetUpdate",
+        IntentEntry item = new IntentEntry(intent, "AppWidgetUpdate",
                 "Send app widget update broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testBluetoothStateChange(List<ActivityEntry> itemsList) {
+    private void testBluetoothStateChange(List<IntentEntry> itemsList) {
         // SecurityException: protected-broadcast
         Intent intent = new Intent(BluetoothAdapter.ACTION_STATE_CHANGED);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "BluetoothChange",
+        IntentEntry item = new IntentEntry(intent, "BluetoothChange",
                 "Send bluetooth state change broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
-    private void testAirplaceModeChange(List<ActivityEntry> itemsList) {
+    private void testAirplaceModeChange(List<IntentEntry> itemsList) {
         // a) OK: no protection (older versions than android-4.3_r0.9)
         // b) SecurityException: protected-broadcast (android-4.3_r0.9+)
         Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "AirplaceChange",
+        IntentEntry item = new IntentEntry(intent, "AirplaceChange",
                 "Send airplane mode change broadcast: " + intent.getAction());
         itemsList.add(item);
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    private void testLocationChanged(List<ActivityEntry> itemsList) {
+    private void testLocationChanged(List<IntentEntry> itemsList) {
         // a) OK: no protection (older versions than android-4.4_r0.7)
         // b) SecurityException: protected-broadcast (android-4.4_r0.7+)
         Intent intent = new Intent(LocationManager.PROVIDERS_CHANGED_ACTION);
         intent.setPackage(mTargetPkgName);
-        ActivityEntry item = new ActivityEntry(intent, "LocationChange",
+        IntentEntry item = new IntentEntry(intent, "LocationChange",
                 "Send location change broadcast: " + intent.getAction());
         itemsList.add(item);
     }
