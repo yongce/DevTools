@@ -9,7 +9,7 @@ import android.widget.TextView;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.lib.common.compat.ViewsCompat;
-import me.ycdev.android.lib.common.ui.base.ListAdapterBase;
+import me.ycdev.android.lib.commonui.base.ListAdapterBase;
 
 class InstalledAppsAdapter extends ListAdapterBase<AppInfo> {
     private static final int ALPHA_ENABLED = 255;

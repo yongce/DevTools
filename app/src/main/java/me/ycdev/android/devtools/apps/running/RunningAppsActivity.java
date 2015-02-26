@@ -1,5 +1,6 @@
 package me.ycdev.android.devtools.apps.running;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -21,11 +22,13 @@ import java.util.List;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.devtools.utils.AppLogger;
+import me.ycdev.android.lib.commonui.base.WaitingAsyncTaskBase;
 
 public class RunningAppsActivity extends ActionBarActivity {
     private static final String TAG = "RunningAppsActivity";
 
     private RunningAppsAdapter mAdapter;
+    private AppsLoader mAppsLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,11 @@ public class RunningAppsActivity extends ActionBarActivity {
     }
 
     private void loadApps() {
-        new AppsLoader(this).execute();
+        if (mAppsLoader != null && mAppsLoader.getStatus() != AsyncTask.Status.FINISHED) {
+            mAppsLoader.cancel(true);
+        }
+        mAppsLoader = new AppsLoader(this);
+        mAppsLoader.execute();
     }
 
     @Override
@@ -60,10 +67,19 @@ public class RunningAppsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class AppsLoader extends AsyncTask<Void, Void, List<RunningAppInfo>> {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAppsLoader != null && mAppsLoader.getStatus() != AsyncTask.Status.FINISHED) {
+            mAppsLoader.cancel(true);
+        }
+    }
+
+    private class AppsLoader extends WaitingAsyncTaskBase<Void, Void, List<RunningAppInfo>> {
         private Context mContext;
 
-        public AppsLoader(Context cxt) {
+        public AppsLoader(Activity cxt) {
+            super(cxt, cxt.getString(R.string.tips_loading), true, true);
             mContext = cxt;
         }
 
@@ -80,6 +96,9 @@ public class RunningAppsActivity extends ActionBarActivity {
             RunningAppInfo.ProcInfo[] procInfoList = new RunningAppInfo.ProcInfo[N];
 
             for (int i = 0; i < N; i++) {
+                if (isCancelled()) {
+                    return null; // cancelled
+                }
                 ActivityManager.RunningAppProcessInfo procInfo = runningProcesses.get(i);
 
                 RunningAppInfo.ProcInfo procItem = new RunningAppInfo.ProcInfo();
@@ -110,6 +129,9 @@ public class RunningAppsActivity extends ActionBarActivity {
             // Get memory usage of all the running processes
             Debug.MemoryInfo[] pidsMemInfo = am.getProcessMemoryInfo(pidsList);
             for (int i = 0; i < N; i++) {
+                if (isCancelled()) {
+                    return null; // cancelled
+                }
                 Debug.MemoryInfo memInfo = pidsMemInfo[i];
                 procInfoList[i].memPss = memInfo.getTotalPss();
             }
@@ -117,6 +139,9 @@ public class RunningAppsActivity extends ActionBarActivity {
             // Convert the map to list
             List<RunningAppInfo> result = new ArrayList<>(runningApps.size());
             for (RunningAppInfo appInfo : runningApps.values()) {
+                if (isCancelled()) {
+                    return null; // cancelled
+                }
                 result.add(appInfo);
                 appInfo.totalMemPss = 0;
                 for (RunningAppInfo.ProcInfo procInfo : appInfo.allProcesses) {
@@ -131,6 +156,7 @@ public class RunningAppsActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(List<RunningAppInfo> result) {
+            super.onPostExecute(result);
             mAdapter.setData(result);
         }
     }

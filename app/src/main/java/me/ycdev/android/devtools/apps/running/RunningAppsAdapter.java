@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.lib.common.ui.base.ListAdapterBase;
+import me.ycdev.android.lib.commonui.base.ListAdapterBase;
 
 public class RunningAppsAdapter extends ListAdapterBase<RunningAppInfo> {
     public RunningAppsAdapter(@NonNull Context cxt) {

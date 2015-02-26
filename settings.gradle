@@ -2,3 +2,6 @@ include ':app'
 
 include ':androidLib'
 project(':androidLib').projectDir = file('submodules/AndroidLib/lib')
+
+include ':androidUiLib'
+project(':androidUiLib').projectDir = file('submodules/AndroidUiLib/lib')

@@ -15,7 +15,7 @@ import java.util.List;
 
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.common.AppInfo;
-import me.ycdev.android.lib.common.ui.base.ListAdapterBase;
+import me.ycdev.android.lib.commonui.base.ListAdapterBase;
 
 class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {
     public interface SelectedAppsChangeListener {

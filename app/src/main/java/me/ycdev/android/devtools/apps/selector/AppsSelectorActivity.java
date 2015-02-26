@@ -19,6 +19,7 @@ import java.util.List;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.lib.common.utils.PackageUtils;
+import me.ycdev.android.lib.commonui.base.WaitingAsyncTaskBase;
 
 public class AppsSelectorActivity extends ActionBarActivity implements AppsSelectorAdapter.SelectedAppsChangeListener,
         View.OnClickListener {
@@ -49,6 +50,8 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
     private AppsSelectorAdapter mAdapter;
     private Button mSelectBtn;
 
+    private AppsLoader mAppsLoader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +72,15 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
         mSelectBtn = (Button) findViewById(R.id.select);
         mSelectBtn.setOnClickListener(this);
 
-        new AppsLoader().execute();
+        loadApps();
+    }
+
+    private void loadApps() {
+        if (mAppsLoader != null && mAppsLoader.getStatus() != AsyncTask.Status.FINISHED) {
+            mAppsLoader.cancel(true);
+        }
+        mAppsLoader = new AppsLoader(this);
+        mAppsLoader.execute();
     }
 
     @Override
@@ -106,9 +117,22 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
         }
     }
 
-    private class AppsLoader extends AsyncTask<Void, Void, List<AppInfo>> {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAppsLoader != null && mAppsLoader.getStatus() != AsyncTask.Status.FINISHED) {
+            mAppsLoader.cancel(true);
+        }
+    }
+
+    private class AppsLoader extends WaitingAsyncTaskBase<Void, Void, List<AppInfo>> {
+        public AppsLoader(Activity activity) {
+            super(activity, activity.getString(R.string.tips_loading), true, true);
+        }
+
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             onSelectedAppsChanged(0);
         }
 
@@ -116,8 +140,11 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
         protected List<AppInfo> doInBackground(Void... params) {
             PackageManager pm = getPackageManager();
             List<PackageInfo> installedApps = pm.getInstalledPackages(0);
-            List<AppInfo> result = new ArrayList<AppInfo>(installedApps.size());
+            List<AppInfo> result = new ArrayList<>(installedApps.size());
             for (PackageInfo pkgInfo : installedApps) {
+                if (isCancelled()) {
+                    return result; // cancelled
+                }
                 AppInfo item = new AppInfo();
                 item.pkgName = pkgInfo.packageName;
                 item.isSysApp = PackageUtils.isPkgSystem(pkgInfo.applicationInfo);
@@ -136,6 +163,7 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
 
         @Override
         protected void onPostExecute(List<AppInfo> result) {
+            super.onPostExecute(result);
             mAdapter.setData(result);
         }
     }

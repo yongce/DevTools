@@ -1,5 +1,6 @@
 package me.ycdev.android.devtools.apps.installed;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -22,11 +23,13 @@ import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.lib.common.utils.PackageUtils;
+import me.ycdev.android.lib.commonui.base.WaitingAsyncTaskBase;
 
 public class InstalledAppsActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
     private static final String TAG = "InstalledAppsActivity";
 
     private InstalledAppsAdapter mAdapter;
+    private AppsLoader mAppsLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,11 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
     }
 
     private void loadApps() {
-        new AppsLoader(this).execute();
+        if (mAppsLoader != null && mAppsLoader.getStatus() != AsyncTask.Status.FINISHED) {
+            mAppsLoader.cancel(true);
+        }
+        mAppsLoader = new AppsLoader(this);
+        mAppsLoader.execute();
     }
 
     @Override
@@ -85,10 +92,19 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
         AppLogger.i(TAG, "clicked item: " + item.toString());
     }
 
-    private class AppsLoader extends AsyncTask<Void, Void, List<AppInfo>> {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAppsLoader != null && mAppsLoader.getStatus() != AsyncTask.Status.FINISHED) {
+            mAppsLoader.cancel(true);
+        }
+    }
+
+    private class AppsLoader extends WaitingAsyncTaskBase<Void, Void, List<AppInfo>> {
         private Context mContext;
 
-        public AppsLoader(Context cxt) {
+        public AppsLoader(Activity cxt) {
+            super(cxt, cxt.getString(R.string.tips_loading));
             mContext = cxt;
         }
 
@@ -98,6 +114,9 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
             List<PackageInfo> installedApps = pm.getInstalledPackages(0);
             List<AppInfo> result = new ArrayList<>(installedApps.size());
             for (PackageInfo pkgInfo : installedApps) {
+                if (isCancelled()) {
+                    return result; // cancelled
+                }
                 AppInfo item = new AppInfo();
                 item.pkgName = pkgInfo.packageName;
                 item.appUid = pkgInfo.applicationInfo.uid;
@@ -119,6 +138,7 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
 
         @Override
         protected void onPostExecute(List<AppInfo> result) {
+            super.onPostExecute(result);
             mAdapter.setData(result);
             mAdapter.sort(new AppInfo.AppNameComparator());
         }
