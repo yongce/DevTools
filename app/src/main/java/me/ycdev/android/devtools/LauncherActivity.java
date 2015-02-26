@@ -3,7 +3,7 @@ package me.ycdev.android.devtools;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.ycdev.android.devtools.apps.InstalledAppsActivity;
+import me.ycdev.android.devtools.apps.installed.InstalledAppsActivity;
 import me.ycdev.android.devtools.sampler.AppsSamplerActivity;
 import me.ycdev.android.devtools.base.GridEntriesActivity;
 import me.ycdev.android.devtools.device.BroadcastTester;

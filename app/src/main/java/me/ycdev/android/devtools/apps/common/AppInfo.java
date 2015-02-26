@@ -60,23 +60,49 @@ public class AppInfo {
         }
     }
 
-    public static class InstallTimeComparator implements Comparator<AppInfo> {
+    public static class UidComparator implements Comparator<AppInfo> {
+        private PkgNameComparator mPkgNameComparator = new PkgNameComparator();
+
         @Override
         public int compare(AppInfo lhs, AppInfo rhs) {
-            if (lhs.installTime < rhs.installTime) {
+            if (lhs.appUid < rhs.appUid) {
                 return -1;
-            } else if (lhs.installTime == rhs.installTime) {
-                return 0;
-            } else {
+            } else if (lhs.appUid > rhs.appUid) {
                 return 1;
+            } else {
+                return mPkgNameComparator.compare(lhs,rhs);
             }
         }
     }
 
-    public static class UidComparator implements Comparator<AppInfo> {
+    public static class InstallTimeComparator implements Comparator<AppInfo> {
+        private PkgNameComparator mPkgNameComparator = new PkgNameComparator();
+
         @Override
         public int compare(AppInfo lhs, AppInfo rhs) {
-            return lhs.appUid - rhs.appUid;
+            if (lhs.installTime < rhs.installTime) {
+                return 1;
+            } else if (lhs.installTime > rhs.installTime) {
+                return -1;
+            } else {
+                return mPkgNameComparator.compare(lhs,rhs);
+            }
         }
     }
+
+    public static class UpdateTimeComparator implements Comparator<AppInfo> {
+        private PkgNameComparator mPkgNameComparator = new PkgNameComparator();
+
+        @Override
+        public int compare(AppInfo lhs, AppInfo rhs) {
+            if (lhs.updateTime < rhs.updateTime) {
+                return 1;
+            } else if (lhs.updateTime > rhs.updateTime) {
+                return -1;
+            } else {
+                return mPkgNameComparator.compare(lhs,rhs);
+            }
+        }
+    }
+
 }

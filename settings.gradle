@@ -1,4 +1,4 @@
 include ':app'
-include ':androidLib'
 
-project(':androidLib').projectDir = file('androidLib/lib')
+include ':androidLib'
+project(':androidLib').projectDir = file('submodules/AndroidLib/lib')

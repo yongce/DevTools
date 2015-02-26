@@ -50,7 +50,7 @@
             android:name="me.ycdev.android.devtools.device.SystemUtilitiesActivity"
             android:label="@string/module_system_utilities_title" />
         <activity
-            android:name="me.ycdev.android.devtools.apps.InstalledAppsActivity"
+            android:name=".apps.installed.InstalledAppsActivity"
             android:label="@string/module_installed_apps_title" />
         <activity 
             android:name="me.ycdev.android.devtools.device.BroadcastTester"

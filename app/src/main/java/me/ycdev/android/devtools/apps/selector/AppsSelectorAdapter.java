@@ -1,5 +1,6 @@
 package me.ycdev.android.devtools.apps.selector;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -43,9 +44,9 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {
         }
     };
 
-    public AppsSelectorAdapter(LayoutInflater inflater, SelectedAppsChangeListener listener,
+    public AppsSelectorAdapter(Context cxt, SelectedAppsChangeListener listener,
                                boolean multiChoice) {
-        super(inflater);
+        super(cxt);
         mChangeListener = listener;
         mMultiChoice = multiChoice;
     }

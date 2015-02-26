@@ -63,7 +63,7 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
         mStatusView = (TextView) findViewById(R.id.status);
 
         mListView = (ListView) findViewById(R.id.list);
-        mAdapter = new AppsSelectorAdapter(getLayoutInflater(), this, mMultiChoice);
+        mAdapter = new AppsSelectorAdapter(this, this, mMultiChoice);
         mListView.setAdapter(mAdapter);
 
         mSelectBtn = (Button) findViewById(R.id.select);

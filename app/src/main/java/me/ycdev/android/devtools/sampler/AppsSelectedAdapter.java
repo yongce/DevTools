@@ -1,5 +1,6 @@
 package me.ycdev.android.devtools.sampler;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -9,8 +10,8 @@ import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.lib.common.ui.base.ListAdapterBase;
 
 class AppsSelectedAdapter extends ListAdapterBase<AppInfo> {
-    public AppsSelectedAdapter(LayoutInflater inflater) {
-        super(inflater);
+    public AppsSelectedAdapter(Context cxt) {
+        super(cxt);
     }
 
     @Override

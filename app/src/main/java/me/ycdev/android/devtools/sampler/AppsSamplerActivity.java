@@ -76,7 +76,7 @@ public class AppsSamplerActivity extends ActionBarActivity implements View.OnCli
         mSampleStatusView = (TextView) findViewById(R.id.sample_status);
 
         mListView = (ListView) findViewById(R.id.list);
-        mAdapter = new AppsSelectedAdapter(getLayoutInflater());
+        mAdapter = new AppsSelectedAdapter(this);
         mListView.setAdapter(mAdapter);
         mAppsSelectBtn = (Button) findViewById(R.id.apps_select);
         mAppsSelectBtn.setOnClickListener(this);

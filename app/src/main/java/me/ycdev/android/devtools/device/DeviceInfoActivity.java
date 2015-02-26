@@ -9,7 +9,6 @@ import me.ycdev.android.lib.common.internalapi.android.os.EnvironmentIA;
 import me.ycdev.android.lib.common.internalapi.android.os.SystemPropertiesIA;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
@@ -17,15 +16,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
+import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-public class DeviceInfoActivity extends Activity {
+public class DeviceInfoActivity extends ActionBarActivity {
     private static final String TAG = "DeviceInfoActivity";
-
-    private LinearLayout mHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,91 +35,91 @@ public class DeviceInfoActivity extends Activity {
 
     @SuppressLint("InlinedApi")
     private void initViews() {
-        mHolder = (LinearLayout) findViewById(R.id.content_holder);
+        LinearLayout holder = (LinearLayout) findViewById(R.id.content_holder);
 
         DisplayMetrics screenMetrics = getScreenMetrics(this);
 
-        ViewHelper.addTextView(mHolder, "Manufacturer", Build.MANUFACTURER);
-        ViewHelper.addTextView(mHolder, "Product", Build.PRODUCT);
-        ViewHelper.addTextView(mHolder, "Device", Build.DEVICE);
-        ViewHelper.addTextView(mHolder, "Id", Build.ID);
-        ViewHelper.addTextView(mHolder, "Model", Build.MODEL);
-        ViewHelper.addTextView(mHolder, "API level", String.valueOf(Build.VERSION.SDK_INT));
-        ViewHelper.addTextView(mHolder, "SDK Release", Build.VERSION.RELEASE);
-        ViewHelper.addTextView(mHolder, "CPU ABI", Build.CPU_ABI);
-        ViewHelper.addTextView(mHolder, "CPU ABI2", Build.CPU_ABI2);
-        ViewHelper.addTextView(mHolder, "Fingerprint", Build.FINGERPRINT);
+        ViewHelper.addTextView(holder, "Manufacturer", Build.MANUFACTURER);
+        ViewHelper.addTextView(holder, "Product", Build.PRODUCT);
+        ViewHelper.addTextView(holder, "Device", Build.DEVICE);
+        ViewHelper.addTextView(holder, "Id", Build.ID);
+        ViewHelper.addTextView(holder, "Model", Build.MODEL);
+        ViewHelper.addTextView(holder, "API level", String.valueOf(Build.VERSION.SDK_INT));
+        ViewHelper.addTextView(holder, "SDK Release", Build.VERSION.RELEASE);
+        ViewHelper.addTextView(holder, "CPU ABI", Build.CPU_ABI);
+        ViewHelper.addTextView(holder, "CPU ABI2", Build.CPU_ABI2);
+        ViewHelper.addTextView(holder, "Fingerprint", Build.FINGERPRINT);
 
-        ViewHelper.addLineView(mHolder, 0xff00ff00); // green
-        ViewHelper.addTextView(mHolder, "LCD densityDpi", screenMetrics.densityDpi);
-        ViewHelper.addTextView(mHolder, "LCD real X&Y densityDPI",
+        ViewHelper.addLineView(holder, 0xff00ff00); // green
+        ViewHelper.addTextView(holder, "LCD densityDpi", screenMetrics.densityDpi);
+        ViewHelper.addTextView(holder, "LCD real X&Y densityDPI",
                 screenMetrics.xdpi + " x " + screenMetrics.ydpi);
-        ViewHelper.addTextView(mHolder, "LCD density", screenMetrics.density);
-        ViewHelper.addTextView(mHolder, "LCD scaledDensity", screenMetrics.scaledDensity);
-        ViewHelper.addTextView(mHolder, "LCD type", getScreenLayoutSizeType());
+        ViewHelper.addTextView(holder, "LCD density", screenMetrics.density);
+        ViewHelper.addTextView(holder, "LCD scaledDensity", screenMetrics.scaledDensity);
+        ViewHelper.addTextView(holder, "LCD type", getScreenLayoutSizeType());
         Point screenSizePt = getScreenHardwareSize(this);
-        ViewHelper.addTextView(mHolder, "LCD size in pixels",
+        ViewHelper.addTextView(holder, "LCD size in pixels",
                 screenSizePt.x + " x " + screenSizePt.y);
-        ViewHelper.addTextView(mHolder, "LCD size in DIP",
+        ViewHelper.addTextView(holder, "LCD size in DIP",
                 screenMetrics.widthPixels / screenMetrics.density + " x " +
                         screenMetrics.heightPixels / screenMetrics.density);
-        ViewHelper.addTextView(mHolder, "VM heap", SystemPropertiesIA.get("dalvik.vm.heapsize", "N/A"));
-        ViewHelper.addTextView(mHolder, "ANR trace", SystemPropertiesIA.get("dalvik.vm.stack-trace-file", "N/A"));
+        ViewHelper.addTextView(holder, "VM heap", SystemPropertiesIA.get("dalvik.vm.heapsize", "N/A"));
+        ViewHelper.addTextView(holder, "ANR trace", SystemPropertiesIA.get("dalvik.vm.stack-trace-file", "N/A"));
 
-        ViewHelper.addLineView(mHolder, 0xff00ff00); // green
-        ViewHelper.addTextView(mHolder, "DNS1", SystemPropertiesIA.get("dhcp.eth0.dns1", "N/A"));
-        ViewHelper.addTextView(mHolder, "DNS2", SystemPropertiesIA.get("dhcp.eth0.dns2", "N/A"));
-        ViewHelper.addTextView(mHolder, "IP", SystemPropertiesIA.get("dhcp.eth0.ipaddress", "N/A"));
-        ViewHelper.addTextView(mHolder, "Gateway", SystemPropertiesIA.get("dhcp.eth0.gateway", "N/A"));
-        ViewHelper.addTextView(mHolder, "Mask", SystemPropertiesIA.get("dhcp.eth0.mask", "N/A"));
+        ViewHelper.addLineView(holder, 0xff00ff00); // green
+        ViewHelper.addTextView(holder, "DNS1", SystemPropertiesIA.get("dhcp.eth0.dns1", "N/A"));
+        ViewHelper.addTextView(holder, "DNS2", SystemPropertiesIA.get("dhcp.eth0.dns2", "N/A"));
+        ViewHelper.addTextView(holder, "IP", SystemPropertiesIA.get("dhcp.eth0.ipaddress", "N/A"));
+        ViewHelper.addTextView(holder, "Gateway", SystemPropertiesIA.get("dhcp.eth0.gateway", "N/A"));
+        ViewHelper.addTextView(holder, "Mask", SystemPropertiesIA.get("dhcp.eth0.mask", "N/A"));
 
-        ViewHelper.addLineView(mHolder, 0xff00ff00); // green
+        ViewHelper.addLineView(holder, 0xff00ff00); // green
         if (Build.VERSION.SDK_INT >= 9) {
-            ViewHelper.addTextView(mHolder, "Encrypted FS: " +
+            ViewHelper.addTextView(holder, "Encrypted FS: " +
                     EnvironmentIA.isEncryptedFilesystemEnabled());
         }
-        ViewHelper.addTextView(mHolder, "Data Dir: " +
+        ViewHelper.addTextView(holder, "Data Dir: " +
                 Environment.getDataDirectory().getAbsolutePath());
-        ViewHelper.addTextView(mHolder, "Download Cache Dir: " +
+        ViewHelper.addTextView(holder, "Download Cache Dir: " +
                 Environment.getDownloadCacheDirectory());
 
         if (Build.VERSION.SDK_INT >= 9) {
-            ViewHelper.addTextView(mHolder, "Android Secure Data Dir: " +
+            ViewHelper.addTextView(holder, "Android Secure Data Dir: " +
                     EnvironmentIA.getSecureDataDirectory());
-            ViewHelper.addTextView(mHolder, "Android System Secure Dir: " +
+            ViewHelper.addTextView(holder, "Android System Secure Dir: " +
                     EnvironmentIA.getSystemSecureDirectory());
         }
 
-        ViewHelper.addTextView(mHolder, "External Storage Dir: " +
+        ViewHelper.addTextView(holder, "External Storage Dir: " +
                 Environment.getExternalStorageDirectory());
-        ViewHelper.addTextView(mHolder, "External Storage state: " +
+        ViewHelper.addTextView(holder, "External Storage state: " +
                 Environment.getExternalStorageState());
-        ViewHelper.addTextView(mHolder, "External Storage size: " + getExternalStorageSize());
+        ViewHelper.addTextView(holder, "External Storage size: " + getExternalStorageSize());
         if (Build.VERSION.SDK_INT >= 9) {
-            ViewHelper.addTextView(mHolder, "External storage removable: " +
+            ViewHelper.addTextView(holder, "External storage removable: " +
                     Environment.isExternalStorageRemovable());
         }
-        ViewHelper.addTextView(mHolder, "External Storage Data Dir: " +
+        ViewHelper.addTextView(holder, "External Storage Data Dir: " +
                 EnvironmentIA.getExternalStorageAndroidDataDir());
 
         if (Build.VERSION.SDK_INT >= 8) {
-            ViewHelper.addTextView(mHolder, "Alarms audio: " +
+            ViewHelper.addTextView(holder, "Alarms audio: " +
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS));
-            ViewHelper.addTextView(mHolder, "DCIM: " +
+            ViewHelper.addTextView(holder, "DCIM: " +
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM));
-            ViewHelper.addTextView(mHolder, "Download: " +
+            ViewHelper.addTextView(holder, "Download: " +
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
-            ViewHelper.addTextView(mHolder, "Movies: " +
+            ViewHelper.addTextView(holder, "Movies: " +
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES));
-            ViewHelper.addTextView(mHolder, "Music: " +
+            ViewHelper.addTextView(holder, "Music: " +
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC));
-            ViewHelper.addTextView(mHolder, "Notification audio: " +
+            ViewHelper.addTextView(holder, "Notification audio: " +
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS));
-            ViewHelper.addTextView(mHolder, "Pictures: " +
+            ViewHelper.addTextView(holder, "Pictures: " +
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
-            ViewHelper.addTextView(mHolder, "Podcasts: " +
+            ViewHelper.addTextView(holder, "Podcasts: " +
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS));
-            ViewHelper.addTextView(mHolder, "Ringtones: " +
+            ViewHelper.addTextView(holder, "Ringtones: " +
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES));
         }
     }
@@ -153,7 +151,7 @@ public class DeviceInfoActivity extends Activity {
             try {
                 Method getRealSizeMethod = Display.class.getMethod("getRealSize",
                         new Class[] { Point.class });
-                getRealSizeMethod.invoke(screen, new Object[] { pt });
+                getRealSizeMethod.invoke(screen, pt);
             } catch (Exception e) {
                 AppLogger.w(TAG, "Unexpected exception: ", e);
                 screen.getSize(pt); // exclude window decor size (eg, statusbar)
