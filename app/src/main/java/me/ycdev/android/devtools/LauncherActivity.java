@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.ycdev.android.devtools.apps.installed.InstalledAppsActivity;
+import me.ycdev.android.devtools.apps.running.RunningAppsActivity;
 import me.ycdev.android.devtools.sampler.AppsSamplerActivity;
 import me.ycdev.android.devtools.base.GridEntriesActivity;
 import me.ycdev.android.devtools.device.BroadcastTester;
@@ -36,6 +37,9 @@ public class LauncherActivity extends GridEntriesActivity {
         activities.add(new IntentEntry(new Intent(this, AppsSamplerActivity.class),
                 getString(R.string.apps_sampler_module_title),
                 getString(R.string.apps_sampler_module_desc)));
+        activities.add(new IntentEntry(new Intent(this, RunningAppsActivity.class),
+                getString(R.string.running_apps_module_title),
+                getString(R.string.running_apps_module_desc)));
         return activities;
     }
 }

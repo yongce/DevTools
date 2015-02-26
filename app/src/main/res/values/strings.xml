@@ -11,6 +11,7 @@
     <string name="action_sort_by_uid">Sort by uid</string>
     <string name="action_sort_by_install_time">Sort by install time</string>
     <string name="action_sort_by_update_time">Sort by update time</string>
+    <string name="action_refresh">Refresh</string>
 
     <string name="module_device_info_title">Device Info</string>
     <string name="module_device_info_desc">Explore the device details</string>
@@ -59,4 +60,6 @@
     <string name="apps_sampler_notification_ticker">Sampling the apps…</string>
     <string name="apps_sampler_sample_status">Start time: %1$s\nClock time (s): %2$d\nSample count: %3$d</string>
 
+    <string name="running_apps_module_title">Running Apps</string>
+    <string name="running_apps_module_desc">Show all the running apps</string>
 </resources>

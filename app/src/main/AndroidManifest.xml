@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.ycdev.android.devtools" >
+    package="me.ycdev.android.devtools">
 
     <permission
         android:name="me.ycdev.android.devtools.permission.DYNAMIC_BROADCAST"
@@ -19,11 +19,12 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <!-- Receivers -->
-        <receiver android:name="me.ycdev.android.devtools.receivers.PackageChangeReceiver"
+        <receiver
+            android:name="me.ycdev.android.devtools.receivers.PackageChangeReceiver"
             android:exported="false">
-            <intent-filter >
+            <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
@@ -36,7 +37,7 @@
         <!-- Activities -->
         <activity
             android:name="me.ycdev.android.devtools.LauncherActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,7 +53,7 @@
         <activity
             android:name=".apps.installed.InstalledAppsActivity"
             android:label="@string/module_installed_apps_title" />
-        <activity 
+        <activity
             android:name="me.ycdev.android.devtools.device.BroadcastTester"
             android:label="@string/module_broadcast_tester_title" />
         <activity
@@ -60,12 +61,17 @@
             android:label="@string/apps_sampler_module_title"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
+
         <service android:name=".sampler.AppsSamplerService" />
 
         <activity
             android:name=".apps.selector.AppsSelectorActivity"
             android:label="@string/apps_selector_title"
             android:configChanges="orientation|screenSize" />
+
+        <activity
+            android:name=".apps.running.RunningAppsActivity"
+            android:label="@string/running_apps_module_title" />
     </application>
 
 </manifest>
