@@ -1,10 +1,6 @@
 package me.ycdev.android.devtools.apps.installed;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,21 +11,22 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.devtools.utils.AppLogger;
-import me.ycdev.android.lib.common.utils.PackageUtils;
-import me.ycdev.android.lib.commonui.base.WaitingAsyncTaskBase;
+import me.ycdev.android.lib.common.apps.AppInfo;
+import me.ycdev.android.lib.common.apps.AppsLoadConfig;
+import me.ycdev.android.lib.common.apps.AppsLoadFilter;
+import me.ycdev.android.lib.common.apps.AppsLoadListener;
+import me.ycdev.android.lib.common.apps.AppsLoader;
+import me.ycdev.android.lib.commonui.base.LoadingAsyncTaskBase;
 
 public class InstalledAppsActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
     private static final String TAG = "InstalledAppsActivity";
 
     private InstalledAppsAdapter mAdapter;
-    private AppsLoader mAppsLoader;
+    private AppsLoadingTask mAppsLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +45,7 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
         if (mAppsLoader != null && mAppsLoader.getStatus() != AsyncTask.Status.FINISHED) {
             mAppsLoader.cancel(true);
         }
-        mAppsLoader = new AppsLoader(this);
+        mAppsLoader = new AppsLoadingTask(this);
         mAppsLoader.execute();
     }
 
@@ -100,40 +97,32 @@ public class InstalledAppsActivity extends ActionBarActivity implements AdapterV
         }
     }
 
-    private class AppsLoader extends WaitingAsyncTaskBase<Void, Void, List<AppInfo>> {
-        private Context mContext;
-
-        public AppsLoader(Activity cxt) {
-            super(cxt, cxt.getString(R.string.tips_loading));
-            mContext = cxt;
+    private class AppsLoadingTask extends LoadingAsyncTaskBase<Void, List<AppInfo>> {
+        public AppsLoadingTask(Activity cxt) {
+            super(cxt);
         }
 
         @Override
         protected List<AppInfo> doInBackground(Void... params) {
-            PackageManager pm = mContext.getPackageManager();
-            List<PackageInfo> installedApps = pm.getInstalledPackages(0);
-            List<AppInfo> result = new ArrayList<>(installedApps.size());
-            for (PackageInfo pkgInfo : installedApps) {
-                if (isCancelled()) {
-                    return result; // cancelled
+            AppsLoadFilter filter = new AppsLoadFilter();
+            filter.onlyMounted = false;
+            filter.onlyEnabled = false;
+
+            AppsLoadConfig config = new AppsLoadConfig();
+
+            AppsLoadListener listener = new AppsLoadListener() {
+                @Override
+                public boolean isCancelled() {
+                    return AppsLoadingTask.this.isCancelled();
                 }
-                AppInfo item = new AppInfo();
-                item.pkgName = pkgInfo.packageName;
-                item.appUid = pkgInfo.applicationInfo.uid;
-                item.sharedUid = pkgInfo.sharedUserId;
-                item.isSysApp = (pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
-                item.appName = pkgInfo.applicationInfo.loadLabel(pm).toString();
-                item.versionName = pkgInfo.versionName;
-                item.versionCode = pkgInfo.versionCode;
-                item.apkPath = pkgInfo.applicationInfo.sourceDir;
-                item.appIcon = pkgInfo.applicationInfo.loadIcon(pm);
-                item.isDisabled = !PackageUtils.isPkgEnabled(mContext, pkgInfo.packageName);
-                item.isUninstalled = !new File(pkgInfo.applicationInfo.sourceDir).exists();
-                item.installTime = pkgInfo.firstInstallTime;
-                item.updateTime = pkgInfo.lastUpdateTime;
-                result.add(item);
-            }
-            return result;
+
+                @Override
+                public void onProgressUpdated(int percent, AppInfo appInfo) {
+                    publishProgress(percent);
+                }
+            };
+
+            return AppsLoader.getInstance(mActivity).loadInstalledApps(filter, config, listener);
         }
 
         @Override

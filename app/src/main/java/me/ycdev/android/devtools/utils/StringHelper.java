@@ -7,23 +7,6 @@ import java.util.Locale;
 import android.content.Context;
 
 public class StringHelper {
-    private static SimpleDateFormat sDateTimeFormat = null;
-
-    private static SimpleDateFormat getDefaultFormatInstance() {
-        if (sDateTimeFormat == null) {
-            sDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-        }
-        return sDateTimeFormat;
-    }
-
-    /**
-     * @param time returned by System.currentTimeMillis(), in milliseconds.
-     * @return In format "yyyy-MM-dd HH:mm:ss"
-     */
-    public static String formatDateTime(long time) {
-        return getDefaultFormatInstance().format(new Date(time));
-    }
-
     public static void addTimeEntry(StringBuilder strBuilder,
             String prefix, Context context, long macroSeconds) {
         final long TIME_UNIT = 1000 * 1000;

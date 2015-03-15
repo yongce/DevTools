@@ -2,8 +2,6 @@ package me.ycdev.android.devtools.apps.selector;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -12,14 +10,16 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.apps.common.AppInfo;
-import me.ycdev.android.lib.common.utils.PackageUtils;
-import me.ycdev.android.lib.commonui.base.WaitingAsyncTaskBase;
+import me.ycdev.android.lib.common.apps.AppInfo;
+import me.ycdev.android.lib.common.apps.AppsLoadConfig;
+import me.ycdev.android.lib.common.apps.AppsLoadFilter;
+import me.ycdev.android.lib.common.apps.AppsLoadListener;
+import me.ycdev.android.lib.common.apps.AppsLoader;
+import me.ycdev.android.lib.commonui.base.LoadingAsyncTaskBase;
 
 public class AppsSelectorActivity extends ActionBarActivity implements AppsSelectorAdapter.SelectedAppsChangeListener,
         View.OnClickListener {
@@ -40,17 +40,15 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
     private static final boolean DEFAULT_EXCLUDE_DISABLED = true;
     private static final boolean DEFAULT_EXCLUDE_SYSTEM = false;
 
-    private boolean mMultiChoice;
     private boolean mExcludeUninstalled;
     private boolean mExcludeDisabled;
     private boolean mExcludeSystem;
 
     private TextView mStatusView;
-    private ListView mListView;
     private AppsSelectorAdapter mAdapter;
     private Button mSelectBtn;
 
-    private AppsLoader mAppsLoader;
+    private AppsLoadingTask mAppsLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +56,16 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
         setContentView(R.layout.act_apps_selector);
 
         Intent intent = getIntent();
-        mMultiChoice = intent.getBooleanExtra(EXTRA_MULTICHOICE, DEFAULT_MULTICHOICE);
+        boolean multiChoice = intent.getBooleanExtra(EXTRA_MULTICHOICE, DEFAULT_MULTICHOICE);
         mExcludeUninstalled = intent.getBooleanExtra(EXTRA_EXCLUDE_UNINSTALLED, DEFAULT_EXCLUDE_UNINSTALLED);
         mExcludeDisabled = intent.getBooleanExtra(EXTRA_EXCLUDE_DISABLED, DEFAULT_EXCLUDE_DISABLED);
         mExcludeSystem = intent.getBooleanExtra(EXTRA_EXCLUDE_SYSTEM, DEFAULT_EXCLUDE_SYSTEM);
 
         mStatusView = (TextView) findViewById(R.id.status);
 
-        mListView = (ListView) findViewById(R.id.list);
-        mAdapter = new AppsSelectorAdapter(this, this, mMultiChoice);
-        mListView.setAdapter(mAdapter);
+        ListView listView = (ListView) findViewById(R.id.list);
+        mAdapter = new AppsSelectorAdapter(this, this, multiChoice);
+        listView.setAdapter(mAdapter);
 
         mSelectBtn = (Button) findViewById(R.id.select);
         mSelectBtn.setOnClickListener(this);
@@ -79,7 +77,7 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
         if (mAppsLoader != null && mAppsLoader.getStatus() != AsyncTask.Status.FINISHED) {
             mAppsLoader.cancel(true);
         }
-        mAppsLoader = new AppsLoader(this);
+        mAppsLoader = new AppsLoadingTask(this);
         mAppsLoader.execute();
     }
 
@@ -99,7 +97,7 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
 
     private void setSelectedApps() {
         List<AppInfo> apps = mAdapter.getSelectedApps();
-        ArrayList<String> pkgNames = new ArrayList<String>(apps.size());
+        ArrayList<String> pkgNames = new ArrayList<>(apps.size());
         for (AppInfo appInfo : apps) {
             pkgNames.add(appInfo.pkgName);
         }
@@ -125,9 +123,9 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
         }
     }
 
-    private class AppsLoader extends WaitingAsyncTaskBase<Void, Void, List<AppInfo>> {
-        public AppsLoader(Activity activity) {
-            super(activity, activity.getString(R.string.tips_loading), true, true);
+    private class AppsLoadingTask extends LoadingAsyncTaskBase<Void, List<AppInfo>> {
+        public AppsLoadingTask(Activity activity) {
+            super(activity);
         }
 
         @Override
@@ -138,27 +136,26 @@ public class AppsSelectorActivity extends ActionBarActivity implements AppsSelec
 
         @Override
         protected List<AppInfo> doInBackground(Void... params) {
-            PackageManager pm = getPackageManager();
-            List<PackageInfo> installedApps = pm.getInstalledPackages(0);
-            List<AppInfo> result = new ArrayList<>(installedApps.size());
-            for (PackageInfo pkgInfo : installedApps) {
-                if (isCancelled()) {
-                    return result; // cancelled
+            AppsLoadFilter filter = new AppsLoadFilter();
+            filter.onlyMounted = mExcludeUninstalled;
+            filter.onlyEnabled = mExcludeDisabled;
+            filter.includeSysApp = !mExcludeSystem;
+
+            AppsLoadConfig config = new AppsLoadConfig();
+
+            AppsLoadListener listener = new AppsLoadListener() {
+                @Override
+                public boolean isCancelled() {
+                    return AppsLoadingTask.this.isCancelled();
                 }
-                AppInfo item = new AppInfo();
-                item.pkgName = pkgInfo.packageName;
-                item.isSysApp = PackageUtils.isPkgSystem(pkgInfo.applicationInfo);
-                item.isUninstalled = !new File(pkgInfo.applicationInfo.sourceDir).exists();
-                item.isDisabled = !PackageUtils.isPkgEnabled(pkgInfo.applicationInfo);
-                if (mExcludeSystem && item.isSysApp || mExcludeUninstalled && item.isUninstalled
-                        || mExcludeDisabled && item.isDisabled) {
-                    continue;
+
+                @Override
+                public void onProgressUpdated(int percent, AppInfo appInfo) {
+                    publishProgress(percent);
                 }
-                item.appName = pkgInfo.applicationInfo.loadLabel(pm).toString();
-                item.appIcon = pkgInfo.applicationInfo.loadIcon(pm);
-                result.add(item);
-            }
-            return result;
+            };
+
+            return AppsLoader.getInstance(mActivity).loadInstalledApps(filter, config, listener);
         }
 
         @Override

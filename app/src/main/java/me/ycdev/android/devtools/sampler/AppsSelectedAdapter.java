@@ -1,12 +1,11 @@
 package me.ycdev.android.devtools.sampler;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.apps.common.AppInfo;
+import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
 
 class AppsSelectedAdapter extends ListAdapterBase<AppInfo> {

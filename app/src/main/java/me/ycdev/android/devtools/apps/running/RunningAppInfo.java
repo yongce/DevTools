@@ -3,7 +3,7 @@ package me.ycdev.android.devtools.apps.running;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.ycdev.android.devtools.apps.common.AppInfo;
+import me.ycdev.android.lib.common.apps.AppInfo;
 
 class RunningAppInfo extends AppInfo {
     static class ProcInfo {

@@ -1,7 +1,6 @@
 package me.ycdev.android.devtools.apps.selector;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -14,7 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.apps.common.AppInfo;
+import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
 
 class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {

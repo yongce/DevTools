@@ -20,9 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.devtools.utils.AppLogger;
-import me.ycdev.android.lib.commonui.base.WaitingAsyncTaskBase;
+import me.ycdev.android.lib.common.apps.AppInfo;
+import me.ycdev.android.lib.common.utils.MiscUtils;
+import me.ycdev.android.lib.commonui.base.LoadingAsyncTaskBase;
 
 public class RunningAppsActivity extends ActionBarActivity {
     private static final String TAG = "RunningAppsActivity";
@@ -75,18 +76,15 @@ public class RunningAppsActivity extends ActionBarActivity {
         }
     }
 
-    private class AppsLoader extends WaitingAsyncTaskBase<Void, Void, List<RunningAppInfo>> {
-        private Context mContext;
-
+    private class AppsLoader extends LoadingAsyncTaskBase<Void, List<RunningAppInfo>> {
         public AppsLoader(Activity cxt) {
-            super(cxt, cxt.getString(R.string.tips_loading), true, true);
-            mContext = cxt;
+            super(cxt);
         }
 
         @Override
         protected List<RunningAppInfo> doInBackground(Void... params) {
-            PackageManager pm = mContext.getPackageManager();
-            ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+            PackageManager pm = mActivity.getPackageManager();
+            ActivityManager am = (ActivityManager) mActivity.getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
             HashMap<String, RunningAppInfo> runningApps = new HashMap<>();
 
@@ -124,6 +122,9 @@ public class RunningAppsActivity extends ActionBarActivity {
                     runningApps.put(pkgName, appItem);
                 }
                 appItem.allProcesses.add(procItem);
+
+                int percent = MiscUtils.calcProgressPercent(1, 40, i + 1, N);
+                publishProgress(percent);
             }
 
             // Get memory usage of all the running processes
@@ -134,10 +135,15 @@ public class RunningAppsActivity extends ActionBarActivity {
                 }
                 Debug.MemoryInfo memInfo = pidsMemInfo[i];
                 procInfoList[i].memPss = memInfo.getTotalPss();
+
+                int percent = MiscUtils.calcProgressPercent(41, 80, i + 1, N);
+                publishProgress(percent);
             }
 
             // Convert the map to list
             List<RunningAppInfo> result = new ArrayList<>(runningApps.size());
+            int i = 0;
+            final int RUNNING_APPS_N = runningApps.size();
             for (RunningAppInfo appInfo : runningApps.values()) {
                 if (isCancelled()) {
                     return null; // cancelled
@@ -147,9 +153,14 @@ public class RunningAppsActivity extends ActionBarActivity {
                 for (RunningAppInfo.ProcInfo procInfo : appInfo.allProcesses) {
                     appInfo.totalMemPss += procInfo.memPss;
                 }
+
+                i++;
+                int percent = MiscUtils.calcProgressPercent(81, 95, i, RUNNING_APPS_N);
+                publishProgress(percent);
             }
 
             Collections.sort(result, new AppInfo.AppNameComparator());
+            publishProgress(100);
 
             return result;
         }

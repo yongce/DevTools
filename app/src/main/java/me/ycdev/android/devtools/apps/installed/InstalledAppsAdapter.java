@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.apps.common.AppInfo;
+import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.compat.ViewsCompat;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
 
@@ -57,9 +57,9 @@ class InstalledAppsAdapter extends ListAdapterBase<AppInfo> {
         vh.apkPathView.setText(item.apkPath);
 
         String stateStr = mContext.getString(R.string.apps_app_state,
-                String.valueOf(item.isDisabled), String.valueOf(item.isUninstalled));
+                String.valueOf(item.isDisabled), String.valueOf(item.isUnmounted));
         vh.stateView.setText(stateStr);
-        if (item.isDisabled || item.isUninstalled) {
+        if (item.isDisabled || item.isUnmounted) {
             ViewsCompat.setImageViewAlpha(vh.iconView, ALPHA_DISABLED);
             vh.stateView.setTextColor(mUnavailableColor);
         } else {

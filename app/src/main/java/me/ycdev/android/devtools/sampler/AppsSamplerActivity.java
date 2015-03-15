@@ -1,6 +1,5 @@
 package me.ycdev.android.devtools.sampler;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,9 +18,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.apps.common.AppInfo;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
-import me.ycdev.android.devtools.utils.StringHelper;
+import me.ycdev.android.lib.common.apps.AppInfo;
+import me.ycdev.android.lib.common.utils.DateTimeUtils;
 import me.ycdev.android.lib.common.utils.WeakHandler;
 
 public class AppsSamplerActivity extends ActionBarActivity implements View.OnClickListener, WeakHandler.MessageHandler {
@@ -104,7 +103,7 @@ public class AppsSamplerActivity extends ActionBarActivity implements View.OnCli
         SampleTaskInfo taskInfo = AppsSamplerService.getLastSampleTask();
         if (taskInfo != null && taskInfo.isSampling) {
             String status = getString(R.string.apps_sampler_sample_status,
-                    StringHelper.formatDateTime(taskInfo.startTime),
+                    DateTimeUtils.getReadableTimeStamp(taskInfo.startTime),
                     taskInfo.sampleClockTime / 1000,
                     taskInfo.sampleCount);
             mSampleStatusView.setText(status);

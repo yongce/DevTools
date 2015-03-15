@@ -24,7 +24,6 @@ import java.util.HashMap;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.devtools.utils.Constants;
-import me.ycdev.android.devtools.utils.StringHelper;
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
 import me.ycdev.android.lib.common.utils.IoUtils;
 
@@ -276,7 +275,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
         AppsSetStat appsSetStat = AppsSetStat.createSnapshot(this, taskInfo.pkgNames);
         if (taskInfo.preAppsSetStat != null) {
             AppsSetStat appsUsage = AppsSetStat.computeUsage(taskInfo.preAppsSetStat, appsSetStat);
-            String timeStamp = StringHelper.formatDateTime(appsUsage.sampleTime);
+            String timeStamp = DateTimeUtils.getReadableTimeStamp(appsUsage.sampleTime);
 
             final int N = taskInfo.pkgNames.size();
             for (int i = 0; i < N; i++) {

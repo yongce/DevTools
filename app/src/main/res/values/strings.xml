@@ -13,8 +13,6 @@
     <string name="action_sort_by_update_time">Sort by update time</string>
     <string name="action_refresh">Refresh</string>
 
-    <string name="tips_loading">Loading…</string>
-
     <string name="module_device_info_title">Device Info</string>
     <string name="module_device_info_desc">Explore the device details</string>
     <string name="module_system_utilities_title">System Utilities</string>
