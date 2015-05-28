@@ -11,6 +11,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -39,6 +40,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
     private static final String EXTRA_INTERVAL = "extra.interval"; // seconds
     private static final String EXTRA_PERIOD = "extra.period"; // minutes
 
+    private static final String FILENAME_SAMPLE_TASK_BACKUP = "task-backup.txt";
     private static final String FILENAME_TAG_STATS = "-stats-";
     private static final String FILENAME_TAG_REPORT = "-report";
 
@@ -52,10 +54,17 @@ public class AppsSamplerService extends Service implements Handler.Callback {
     private HandlerThread mHandlerThread;
     private Handler mHandler;
 
+    private SampleLogger mSampleLogger;
+
     private static SampleTaskInfo sTaskInfo;
 
     public static void startSampler(Context cxt, ArrayList<String> pkgNames,
             int intervalSeconds, int periodMinutes) {
+        // delete task info backup if exist
+        File backupFile = SamplerUtils.getFileForSampler(FILENAME_SAMPLE_TASK_BACKUP, false);
+        //noinspection ResultOfMethodCallIgnored
+        backupFile.delete();
+
         Intent intent = new Intent(cxt, AppsSamplerService.class);
         intent.setAction(ACTION_START_SAMPLER);
         intent.putExtra(EXTRA_PKG_NAMES, pkgNames);
@@ -93,29 +102,45 @@ public class AppsSamplerService extends Service implements Handler.Callback {
         mHandlerThread = new HandlerThread("AppsSampler");
         mHandlerThread.start();
         mHandler = new Handler(mHandlerThread.getLooper(), this);
+        mSampleLogger = new SampleLogger();
     }
 
     @Override
     public void onDestroy() {
         AppLogger.i(TAG, "Apps sampler service is destroying...");
         mHandlerThread.getLooper().quit();
+        IoUtils.closeQuietly(mSampleLogger);
         super.onDestroy();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        AppLogger.i(TAG, "requested to start sampler service: " + intent);
+        mSampleLogger.logInfo(TAG, "requested to start sampler service: " + intent);
         if (intent == null) {
-            AppLogger.e(TAG, "sampling service cannot restart because of info lost");
-            return START_NOT_STICKY;
+            mSampleLogger.logInfo(TAG, "sampling service restart and info lost");
+            SampleTaskInfo taskInfo = restoreSampleTaskInfo();
+            if (taskInfo == null) {
+                mSampleLogger.logError(TAG, "cannot restore the sample task");
+                stopSelf();
+            } else {
+                mSampleLogger.logInfo(TAG, "restore sample: " + taskInfo.backupTaskInfo());
+                mHandler.obtainMessage(MSG_START_SAMPLER, startId, 0, taskInfo).sendToTarget();
+            }
+            return START_STICKY;
         }
 
         String action = intent.getAction();
         if (action.equals(ACTION_START_SAMPLER)) {
-            SampleTaskInfo taskInfo = new SampleTaskInfo();
-            taskInfo.pkgNames = intent.getStringArrayListExtra(EXTRA_PKG_NAMES);
-            taskInfo.sampleInterval = intent.getIntExtra(EXTRA_INTERVAL, 0);
-            taskInfo.samplePeriod = intent.getIntExtra(EXTRA_PERIOD, 0);
+            SampleTaskInfo taskInfo = restoreSampleTaskInfo();
+            if (taskInfo == null) {
+                taskInfo = new SampleTaskInfo();
+                taskInfo.pkgNames = intent.getStringArrayListExtra(EXTRA_PKG_NAMES);
+                taskInfo.sampleInterval = intent.getIntExtra(EXTRA_INTERVAL, 0);
+                taskInfo.samplePeriod = intent.getIntExtra(EXTRA_PERIOD, 0);
+                taskInfo.startTime = System.currentTimeMillis();
+            } else {
+                mSampleLogger.logInfo(TAG, "start sampler, use backup: " + taskInfo.backupTaskInfo());
+            }
             mHandler.obtainMessage(MSG_START_SAMPLER, startId, 0, taskInfo).sendToTarget();
         } else if (action.equals(ACTION_STOP_SAMPLER)) {
             mHandler.obtainMessage(MSG_STOP_SAMPLER, startId, 0).sendToTarget();
@@ -124,10 +149,51 @@ public class AppsSamplerService extends Service implements Handler.Callback {
         } else if (action.equals(ACTION_CLEAR_LOGS)) {
             mHandler.obtainMessage(MSG_CLEAR_LOGS, startId, 0).sendToTarget();
         } else {
-            AppLogger.w(TAG, "unknown request: " + intent);
+            mSampleLogger.logWarning(TAG, "unknown request: " + intent);
             mHandler.obtainMessage(MSG_UNKNOWN_ACTION, startId, 0).sendToTarget();
         }
-        return START_NOT_STICKY;
+        return START_STICKY;
+    }
+
+    private static void backupSampleTaskInfo(SampleTaskInfo taskInfo) {
+        if (taskInfo == null) {
+            AppLogger.w(TAG, "cannot backup sample task info, no task info yet");
+            return;
+        }
+
+        String taskInfoBackup = taskInfo.backupTaskInfo();
+        if (taskInfoBackup == null) {
+            AppLogger.w(TAG, "failed to create sample task info backup");
+            return;
+        }
+
+        try {
+            File backupFile = SamplerUtils.getFileForSampler(FILENAME_SAMPLE_TASK_BACKUP, true);
+            IoUtils.saveAsFile(taskInfoBackup, backupFile.getAbsolutePath());
+        } catch (IOException e) {
+            AppLogger.w(TAG, "failed to save sample task info into backup file", e);
+        }
+    }
+
+    private static SampleTaskInfo restoreSampleTaskInfo() {
+        File backupFile = SamplerUtils.getFileForSampler(FILENAME_SAMPLE_TASK_BACKUP, false);
+        if (!backupFile.exists()) {
+            return null;
+        }
+
+        String taskInfoBackup;
+        try {
+            taskInfoBackup = IoUtils.readAllLines(backupFile.getAbsolutePath());
+        } catch (IOException e) {
+            AppLogger.w(TAG, "failed to create sampler log file", e);
+            return null;
+        }
+        if (TextUtils.isEmpty(taskInfoBackup)) {
+            AppLogger.w(TAG, "no task info backup");
+            return null;
+        }
+
+        return SampleTaskInfo.restoreTaskInfo(taskInfoBackup);
     }
 
     @Override
@@ -136,11 +202,11 @@ public class AppsSamplerService extends Service implements Handler.Callback {
     }
 
     private static String generateStatsFileName(String pkgName, long startTime) {
-        return DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_STATS + pkgName;
+        return DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_STATS + pkgName + ".txt";
     }
 
     private static String generateReportFileName(long startTime) {
-        return DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_REPORT;
+        return DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_REPORT + ".txt";
     }
 
     private Notification buildNotification() {
@@ -204,7 +270,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
 
             case MSG_CLEAR_LOGS: {
                 if (sTaskInfo != null && sTaskInfo.isSampling) {
-                    AppLogger.w(TAG, "sampler is running, cannot clear logs");
+                    mSampleLogger.logWarning(TAG, "sampler is running, cannot clear logs");
                 } else {
                     clearLogs();
                     stopSelf(msg.arg1);
@@ -226,31 +292,28 @@ public class AppsSamplerService extends Service implements Handler.Callback {
             return;
         }
 
-        AppLogger.i(TAG, "try to start sampler, interval: " + taskInfo.sampleInterval
+        mSampleLogger.logInfo(TAG, "try to start sampler, interval: " + taskInfo.sampleInterval
                 + ", period: " + taskInfo.samplePeriod);
         if (taskInfo.pkgNames == null || taskInfo.pkgNames.size() == 0 || taskInfo.sampleInterval <= 0) {
-            AppLogger.w(TAG, "cannot start sampler because of wrong parameters");
+            mSampleLogger.logWarning(TAG, "cannot start sampler because of wrong parameters");
             stopSelf(startId);
             return;
         }
 
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            AppLogger.w(TAG, "cannot start sampler because no SD card mounted");
+            mSampleLogger.logWarning(TAG, "cannot start sampler because no SD card mounted");
             stopSelf(startId);
             return;
         }
 
-        AppLogger.d(TAG, "start sampler...");
+        mSampleLogger.logDebug(TAG, "do start sampler...");
 
-        taskInfo.startTime = System.currentTimeMillis();
         taskInfo.isSampling = true;
-        taskInfo.fileWriters = new ArrayList<FileWriter>(taskInfo.pkgNames.size());
+        taskInfo.fileWriters = new ArrayList<>(taskInfo.pkgNames.size());
         for (String pkgName : taskInfo.pkgNames) {
             try {
-                File sdRoot = Environment.getExternalStorageDirectory();
-                File appDir = new File(sdRoot, Constants.EXTERNAL_STORAGE_PATH_APPS_SAMPLER);
-                appDir.mkdirs();
-                File dataFile = new File(appDir, generateStatsFileName(pkgName, taskInfo.startTime));
+                File dataFile = SamplerUtils.getFileForSampler(
+                        generateStatsFileName(pkgName, taskInfo.startTime), true);
                 FileWriter writer = new FileWriter(dataFile, true);
                 AppStat.appendHeader(writer);
                 writer.flush();
@@ -299,13 +362,16 @@ public class AppsSamplerService extends Service implements Handler.Callback {
 
         taskInfo.preAppsSetStat = appsSetStat;
 
+        // backup the current task info state
+        backupSampleTaskInfo(taskInfo);
+
         AppLogger.i(TAG, "sample stats snapshot done");
     }
 
     private void doStopSampler(SampleTaskInfo taskInfo) {
-        AppLogger.i(TAG, "requested to stop sample...");
+        mSampleLogger.logInfo(TAG, "requested to stop sample...");
         if (!taskInfo.isSampling) {
-            AppLogger.w(TAG, "sampler not running");
+            mSampleLogger.logWarning(TAG, "sampler not running");
             return;
         }
         mHandler.removeMessages(MSG_SAMPLE_STATS);
@@ -321,14 +387,16 @@ public class AppsSamplerService extends Service implements Handler.Callback {
             }
         }
 
+        File backupFile = SamplerUtils.getFileForSampler(FILENAME_SAMPLE_TASK_BACKUP, false);
+        //noinspection ResultOfMethodCallIgnored
+        backupFile.delete();
+
         taskInfo.isSampling = false;
         stopForeground(true);
     }
 
     private static void createSampleReport(Context cxt, SampleTaskInfo taskInfo) {
-        File sdRoot = Environment.getExternalStorageDirectory();
-        File appDir = new File(sdRoot, Constants.EXTERNAL_STORAGE_PATH_APPS_SAMPLER);
-        appDir.mkdirs();
+        File appDir = SamplerUtils.getSamplerFolder();
         File reportFile = new File(appDir, generateReportFileName(taskInfo.startTime));
         FileWriter writer = null;
         try {
@@ -338,7 +406,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
                         pkgName, taskInfo.startTime));
                 BufferedReader reader = new BufferedReader(new FileReader(statFile));
                 AppStatReport appReport = new AppStatReport(pkgName);
-                String line = null;
+                String line;
                 while ((line = reader.readLine()) != null) {
                     StatFileLine entry = AppStat.readStat(line);
                     if (entry == null) {
@@ -389,15 +457,14 @@ public class AppsSamplerService extends Service implements Handler.Callback {
     }
 
     private static void createAllReports(Context cxt) {
-        File sdRoot = Environment.getExternalStorageDirectory();
-        File appDir = new File(sdRoot, Constants.EXTERNAL_STORAGE_PATH_APPS_SAMPLER);
+        File appDir = SamplerUtils.getSamplerFolder();
         File[] allFiles = appDir.listFiles();
         if (allFiles == null || allFiles.length == 0) {
             return;
         }
 
         // get all stats files
-        HashMap<String, SampleTaskInfo> allTasks = new HashMap<String, SampleTaskInfo>();
+        HashMap<String, SampleTaskInfo> allTasks = new HashMap<>();
         for (File file : allFiles) {
             String fileName = file.getName();
             int statsTagIndex = fileName.indexOf(FILENAME_TAG_STATS);
@@ -416,7 +483,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
                     AppLogger.w(TAG, "bad file name when parsing time: " + fileName, e);
                     continue;
                 }
-                taskInfo.pkgNames = new ArrayList<String>();
+                taskInfo.pkgNames = new ArrayList<>();
                 allTasks.put(timeStr, taskInfo);
             }
             String pkgName = fileName.substring(statsTagIndex + FILENAME_TAG_STATS.length());
@@ -430,11 +497,11 @@ public class AppsSamplerService extends Service implements Handler.Callback {
     }
 
     private static void clearLogs() {
-        File sdRoot = Environment.getExternalStorageDirectory();
-        File appDir = new File(sdRoot, Constants.EXTERNAL_STORAGE_PATH_APPS_SAMPLER);
+        File appDir = SamplerUtils.getSamplerFolder();
         if (appDir.exists()) {
             File[] files = appDir.listFiles();
             for (File file : files) {
+                //noinspection ResultOfMethodCallIgnored
                 file.delete();
             }
         }

@@ -85,6 +85,8 @@ public class AppsSamplerActivity extends ActionBarActivity implements View.OnCli
         }
         refreshButtonsState(taskInfo != null && taskInfo.isSampling);
         refreshSamplingInfo();
+        // refresh the UI later for killed
+        mHandler.sendEmptyMessageDelayed(MSG_REFRESH_SAMPLE_STATUS, mInterval * 1000);
     }
 
     private void refreshButtonsState(boolean isSampling) {
