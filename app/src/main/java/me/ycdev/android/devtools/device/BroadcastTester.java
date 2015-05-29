@@ -24,10 +24,18 @@ import android.widget.Toast;
 public class BroadcastTester extends GridEntriesActivity {
     private String mTargetPkgName;
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mReceiver1 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(getApplicationContext(), "Received: " + intent.getAction(),
+            Toast.makeText(getApplicationContext(), "Received1: " + intent.getAction(),
+                    Toast.LENGTH_LONG).show();
+        }
+    };
+
+    private BroadcastReceiver mReceiver2 = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(getApplicationContext(), "Received2: " + intent.getAction(),
                     Toast.LENGTH_LONG).show();
         }
     };
@@ -35,15 +43,19 @@ public class BroadcastTester extends GridEntriesActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.ACTION_DYNAMIC_BROADCAST_TEST);
-        registerReceiver(mReceiver, filter, Constants.PERM_DYNAMIC_BROADCAST, null);
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mReceiver1, filter, Constants.PERM_DYNAMIC_BROADCAST, null);
+        registerReceiver(mReceiver2, filter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(mReceiver);
+        unregisterReceiver(mReceiver1);
+        unregisterReceiver(mReceiver2);
     }
 
     @Override
@@ -55,7 +67,8 @@ public class BroadcastTester extends GridEntriesActivity {
     protected List<IntentEntry> getIntents() {
         List<IntentEntry> broadcasts = new ArrayList<IntentEntry>();
         mTargetPkgName = getPackageName();
-        testDevTools(broadcasts);
+        testBroadcastWithPerm(broadcasts);
+        testBroadcastWithoutPerm(broadcasts);
         testPackageAdd(broadcasts);
         testPackageReplaced(broadcasts);
         testPackageRemoved(broadcasts);
@@ -96,14 +109,23 @@ public class BroadcastTester extends GridEntriesActivity {
         builder.show();
     }
 
-    private void testDevTools(List<IntentEntry> itemsList) {
-        Intent intent = new Intent("me.ycdev.android.devtools.action.DYNAMIC_BROADCAST_TEST");
-        IntentEntry item = new IntentEntry(intent, "DevToolTest",
-                "Send DevTools test broadcast: " + intent.getAction());
+    private void testBroadcastWithPerm(List<IntentEntry> itemsList) {
+        Intent intent = new Intent(Constants.ACTION_DYNAMIC_BROADCAST_TEST);
+        IntentEntry item = new IntentEntry(intent, "Broadcast#1",
+                "Send Broadcast with perm: " + intent.getAction());
         item.type = IntentEntry.TYPE_BROADCAST;
         item.perm = Constants.PERM_DYNAMIC_BROADCAST;
         itemsList.add(item);
     }
+
+    private void testBroadcastWithoutPerm(List<IntentEntry> itemsList) {
+        Intent intent = new Intent(Constants.ACTION_DYNAMIC_BROADCAST_TEST);
+        IntentEntry item = new IntentEntry(intent, "Broadcast#2",
+                "Send Broadcast without perm: " + intent.getAction());
+        item.type = IntentEntry.TYPE_BROADCAST;
+        itemsList.add(item);
+    }
+
 
     private void testPackageAdd(List<IntentEntry> itemsList) {
         // SecurityException: protected-broadcast
