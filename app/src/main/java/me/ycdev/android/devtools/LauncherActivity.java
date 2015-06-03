@@ -7,9 +7,10 @@ import me.ycdev.android.devtools.apps.installed.InstalledAppsActivity;
 import me.ycdev.android.devtools.apps.running.RunningAppsActivity;
 import me.ycdev.android.devtools.sampler.AppsSamplerActivity;
 import me.ycdev.android.devtools.base.GridEntriesActivity;
-import me.ycdev.android.devtools.device.BroadcastTester;
+import me.ycdev.android.devtools.device.BroadcastTesterActivity;
 import me.ycdev.android.devtools.device.DeviceInfoActivity;
 import me.ycdev.android.devtools.device.SystemUtilitiesActivity;
+import me.ycdev.android.devtools.security.SecurityScannerActivity;
 
 import android.content.Intent;
 
@@ -31,7 +32,7 @@ public class LauncherActivity extends GridEntriesActivity {
         activities.add(new IntentEntry(new Intent(this, InstalledAppsActivity.class),
                 getString(R.string.module_installed_apps_title),
                 getString(R.string.module_installed_apps_desc)));
-        activities.add(new IntentEntry(new Intent(this, BroadcastTester.class),
+        activities.add(new IntentEntry(new Intent(this, BroadcastTesterActivity.class),
                 getString(R.string.module_broadcast_tester_title),
                 getString(R.string.module_broadcast_tester_desc)));
         activities.add(new IntentEntry(new Intent(this, AppsSamplerActivity.class),
@@ -40,6 +41,9 @@ public class LauncherActivity extends GridEntriesActivity {
         activities.add(new IntentEntry(new Intent(this, RunningAppsActivity.class),
                 getString(R.string.running_apps_module_title),
                 getString(R.string.running_apps_module_desc)));
+        activities.add(new IntentEntry(new Intent(this, SecurityScannerActivity.class),
+                getString(R.string.security_scanner_module_title),
+                getString(R.string.security_scanner_module_desc)));
         return activities;
     }
 }

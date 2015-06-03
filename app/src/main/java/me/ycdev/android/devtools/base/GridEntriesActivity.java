@@ -9,7 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +19,8 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public abstract class GridEntriesActivity extends ActionBarActivity implements AdapterView.OnItemClickListener,
-        AdapterView.OnItemLongClickListener {
+public abstract class GridEntriesActivity extends AppCompatActivity
+        implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     public static class IntentEntry {
         public static final int TYPE_ACTIVITY = 1;
         public static final int TYPE_BROADCAST = 2;

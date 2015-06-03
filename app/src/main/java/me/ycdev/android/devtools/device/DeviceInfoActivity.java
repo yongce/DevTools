@@ -16,13 +16,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-public class DeviceInfoActivity extends ActionBarActivity {
+public class DeviceInfoActivity extends AppCompatActivity {
     private static final String TAG = "DeviceInfoActivity";
 
     @Override

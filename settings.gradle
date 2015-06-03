@@ -5,3 +5,6 @@ project(':androidLib').projectDir = file('submodules/AndroidLib/lib')
 
 include ':androidUiLib'
 project(':androidUiLib').projectDir = file('submodules/AndroidUiLib/lib')
+
+include ':libsuperuser'
+project(':libsuperuser').projectDir = file('submodules/libsuperuser/libsuperuser')

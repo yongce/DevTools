@@ -4,3 +4,6 @@
 [submodule "submodules/AndroidUiLib"]
 	path = submodules/AndroidUiLib
 	url = https://github.com/yongce/AndroidUiLib.git
+[submodule "submodules/libsuperuser"]
+	path = submodules/libsuperuser
+	url = https://github.com/ycdev-fork/libsuperuser.git

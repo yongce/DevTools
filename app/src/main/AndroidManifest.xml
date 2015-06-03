@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.ycdev.android.devtools">
+    package="me.ycdev.android.devtools" >
 
     <permission
         android:name="me.ycdev.android.devtools.permission.DYNAMIC_BROADCAST"
-        android:label="@string/perm_guard_common_label"
         android:description="@string/perm_guard_common_desc"
+        android:label="@string/perm_guard_common_label"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="me.ycdev.android.devtools.permission.DYNAMIC_BROADCAST" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="me.ycdev.android.devtools.DevToolsApplication"
+        android:name=".DevToolsApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
+
         <!-- Receivers -->
         <receiver
-            android:name="me.ycdev.android.devtools.receivers.PackageChangeReceiver"
-            android:exported="false">
+            android:name=".receivers.PackageChangeReceiver"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
@@ -36,8 +36,8 @@
 
         <!-- Activities -->
         <activity
-            android:name="me.ycdev.android.devtools.LauncherActivity"
-            android:label="@string/app_name">
+            android:name=".LauncherActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,33 +45,38 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.ycdev.android.devtools.device.DeviceInfoActivity"
+            android:name=".device.DeviceInfoActivity"
             android:label="@string/module_device_info_title" />
         <activity
-            android:name="me.ycdev.android.devtools.device.SystemUtilitiesActivity"
+            android:name=".device.SystemUtilitiesActivity"
             android:label="@string/module_system_utilities_title" />
         <activity
             android:name=".apps.installed.InstalledAppsActivity"
             android:label="@string/module_installed_apps_title" />
         <activity
-            android:name="me.ycdev.android.devtools.device.BroadcastTester"
+            android:name=".device.BroadcastTesterActivity"
             android:label="@string/module_broadcast_tester_title" />
         <activity
             android:name=".sampler.AppsSamplerActivity"
-            android:label="@string/apps_sampler_module_title"
             android:configChanges="orientation|screenSize"
+            android:label="@string/apps_sampler_module_title"
             android:windowSoftInputMode="stateHidden" />
 
         <service android:name=".sampler.AppsSamplerService" />
 
         <activity
             android:name=".apps.selector.AppsSelectorActivity"
-            android:label="@string/apps_selector_title"
-            android:configChanges="orientation|screenSize" />
-
+            android:configChanges="orientation|screenSize"
+            android:label="@string/apps_selector_title" />
         <activity
             android:name=".apps.running.RunningAppsActivity"
             android:label="@string/running_apps_module_title" />
+        <activity
+            android:name=".security.SecurityScannerActivity"
+            android:label="@string/security_scanner_module_title" />
+        <activity
+            android:name=".security.unmarshall.UnmarshallScannerActivity"
+            android:label="@string/security_scanner_unmarshall_module_title" />
     </application>
 
 </manifest>

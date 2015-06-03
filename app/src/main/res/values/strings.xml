@@ -62,4 +62,14 @@
 
     <string name="running_apps_module_title">Running Apps</string>
     <string name="running_apps_module_desc">Show all the running apps</string>
+    <string name="title_activity_intent_unmarshall_checker">IntentUnmarshallCheckerActivity</string>
+
+    <string name="security_scanner_module_title">Security Scanner</string>
+    <string name="security_scanner_module_desc">Scan security issues of apps</string>
+    <string name="security_scanner_unmarshall_module_title">Intent Unmarshall</string>
+    <string name="security_scanner_unmarshall_module_desc">Scan the \"intent unmarshall\" issue</string>
+    <string name="security_scanner_unmarshall_scan_all">Test all components</string>
+    <string name="security_scanner_unmarshall_stop_scan">Stop scanning</string>
+    <string name="security_scanner_unmarshall_app_selected_state">The app selected to scan:\n%1$s</string>
+    <string name="security_scanner_unmarshall_select_app">Select app</string>
 </resources>

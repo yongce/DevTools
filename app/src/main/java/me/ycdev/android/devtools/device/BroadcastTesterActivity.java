@@ -21,7 +21,7 @@ import android.os.Build;
 import android.provider.Telephony;
 import android.widget.Toast;
 
-public class BroadcastTester extends GridEntriesActivity {
+public class BroadcastTesterActivity extends GridEntriesActivity {
     private String mTargetPkgName;
 
     private BroadcastReceiver mReceiver1 = new BroadcastReceiver() {

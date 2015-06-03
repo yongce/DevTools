@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,7 +23,8 @@ import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
 import me.ycdev.android.lib.common.utils.WeakHandler;
 
-public class AppsSamplerActivity extends ActionBarActivity implements View.OnClickListener, WeakHandler.MessageHandler {
+public class AppsSamplerActivity extends AppCompatActivity
+        implements View.OnClickListener, WeakHandler.MessageHandler {
     private static final int REQUEST_CODE_APPS_SELECTOR = 1;
 
     private static final int MSG_REFRESH_SAMPLE_STATUS = 100;
@@ -170,6 +171,7 @@ public class AppsSamplerActivity extends ActionBarActivity implements View.OnCli
                     Toast.LENGTH_SHORT).show();
         } else if (v == mAppsSelectBtn) {
             Intent intent = new Intent(this, AppsSelectorActivity.class);
+            intent.putExtra(AppsSelectorActivity.EXTRA_MULTICHOICE, true);
             startActivityForResult(intent, REQUEST_CODE_APPS_SELECTOR);
         }
     }

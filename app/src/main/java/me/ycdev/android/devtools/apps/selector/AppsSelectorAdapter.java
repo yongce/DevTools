@@ -31,7 +31,7 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {
             AppInfo item = (AppInfo) v.getTag();
             item.isSelected = !item.isSelected;
             if (item.isSelected) {
-                if (mMultiChoice && mSelectedApps.size() > 0) {
+                if (!mMultiChoice && mSelectedApps.size() > 0) {
                     getOneSelectedApp().isSelected = false;
                     mSelectedApps.clear();
                 }
@@ -39,6 +39,7 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {
             } else {
                 mSelectedApps.remove(item);
             }
+            notifyDataSetChanged();
             mChangeListener.onSelectedAppsChanged(mSelectedApps.size());
         }
     };
