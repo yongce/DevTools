@@ -34,6 +34,14 @@ android {
         }
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(output.outputFile.parent,
+                    "DevTools-${variant.name}-${defaultConfig.versionName}" +
+                            "-${defaultConfig.versionCode}.apk")
+        }
+    }
+
     lintOptions {
         textReport true
         textOutput 'stdout'
