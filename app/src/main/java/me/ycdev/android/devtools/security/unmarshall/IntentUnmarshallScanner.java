@@ -13,7 +13,6 @@ import java.util.Collections;
 
 import me.ycdev.android.devtools.root.cmd.AppsKillerCmd;
 import me.ycdev.android.devtools.security.foo.ParcelableTest;
-import me.ycdev.android.devtools.security.foo.SerializableTest;
 import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.lib.common.utils.PackageUtils;
 
@@ -23,8 +22,7 @@ public class IntentUnmarshallScanner {
     private static Intent buildScanIntent(ComponentName target) {
         Intent intent = new Intent();
         intent.setComponent(target);
-        intent.putExtra("test_serializable", new SerializableTest());
-        intent.putExtra("test_parcelable", new ParcelableTest());
+        intent.putExtra("extra.oom_attack", new ParcelableTest(1014 * 1024 * 1024));
         return intent;
     }
 

@@ -4,12 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class ParcelableTest implements Parcelable {
-    public ParcelableTest() {
-        // nothing
+    private int mOomValue;
+
+    public ParcelableTest(int oomValue) {
+        mOomValue = oomValue;
     }
 
     private ParcelableTest(Parcel in) {
-        // nothing
+        mOomValue = in.readInt();
     }
 
     @Override
@@ -19,7 +21,7 @@ public class ParcelableTest implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        // nothing
+        dest.writeInt(mOomValue);
     }
 
     public static final Parcelable.Creator<ParcelableTest> CREATOR = new

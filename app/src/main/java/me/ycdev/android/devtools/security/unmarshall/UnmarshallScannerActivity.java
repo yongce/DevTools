@@ -14,10 +14,13 @@ import java.util.ArrayList;
 
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
+import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.lib.common.utils.WeakHandler;
 
 public class UnmarshallScannerActivity extends AppCompatActivity
         implements View.OnClickListener, WeakHandler.MessageHandler {
+    private static final String TAG = "UnmarshallScannerActivity";
+
     private static final int MSG_CHECK_DONE = 1;
 
     private static final int REQUEST_CODE_APP_SELECTOR = 1;
@@ -46,6 +49,7 @@ public class UnmarshallScannerActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_unmarshall_scanner);
+        AppLogger.i(TAG, "onCreate()");
 
         mAppSelectedStateView = (TextView) findViewById(R.id.app_selected_state);
         mAppSelectBtn = (Button) findViewById(R.id.app_select);
@@ -59,6 +63,7 @@ public class UnmarshallScannerActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        AppLogger.i(TAG, "onDestroy()");
         mScanController.cancel();
     }
 

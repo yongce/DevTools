@@ -11,10 +11,20 @@ import me.ycdev.android.devtools.device.BroadcastTesterActivity;
 import me.ycdev.android.devtools.device.DeviceInfoActivity;
 import me.ycdev.android.devtools.device.SystemUtilitiesActivity;
 import me.ycdev.android.devtools.security.SecurityScannerActivity;
+import me.ycdev.android.devtools.utils.AppLogger;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 public class LauncherActivity extends GridEntriesActivity {
+    private static final String TAG = "LauncherActivity";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        AppLogger.d(TAG, "#onCreate()");
+    }
+
     @Override
     protected boolean needLoadIntentsAsync() {
         return true;
