@@ -34,6 +34,9 @@
             </intent-filter>
         </receiver>
 
+        <!-- Services -->
+        <service android:name=".CommonIntentService" />
+
         <!-- Activities -->
         <activity
             android:name=".LauncherActivity"

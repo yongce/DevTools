@@ -8,10 +8,12 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import me.ycdev.android.devtools.CommonIntentService;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
 import me.ycdev.android.devtools.utils.AppLogger;
@@ -28,18 +30,24 @@ public class UnmarshallScannerActivity extends AppCompatActivity
     private TextView mAppSelectedStateView;
     private Button mAppSelectBtn;
     private Button mScanAllBtn;
+    private CheckBox mReceiverCheckBox;
+    private CheckBox mServiceCheckBox;
+    private CheckBox mActivityCheckBox;
+    private CheckBox mNeedKillCheckBox;
 
     private String mTargetPkgName;
-    private boolean mScanRunning;
     private Handler mHandler = new WeakHandler(this);
-    private MyScanController mScanController = new MyScanController();
 
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {
             case MSG_CHECK_DONE: {
-                mScanRunning = false;
-                mScanAllBtn.setText(R.string.security_scanner_unmarshall_scan_all);
+                if (sScanTask == null || !sScanTask.taskRunning) {
+                    mScanAllBtn.setText(R.string.security_scanner_unmarshall_scan_all);
+                    sScanTask = null;
+                } else {
+                    mHandler.sendEmptyMessageDelayed(MSG_CHECK_DONE, 3000);
+                }
                 break;
             }
         }
@@ -56,15 +64,28 @@ public class UnmarshallScannerActivity extends AppCompatActivity
         mAppSelectBtn.setOnClickListener(this);
         mScanAllBtn = (Button) findViewById(R.id.test_all);
         mScanAllBtn.setOnClickListener(this);
+        mReceiverCheckBox = (CheckBox) findViewById(R.id.option_receiver);
+        mServiceCheckBox = (CheckBox) findViewById(R.id.option_service);
+        mActivityCheckBox = (CheckBox) findViewById(R.id.option_activity);
+        mNeedKillCheckBox = (CheckBox) findViewById(R.id.option_needkill);
 
-        updateSelectedApp(null);
+        if (sScanTask != null) {
+            updateSelectedApp(sScanTask.targetAppPkgName);
+            mScanAllBtn.setText(R.string.security_scanner_unmarshall_stop_scan);
+            mReceiverCheckBox.setChecked(sScanTask.scanReceiver);
+            mServiceCheckBox.setChecked(sScanTask.scanService);
+            mActivityCheckBox.setChecked(sScanTask.scanActivity);
+            mNeedKillCheckBox.setChecked(sScanTask.needKill);
+            mHandler.sendEmptyMessageDelayed(MSG_CHECK_DONE, 3000);
+        } else {
+            updateSelectedApp(null);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         AppLogger.i(TAG, "onDestroy()");
-        mScanController.cancel();
     }
 
     @Override
@@ -74,15 +95,15 @@ public class UnmarshallScannerActivity extends AppCompatActivity
                 ArrayList<String> pkgNames = data.getStringArrayListExtra(
                         AppsSelectorActivity.RESULT_EXTRA_APPS_PKG_NAMES);
                 if (pkgNames.size() > 0) {
-                    updateSelectedApp(pkgNames);
+                    updateSelectedApp(pkgNames.get(0));
                 }
             }
         }
     }
 
-    private void updateSelectedApp(ArrayList<String> pkgNames) {
-        if (pkgNames != null && pkgNames.size() > 0) {
-            mTargetPkgName = pkgNames.get(0);
+    private void updateSelectedApp(String pkgName) {
+        if (pkgName != null) {
+            mTargetPkgName = pkgName;
             mScanAllBtn.setEnabled(true);
         } else {
             mScanAllBtn.setEnabled(false);
@@ -99,36 +120,33 @@ public class UnmarshallScannerActivity extends AppCompatActivity
             Intent intent = new Intent(this, AppsSelectorActivity.class);
             startActivityForResult(intent, REQUEST_CODE_APP_SELECTOR);
         } else if (v == mScanAllBtn) {
-            if (mScanRunning) {
-                mScanController.cancel();
+            if (sScanTask != null) {
+                sScanTask.scanController.cancel();
             } else {
-                mScanRunning = true;
-                mScanController.reset();
-                mScanController.setTargetPackageName(mTargetPkgName);
                 mScanAllBtn.setText(R.string.security_scanner_unmarshall_stop_scan);
-                testAll();
+                scanAll();
             }
         }
     }
 
-    private void testAll() {
-        final Context appContext = getApplicationContext();
-        new Thread() {
-            @Override
-            public void run() {
-                mScanController.setNeedKillApp(true);
-                IntentUnmarshallScanner.scanAllReceivers(appContext, mScanController);
-                IntentUnmarshallScanner.scanAllServices(appContext, mScanController);
-                mScanController.setNeedKillApp(false);
-                IntentUnmarshallScanner.scanAllReceivers(appContext, mScanController);
-                IntentUnmarshallScanner.scanAllServices(appContext, mScanController);
-                mScanController.setNeedKillApp(true);
-                IntentUnmarshallScanner.scanAllActivities(appContext, mScanController);
-                mScanController.setNeedKillApp(false);
-                IntentUnmarshallScanner.scanAllActivities(appContext, mScanController);
-                mHandler.sendEmptyMessage(MSG_CHECK_DONE);
-            }
-        }.start();
+    private void scanAll() {
+        ScanTask task = new ScanTask();
+        task.taskRunning = true;
+        task.targetAppPkgName = mTargetPkgName;
+        task.needKill = mNeedKillCheckBox.isChecked();
+        task.scanReceiver = mReceiverCheckBox.isChecked();
+        task.scanService = mServiceCheckBox.isChecked();
+        task.scanActivity = mActivityCheckBox.isChecked();
+
+        task.scanController = new MyScanController();
+        task.scanController.setTargetPackageName(mTargetPkgName);
+
+        sScanTask = task;
+        Intent intent = new Intent(this, CommonIntentService.class);
+        intent.setAction(CommonIntentService.ACTION_UNMARSHALL_SCANNER);
+        startService(intent);
+
+        mHandler.sendEmptyMessageDelayed(MSG_CHECK_DONE, 3000);
     }
 
     private static class MyScanController implements IScanController {
@@ -142,10 +160,6 @@ public class UnmarshallScannerActivity extends AppCompatActivity
 
         public void setNeedKillApp(boolean needKillApp) {
             mNeedKillApp = needKillApp;
-        }
-
-        public void reset() {
-            mIsCanceled = false;
         }
 
         public void cancel() {
@@ -166,5 +180,56 @@ public class UnmarshallScannerActivity extends AppCompatActivity
         public boolean isCanceled() {
             return mIsCanceled;
         }
+    }
+
+    private static class ScanTask {
+        public boolean taskRunning;
+        public String targetAppPkgName;
+        public boolean needKill;
+        public boolean scanReceiver;
+        public boolean scanService;
+        public boolean scanActivity;
+
+        public MyScanController scanController;
+    }
+
+    private static ScanTask sScanTask;
+
+    public static void scanUnmarshallIssue(Context cxt) {
+        ScanTask task = sScanTask;
+        if (task == null) {
+            AppLogger.w(TAG, "Cannot scan unmarshall issues, no task");
+            return;
+        }
+
+        if (task.needKill) {
+            task.scanController.setNeedKillApp(true);
+            if (task.scanReceiver) {
+                IntentUnmarshallScanner.scanAllReceivers(cxt, task.scanController);
+            }
+            if (task.scanService) {
+                IntentUnmarshallScanner.scanAllServices(cxt, task.scanController);
+            }
+        }
+        task.scanController.setNeedKillApp(false);
+        if (task.scanReceiver) {
+            IntentUnmarshallScanner.scanAllReceivers(cxt, task.scanController);
+        }
+        if (task.scanService) {
+            IntentUnmarshallScanner.scanAllServices(cxt, task.scanController);
+        }
+
+        if (task.needKill) {
+            task.scanController.setNeedKillApp(true);
+            if (task.scanActivity) {
+                IntentUnmarshallScanner.scanAllActivities(cxt, task.scanController);
+            }
+        }
+        task.scanController.setNeedKillApp(false);
+        if (task.scanActivity) {
+            IntentUnmarshallScanner.scanAllActivities(cxt, task.scanController);
+        }
+
+        task.taskRunning = false;
     }
 }

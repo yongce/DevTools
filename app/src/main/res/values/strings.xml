@@ -72,4 +72,8 @@
     <string name="security_scanner_unmarshall_stop_scan">Stop scanning</string>
     <string name="security_scanner_unmarshall_app_selected_state">The app selected to scan:\n%1$s</string>
     <string name="security_scanner_unmarshall_select_app">Select app</string>
+    <string name="security_scanner_unmarshall_option_receiver">Scan Receivers</string>
+    <string name="security_scanner_unmarshall_option_service">Scan Services</string>
+    <string name="security_scanner_unmarshall_option_activity">Scan Activities</string>
+    <string name="security_scanner_unmarshall_option_needkill">Need Kill</string>
 </resources>

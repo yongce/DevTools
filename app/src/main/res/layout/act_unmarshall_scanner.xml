@@ -24,6 +24,38 @@
 
     <View style="@style/AppTheme.HorizontalDivider" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <CheckBox
+            android:id="@+id/option_receiver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/security_scanner_unmarshall_option_receiver"
+            android:checked="true" />
+        <CheckBox
+            android:id="@+id/option_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/security_scanner_unmarshall_option_service"
+            android:checked="true" />
+        <CheckBox
+            android:id="@+id/option_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/security_scanner_unmarshall_option_activity"
+            android:checked="true" />
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/option_needkill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/security_scanner_unmarshall_option_needkill"
+        android:checked="true" />
+
+    <View style="@style/AppTheme.HorizontalDivider" />
+
     <Button
         android:id="@+id/test_all"
         android:layout_width="wrap_content"
