@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-import me.ycdev.android.devtools.utils.AppLogger;
+import me.ycdev.android.arch.utils.AppLogger;
 
 class SampleTaskInfo {
     private static final String TAG = "SampleTaskInfo";

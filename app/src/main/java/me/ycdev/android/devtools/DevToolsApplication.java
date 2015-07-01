@@ -1,8 +1,9 @@
 package me.ycdev.android.devtools;
-import me.ycdev.android.devtools.utils.AppLogger;
 
 import android.app.Application;
 import android.os.Process;
+
+import me.ycdev.android.arch.utils.AppLogger;
 
 public class DevToolsApplication extends Application {
     private static final String TAG = "DevToolsApplication";

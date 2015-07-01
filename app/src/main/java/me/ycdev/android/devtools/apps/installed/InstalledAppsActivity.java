@@ -3,7 +3,7 @@ package me.ycdev.android.devtools.apps.installed;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,8 +13,8 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.apps.AppsLoadConfig;
 import me.ycdev.android.lib.common.apps.AppsLoadFilter;
@@ -22,7 +22,8 @@ import me.ycdev.android.lib.common.apps.AppsLoadListener;
 import me.ycdev.android.lib.common.apps.AppsLoader;
 import me.ycdev.android.lib.commonui.base.LoadingAsyncTaskBase;
 
-public class InstalledAppsActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+public class InstalledAppsActivity extends AppCompatActivity
+        implements AdapterView.OnItemClickListener {
     private static final String TAG = "InstalledAppsActivity";
 
     private InstalledAppsAdapter mAdapter;

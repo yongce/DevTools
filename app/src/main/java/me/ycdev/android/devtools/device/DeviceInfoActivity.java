@@ -2,8 +2,8 @@ package me.ycdev.android.devtools.device;
 
 import java.lang.reflect.Method;
 
+import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.devtools.utils.ViewHelper;
 import me.ycdev.android.lib.common.internalapi.android.os.EnvironmentIA;
 import me.ycdev.android.lib.common.internalapi.android.os.SystemPropertiesIA;

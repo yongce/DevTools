@@ -22,8 +22,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.devtools.utils.Constants;
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
 import me.ycdev.android.lib.common.utils.IoUtils;

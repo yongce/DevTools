@@ -1,5 +1,6 @@
 package me.ycdev.android.devtools.security.unmarshall;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +12,10 @@ import android.support.v4.content.IntentCompat;
 
 import java.util.Collections;
 
+import me.ycdev.android.arch.utils.AppLogger;
+import me.ycdev.android.arch.wrapper.BroadcastHelper;
 import me.ycdev.android.devtools.root.cmd.AppsKillerCmd;
 import me.ycdev.android.devtools.security.foo.ParcelableTest;
-import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.lib.common.utils.PackageUtils;
 
 public class IntentUnmarshallScanner {
@@ -30,7 +32,7 @@ public class IntentUnmarshallScanner {
         AppLogger.i(TAG, "scan receiver: " + target + ", with perm: " + perm);
         try {
             Intent intent = buildScanIntent(target);
-            cxt.sendBroadcast(intent, perm);
+            BroadcastHelper.sendToExternal(cxt, intent, perm);
             return true;
         } catch (Exception e) {
             AppLogger.w(TAG, "failed to send broadcast", e);

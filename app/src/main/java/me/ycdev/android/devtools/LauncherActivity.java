@@ -3,6 +3,7 @@ package me.ycdev.android.devtools;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.apps.installed.InstalledAppsActivity;
 import me.ycdev.android.devtools.apps.running.RunningAppsActivity;
 import me.ycdev.android.devtools.sampler.AppsSamplerActivity;
@@ -11,7 +12,6 @@ import me.ycdev.android.devtools.device.BroadcastTesterActivity;
 import me.ycdev.android.devtools.device.DeviceInfoActivity;
 import me.ycdev.android.devtools.device.SystemUtilitiesActivity;
 import me.ycdev.android.devtools.security.SecurityScannerActivity;
-import me.ycdev.android.devtools.utils.AppLogger;
 
 import android.content.Intent;
 import android.os.Bundle;

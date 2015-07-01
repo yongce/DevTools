@@ -10,6 +10,9 @@ android {
         targetSdkVersion 22
         versionCode 6
         versionName "1.3.1"
+
+        buildConfigField "boolean", "DEBUG_LOG", rootProject.ext.DEBUG_LOG
+        buildConfigField "boolean", "DISABLE_LOG", rootProject.ext.DISABLE_LOG
     }
 
     signingConfigs {
@@ -53,9 +56,28 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':archLib')
     compile project(':androidLib')
     compile project(':androidUiLib')
     compile project(':libsuperuser')
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:support-annotations:22.0.0'
+}
+
+// workaround for the bug: http://code.google.com/p/android/issues/detail?id=174808
+project.afterEvaluate {
+    tasks.matching {
+        it.name.startsWith('lint')
+    }.each { task ->
+        println "lint task found: " + task.name + ", full: " + task
+        task.doFirst {
+            println "!!!!!!!!! try to copy lint jars"
+            fileTree(project.buildDir) {
+                include '**/jars/lint.jar'
+            }.each { File file ->
+                println "copy lint jar: " + file.absolutePath
+                file.renameTo(new File(file.parentFile.parentFile, file.getName()))
+            }
+        }
+    }
 }

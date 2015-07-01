@@ -7,3 +7,6 @@
 [submodule "submodules/libsuperuser"]
 	path = submodules/libsuperuser
 	url = https://github.com/ycdev-fork/libsuperuser.git
+[submodule "submodules/AndroidArch"]
+	path = submodules/AndroidArch
+	url = https://github.com/yongce/AndroidArch.git

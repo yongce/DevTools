@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
 import me.ycdev.android.lib.common.apps.AppInfo;
@@ -127,8 +128,8 @@ public class AppsSamplerActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.clear) {
             AppsSamplerService.clearLogs(this);
-            Toast.makeText(this, R.string.apps_sampler_clear_logs_toast,
-                    Toast.LENGTH_SHORT).show();
+            ToastHelper.show(this, R.string.apps_sampler_clear_logs_toast,
+                    Toast.LENGTH_SHORT);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -139,13 +140,13 @@ public class AppsSamplerActivity extends AppCompatActivity
         if (v == mStartBtn) {
             String intervalStr = mIntervalView.getText().toString();
             if (intervalStr.length() == 0) {
-                Toast.makeText(this, R.string.apps_sampler_sample_interval_input_toast,
-                        Toast.LENGTH_SHORT).show();
+                ToastHelper.show(this, R.string.apps_sampler_sample_interval_input_toast,
+                        Toast.LENGTH_SHORT);
                 return;
             }
             if (mPkgNames.size() == 0) {
-                Toast.makeText(this, R.string.apps_sampler_no_apps_toast,
-                        Toast.LENGTH_SHORT).show();
+                ToastHelper.show(this, R.string.apps_sampler_no_apps_toast,
+                        Toast.LENGTH_SHORT);
                 return;
             }
 
@@ -155,20 +156,20 @@ public class AppsSamplerActivity extends AppCompatActivity
             }
             mInterval = Integer.parseInt(intervalStr);
             AppsSamplerService.startSampler(this, mPkgNames, mInterval, mPeriod);
-            Toast.makeText(this, R.string.apps_sampler_start_sampling_toast,
-                    Toast.LENGTH_SHORT).show();
+            ToastHelper.show(this, R.string.apps_sampler_start_sampling_toast,
+                    Toast.LENGTH_SHORT);
             refreshButtonsState(true);
             mHandler.sendEmptyMessageDelayed(MSG_REFRESH_SAMPLE_STATUS, mInterval * 1000);
         } else if (v == mStopBtn) {
             AppsSamplerService.createSampleReport(this);
             AppsSamplerService.stopSampler(this);
-            Toast.makeText(this, R.string.apps_sampler_stop_sampling_toast,
-                    Toast.LENGTH_SHORT).show();
+            ToastHelper.show(this, R.string.apps_sampler_stop_sampling_toast,
+                    Toast.LENGTH_SHORT);
             refreshButtonsState(false);
         } else if (v == mCreateReportBtn) {
             AppsSamplerService.createSampleReport(this);
-            Toast.makeText(this, R.string.apps_sampler_create_report_toast,
-                    Toast.LENGTH_SHORT).show();
+            ToastHelper.show(this, R.string.apps_sampler_create_report_toast,
+                    Toast.LENGTH_SHORT);
         } else if (v == mAppsSelectBtn) {
             Intent intent = new Intent(this, AppsSelectorActivity.class);
             intent.putExtra(AppsSelectorActivity.EXTRA_MULTICHOICE, true);

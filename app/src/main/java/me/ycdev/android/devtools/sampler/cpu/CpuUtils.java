@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Locale;
 
-import me.ycdev.android.devtools.utils.AppLogger;
+import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.lib.common.utils.IoUtils;
 import me.ycdev.android.lib.common.utils.StringUtils;
 

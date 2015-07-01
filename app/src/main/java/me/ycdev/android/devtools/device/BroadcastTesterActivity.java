@@ -3,6 +3,7 @@ package me.ycdev.android.devtools.device;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.devtools.base.GridEntriesActivity;
 import me.ycdev.android.devtools.utils.Constants;
 
@@ -27,16 +28,16 @@ public class BroadcastTesterActivity extends GridEntriesActivity {
     private BroadcastReceiver mReceiver1 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(getApplicationContext(), "Received1: " + intent.getAction(),
-                    Toast.LENGTH_LONG).show();
+            ToastHelper.show(getApplicationContext(), "Received1: " + intent.getAction(),
+                    Toast.LENGTH_LONG);
         }
     };
 
     private BroadcastReceiver mReceiver2 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(getApplicationContext(), "Received2: " + intent.getAction(),
-                    Toast.LENGTH_LONG).show();
+            ToastHelper.show(getApplicationContext(), "Received2: " + intent.getAction(),
+                    Toast.LENGTH_LONG);
         }
     };
 

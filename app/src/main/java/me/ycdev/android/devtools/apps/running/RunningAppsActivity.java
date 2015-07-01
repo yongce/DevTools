@@ -19,8 +19,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.utils.AppLogger;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.utils.MiscUtils;
 import me.ycdev.android.lib.commonui.base.LoadingAsyncTaskBase;

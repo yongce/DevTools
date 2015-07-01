@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import me.ycdev.android.devtools.utils.AppLogger;
+import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
 import me.ycdev.android.lib.common.utils.IoUtils;
 

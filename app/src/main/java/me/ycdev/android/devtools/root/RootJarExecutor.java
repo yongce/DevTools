@@ -2,13 +2,13 @@ package me.ycdev.android.devtools.root;
 
 import java.util.Arrays;
 
-import me.ycdev.android.devtools.utils.AppConfigs;
-import me.ycdev.android.devtools.utils.AppLogger;
+import me.ycdev.android.arch.utils.AppConfigs;
+import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.lib.common.internalapi.android.app.ActivityManagerIA;
 
 public class RootJarExecutor {
     private static final String TAG = "RootJarExecutor";
-    private static final boolean DEBUG = AppConfigs.DEBUG;
+    private static final boolean DEBUG = AppConfigs.DEBUG_LOG;
 
     public static final String CMD_FORCE_STOP_PACKAGE = "amForceStop";
 

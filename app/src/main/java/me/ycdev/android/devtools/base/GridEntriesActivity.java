@@ -2,6 +2,7 @@ package me.ycdev.android.devtools.base;
 
 import java.util.List;
 
+import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.utils.IntentUtils;
 
@@ -82,7 +83,7 @@ public abstract class GridEntriesActivity extends AppCompatActivity
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         IntentEntry item = mAdapter.getItem(position);
-        Toast.makeText(this, item.desc, Toast.LENGTH_LONG).show();
+        ToastHelper.show(this, item.desc, Toast.LENGTH_LONG);
         return true;
     }
 
@@ -100,7 +101,7 @@ public abstract class GridEntriesActivity extends AppCompatActivity
         if (IntentUtils.canStartActivity(this, item.intent)) {
             startActivity(item.intent);
         } else {
-            Toast.makeText(this, item.desc, Toast.LENGTH_LONG).show();
+            ToastHelper.show(this, item.desc, Toast.LENGTH_LONG);
         }
     }
 
