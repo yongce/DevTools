@@ -1,10 +1,14 @@
 include ':app'
+include ':aaaLintRulesImporter'
 
 include ':archLib'
 project(':archLib').projectDir = file('submodules/AndroidArch/archLib')
 
 include ':archLintRules'
 project(':archLintRules').projectDir = file('submodules/AndroidArch/archLintRules')
+
+include ':archLintRulesAAR'
+project(':archLintRulesAAR').projectDir = file('submodules/AndroidArch/archLintRulesAAR')
 
 include ':androidLib'
 project(':androidLib').projectDir = file('submodules/AndroidLib/lib')

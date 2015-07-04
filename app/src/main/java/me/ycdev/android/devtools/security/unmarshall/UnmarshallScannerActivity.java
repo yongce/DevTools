@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,13 +12,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import me.ycdev.android.arch.activity.AppCompatBaseActivity;
 import me.ycdev.android.arch.utils.AppLogger;
+import me.ycdev.android.arch.wrapper.IntentHelper;
 import me.ycdev.android.devtools.CommonIntentService;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
 import me.ycdev.android.lib.common.utils.WeakHandler;
 
-public class UnmarshallScannerActivity extends AppCompatActivity
+public class UnmarshallScannerActivity extends AppCompatBaseActivity
         implements View.OnClickListener, WeakHandler.MessageHandler {
     private static final String TAG = "UnmarshallScannerActivity";
 
@@ -92,9 +93,9 @@ public class UnmarshallScannerActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_APP_SELECTOR) {
             if (resultCode == RESULT_OK) {
-                ArrayList<String> pkgNames = data.getStringArrayListExtra(
+                ArrayList<String> pkgNames = IntentHelper.getStringArrayListExtra(data,
                         AppsSelectorActivity.RESULT_EXTRA_APPS_PKG_NAMES);
-                if (pkgNames.size() > 0) {
+                if (pkgNames != null && pkgNames.size() > 0) {
                     updateSelectedApp(pkgNames.get(0));
                 }
             }

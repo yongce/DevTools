@@ -1,13 +1,5 @@
 package me.ycdev.android.devtools.device;
 
-import java.lang.reflect.Method;
-
-import me.ycdev.android.arch.utils.AppLogger;
-import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.utils.ViewHelper;
-import me.ycdev.android.lib.common.internalapi.android.os.EnvironmentIA;
-import me.ycdev.android.lib.common.internalapi.android.os.SystemPropertiesIA;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -16,13 +8,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-public class DeviceInfoActivity extends AppCompatActivity {
+import java.lang.reflect.Method;
+
+import me.ycdev.android.arch.activity.AppCompatBaseActivity;
+import me.ycdev.android.arch.utils.AppLogger;
+import me.ycdev.android.devtools.R;
+import me.ycdev.android.devtools.utils.ViewHelper;
+import me.ycdev.android.lib.common.internalapi.android.os.EnvironmentIA;
+import me.ycdev.android.lib.common.internalapi.android.os.SystemPropertiesIA;
+
+public class DeviceInfoActivity extends AppCompatBaseActivity {
     private static final String TAG = "DeviceInfoActivity";
 
     @Override

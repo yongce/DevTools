@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Debug;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,13 +18,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import me.ycdev.android.arch.activity.AppCompatBaseActivity;
 import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.utils.MiscUtils;
 import me.ycdev.android.lib.commonui.base.LoadingAsyncTaskBase;
 
-public class RunningAppsActivity extends ActionBarActivity {
+public class RunningAppsActivity extends AppCompatBaseActivity {
     private static final String TAG = "RunningAppsActivity";
 
     private RunningAppsAdapter mAdapter;

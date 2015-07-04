@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import me.ycdev.android.arch.utils.AppLogger;
+import me.ycdev.android.arch.wrapper.IntentHelper;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.utils.Constants;
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
@@ -134,9 +135,9 @@ public class AppsSamplerService extends Service implements Handler.Callback {
             SampleTaskInfo taskInfo = restoreSampleTaskInfo();
             if (taskInfo == null) {
                 taskInfo = new SampleTaskInfo();
-                taskInfo.pkgNames = intent.getStringArrayListExtra(EXTRA_PKG_NAMES);
-                taskInfo.sampleInterval = intent.getIntExtra(EXTRA_INTERVAL, 0);
-                taskInfo.samplePeriod = intent.getIntExtra(EXTRA_PERIOD, 0);
+                taskInfo.pkgNames = IntentHelper.getStringArrayListExtra(intent, EXTRA_PKG_NAMES);
+                taskInfo.sampleInterval = IntentHelper.getIntExtra(intent, EXTRA_INTERVAL, 0);
+                taskInfo.samplePeriod = IntentHelper.getIntExtra(intent, EXTRA_PERIOD, 0);
                 taskInfo.startTime = System.currentTimeMillis();
             } else {
                 mSampleLogger.logInfo(TAG, "start sampler, use backup: " + taskInfo.backupTaskInfo());

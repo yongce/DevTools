@@ -1,0 +1,15 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 9
+    }
+}
+
+// workaround for the issue: http://code.google.com/p/android/issues/detail?id=178699
+dependencies {
+    compile project(':archLintRulesAAR')
+}

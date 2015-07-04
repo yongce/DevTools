@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -14,6 +12,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.ycdev.android.arch.activity.AppCompatBaseActivity;
+import me.ycdev.android.arch.wrapper.IntentHelper;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.apps.AppsLoadConfig;
@@ -22,7 +22,7 @@ import me.ycdev.android.lib.common.apps.AppsLoadListener;
 import me.ycdev.android.lib.common.apps.AppsLoader;
 import me.ycdev.android.lib.commonui.base.LoadingAsyncTaskBase;
 
-public class AppsSelectorActivity extends AppCompatActivity
+public class AppsSelectorActivity extends AppCompatBaseActivity
         implements AppsSelectorAdapter.SelectedAppsChangeListener, View.OnClickListener {
     /** Type: boolean, default value: {@value #DEFAULT_MULTICHOICE} */
     public static final String EXTRA_MULTICHOICE = "extra.multichoice";
@@ -57,10 +57,14 @@ public class AppsSelectorActivity extends AppCompatActivity
         setContentView(R.layout.act_apps_selector);
 
         Intent intent = getIntent();
-        boolean multiChoice = intent.getBooleanExtra(EXTRA_MULTICHOICE, DEFAULT_MULTICHOICE);
-        mExcludeUninstalled = intent.getBooleanExtra(EXTRA_EXCLUDE_UNINSTALLED, DEFAULT_EXCLUDE_UNINSTALLED);
-        mExcludeDisabled = intent.getBooleanExtra(EXTRA_EXCLUDE_DISABLED, DEFAULT_EXCLUDE_DISABLED);
-        mExcludeSystem = intent.getBooleanExtra(EXTRA_EXCLUDE_SYSTEM, DEFAULT_EXCLUDE_SYSTEM);
+        boolean multiChoice = IntentHelper.getBooleanExtra(intent,
+                EXTRA_MULTICHOICE, DEFAULT_MULTICHOICE);
+        mExcludeUninstalled = IntentHelper.getBooleanExtra(intent,
+                EXTRA_EXCLUDE_UNINSTALLED, DEFAULT_EXCLUDE_UNINSTALLED);
+        mExcludeDisabled = IntentHelper.getBooleanExtra(intent,
+                EXTRA_EXCLUDE_DISABLED, DEFAULT_EXCLUDE_DISABLED);
+        mExcludeSystem = IntentHelper.getBooleanExtra(intent,
+                EXTRA_EXCLUDE_SYSTEM, DEFAULT_EXCLUDE_SYSTEM);
 
         mStatusView = (TextView) findViewById(R.id.status);
 
@@ -91,7 +95,8 @@ public class AppsSelectorActivity extends AppCompatActivity
                     mAdapter.getOneSelectedApp().pkgName);
             mStatusView.setText(status);
         } else {
-            String status = getString(R.string.apps_selector_status_multiple_apps_selected, newCount);
+            String status = getResources().getQuantityString(
+                    R.plurals.apps_selector_status_multiple_apps_selected, newCount, newCount);
             mStatusView.setText(status);
         }
     }

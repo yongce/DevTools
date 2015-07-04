@@ -38,7 +38,10 @@
     <string name="apps_selector_title">Apps Selector</string>
     <string name="apps_selector_status_no_apps_selected">No apps are selected</string>
     <string name="apps_selector_status_one_app_selected">\"%1$s\" is selected</string>
-    <string name="apps_selector_status_multiple_apps_selected">%1$d apps are selected</string>
+    <plurals name="apps_selector_status_multiple_apps_selected">
+        <item quantity="one">One app is selected</item>
+        <item quantity="other">%1$d apps are selected</item>
+    </plurals>
     <string name="apps_selector_btn_select">Select</string>
 
     <string name="apps_sampler_module_title">Apps Sampler</string>
@@ -62,7 +65,6 @@
 
     <string name="running_apps_module_title">Running Apps</string>
     <string name="running_apps_module_desc">Show all the running apps</string>
-    <string name="title_activity_intent_unmarshall_checker">IntentUnmarshallCheckerActivity</string>
 
     <string name="security_scanner_module_title">Security Scanner</string>
     <string name="security_scanner_module_desc">Scan security issues of apps</string>

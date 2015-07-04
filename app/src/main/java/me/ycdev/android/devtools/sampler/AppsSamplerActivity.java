@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +16,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import me.ycdev.android.arch.activity.AppCompatBaseActivity;
+import me.ycdev.android.arch.wrapper.IntentHelper;
 import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
@@ -24,7 +25,7 @@ import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
 import me.ycdev.android.lib.common.utils.WeakHandler;
 
-public class AppsSamplerActivity extends AppCompatActivity
+public class AppsSamplerActivity extends AppCompatBaseActivity
         implements View.OnClickListener, WeakHandler.MessageHandler {
     private static final int REQUEST_CODE_APPS_SELECTOR = 1;
 
@@ -181,7 +182,7 @@ public class AppsSamplerActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_APPS_SELECTOR) {
             if (resultCode == RESULT_OK) {
-                ArrayList<String> pkgNames = data.getStringArrayListExtra(
+                ArrayList<String> pkgNames = IntentHelper.getStringArrayListExtra(data,
                         AppsSelectorActivity.RESULT_EXTRA_APPS_PKG_NAMES);
                 updateSelectedApps(pkgNames);
             }
@@ -190,7 +191,7 @@ public class AppsSamplerActivity extends AppCompatActivity
 
     private void updateSelectedApps(ArrayList<String> pkgNames) {
         mPkgNames = pkgNames;
-        ArrayList<AppInfo> appsList = new ArrayList<AppInfo>(pkgNames.size());
+        ArrayList<AppInfo> appsList = new ArrayList<>(pkgNames.size());
         for (String pkgName : pkgNames) {
             AppInfo item = new AppInfo();
             item.pkgName = pkgName;

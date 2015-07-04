@@ -1,16 +1,9 @@
 package me.ycdev.android.devtools.base;
 
-import java.util.List;
-
-import me.ycdev.android.arch.wrapper.ToastHelper;
-import me.ycdev.android.devtools.R;
-import me.ycdev.android.lib.common.utils.IntentUtils;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +13,14 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public abstract class GridEntriesActivity extends AppCompatActivity
+import java.util.List;
+
+import me.ycdev.android.arch.activity.AppCompatBaseActivity;
+import me.ycdev.android.arch.wrapper.ToastHelper;
+import me.ycdev.android.devtools.R;
+import me.ycdev.android.lib.common.utils.IntentUtils;
+
+public abstract class GridEntriesActivity extends AppCompatBaseActivity
         implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     public static class IntentEntry {
         public static final int TYPE_ACTIVITY = 1;
