@@ -172,9 +172,17 @@ public class DeviceInfoActivity extends AppCompatBaseActivity {
     @SuppressWarnings("deprecation")
     private static String getExternalStorageSize() {
         StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
-        long avail = stat.getBlockSize() * stat.getAvailableBlocks() / (1024 * 1024);
-        long total = stat.getBlockSize() * stat.getBlockCount() / (1024 * 1024);
-        return avail + "/" + total + " MB";
+        long a, t;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            a = stat.getBlockSizeLong() * stat.getAvailableBlocksLong() / (1024 * 1024);
+            t = stat.getBlockSizeLong() * stat.getBlockCountLong() / (1024 * 1024);
+        } else {
+            // NOTE: stat return values' type is int, maybe error
+            long b = stat.getBlockSize();
+            a = b * stat.getAvailableBlocks() / (1024 * 1024);
+            t = b * stat.getBlockCount() / (1024 * 1024);
+        }
+        return a + "/" + t + " MB";
     }
 
     private static DisplayMetrics getScreenMetrics(Context context) {
