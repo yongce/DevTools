@@ -1,6 +1,7 @@
 package me.ycdev.android.devtools.device;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
@@ -13,6 +14,9 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
@@ -48,6 +52,7 @@ public class DeviceInfoActivity extends AppCompatBaseActivity {
         ViewHelper.addTextView(holder, "SDK Release", Build.VERSION.RELEASE);
         ViewHelper.addTextView(holder, "CPU ABI", Build.CPU_ABI);
         ViewHelper.addTextView(holder, "CPU ABI2", Build.CPU_ABI2);
+        ViewHelper.addTextView(holder, "Memory", getMemorySize());
         ViewHelper.addTextView(holder, "Fingerprint", Build.FINGERPRINT);
 
         ViewHelper.addLineView(holder, 0xff00ff00); // green
@@ -167,9 +172,17 @@ public class DeviceInfoActivity extends AppCompatBaseActivity {
     @SuppressWarnings("deprecation")
     private static String getExternalStorageSize() {
         StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
-        long avail = stat.getBlockSize() * stat.getAvailableBlocks() / (1024 * 1024);
-        long total = stat.getBlockSize() * stat.getBlockCount() / (1024 * 1024);
-        return avail + "/" + total + " MB";
+        long a, t;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            a = stat.getBlockSizeLong() * stat.getAvailableBlocksLong() / (1024 * 1024);
+            t = stat.getBlockSizeLong() * stat.getBlockCountLong() / (1024 * 1024);
+        } else {
+            // NOTE: stat return values' type is int, maybe error
+            long b = stat.getBlockSize();
+            a = b * stat.getAvailableBlocks() / (1024 * 1024);
+            t = b * stat.getBlockCount() / (1024 * 1024);
+        }
+        return a + "/" + t + " MB";
     }
 
     private static DisplayMetrics getScreenMetrics(Context context) {
@@ -179,4 +192,44 @@ public class DeviceInfoActivity extends AppCompatBaseActivity {
         return dm;
     }
 
+    private long getTotalMemory() {
+        // /proc/meminfo读出的内核信息进行解释
+        final String path = "/proc/meminfo";
+        String content = null;
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(path), 8);
+            content = br.readLine();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        if (content == null) {
+            return -1;
+        }
+        int begin = content.indexOf(':');
+        int end = content.indexOf('k'); // 单位是KB
+        content = content.substring(begin + 1, end).trim();
+        return Integer.parseInt(content) / 1024; // 返回单位是MB
+    }
+
+    private String getMemorySize() {
+        ActivityManager am = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        am.getMemoryInfo(mi);
+        long total = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            total = mi.totalMem / (1024 * 1024);
+        } else {
+            total = getTotalMemory();
+        }
+        long avail = mi.availMem / (1024 * 1024);
+        return avail + "/" + total + " MB";
+    }
 }
