@@ -4,7 +4,7 @@ import android.util.SparseArray;
 
 public class AppCpuStat {
     public String pkgName;
-    public SparseArray<ProcCpuStat> procSetStats = new SparseArray();
+    public SparseArray<ProcCpuStat> procSetStats = new SparseArray<>();
 
     public AppCpuStat(String pkgName) {
         this.pkgName = pkgName;
@@ -32,7 +32,9 @@ public class AppCpuStat {
             ProcCpuStat oldPidStat = oldStat.procSetStats.get(pid);
             if (oldPidStat != null) {
                 ProcCpuStat pidUsage = ProcCpuStat.computeUsage(oldPidStat, newPidStat);
-                usage.procSetStats.put(pidUsage.pid, pidUsage);
+                if (pidUsage != null) {
+                    usage.procSetStats.put(pidUsage.pid, pidUsage);
+                }
             }
         }
         return usage;

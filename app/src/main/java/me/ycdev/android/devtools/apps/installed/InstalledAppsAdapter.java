@@ -1,6 +1,7 @@
 package me.ycdev.android.devtools.apps.installed;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,17 +30,18 @@ class InstalledAppsAdapter extends ListAdapterBase<AppInfo> {
     }
 
     @Override
-    protected int getItemResId() {
+    protected @LayoutRes int getItemLayoutResId() {
         return R.layout.installed_apps_item;
     }
 
+    @NonNull
     @Override
     protected ViewHolderBase createViewHolder(@NonNull View itemView, int position) {
         return new ViewHolder(itemView, position);
     }
 
     @Override
-    protected void bindView(AppInfo item, @NonNull ViewHolderBase holder) {
+    protected void bindView(@NonNull AppInfo item, @NonNull ViewHolderBase holder) {
         ViewHolder vh = (ViewHolder) holder;
         vh.iconView.setImageDrawable(item.appIcon);
         vh.appNameView.setText(item.appName);

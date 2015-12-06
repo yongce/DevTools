@@ -1,5 +1,6 @@
 package me.ycdev.android.devtools.apps.running;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -15,17 +16,19 @@ public class RunningAppsAdapter extends ListAdapterBase<RunningAppInfo> {
     }
 
     @Override
-    protected int getItemResId() {
+    protected int getItemLayoutResId() {
         return R.layout.running_apps_item;
     }
 
+    @NonNull
     @Override
     protected ViewHolderBase createViewHolder(@NonNull View itemView, int position) {
         return new ViewHolder(itemView, position);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    protected void bindView(RunningAppInfo item, @NonNull ViewHolderBase holder) {
+    protected void bindView(@NonNull RunningAppInfo item, @NonNull ViewHolderBase holder) {
         ViewHolder vh = (ViewHolder) holder;
         vh.appIconView.setImageDrawable(item.appIcon);
         vh.appNameView.setText(item.appName);

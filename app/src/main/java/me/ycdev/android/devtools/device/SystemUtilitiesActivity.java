@@ -6,7 +6,7 @@ import java.util.List;
 import android.content.Intent;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.base.GridEntriesActivity;
+import me.ycdev.android.lib.commonui.activity.GridEntriesActivity;
 
 public class SystemUtilitiesActivity extends GridEntriesActivity {
     protected List<IntentEntry> getIntents() {

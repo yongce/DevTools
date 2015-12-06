@@ -7,7 +7,7 @@ import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.apps.installed.InstalledAppsActivity;
 import me.ycdev.android.devtools.apps.running.RunningAppsActivity;
 import me.ycdev.android.devtools.sampler.AppsSamplerActivity;
-import me.ycdev.android.devtools.base.GridEntriesActivity;
+import me.ycdev.android.lib.commonui.activity.GridEntriesActivity;
 import me.ycdev.android.devtools.device.BroadcastTesterActivity;
 import me.ycdev.android.devtools.device.DeviceInfoActivity;
 import me.ycdev.android.devtools.device.SystemUtilitiesActivity;

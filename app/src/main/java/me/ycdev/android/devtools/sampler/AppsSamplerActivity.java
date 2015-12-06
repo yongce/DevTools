@@ -23,6 +23,7 @@ import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
+import me.ycdev.android.lib.common.utils.StorageUtils;
 import me.ycdev.android.lib.common.utils.WeakHandler;
 
 public class AppsSamplerActivity extends AppCompatBaseActivity
@@ -139,6 +140,10 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
     @Override
     public void onClick(View v) {
         if (v == mStartBtn) {
+            if (!StorageUtils.isExternalStorageAvailable()) {
+                ToastHelper.show(this, R.string.tip_no_sdcard, Toast.LENGTH_SHORT);
+                return;
+            }
             String intervalStr = mIntervalView.getText().toString();
             if (intervalStr.length() == 0) {
                 ToastHelper.show(this, R.string.apps_sampler_sample_interval_input_toast,

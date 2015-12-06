@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.ycdev.android.devtools.R;
-import me.ycdev.android.devtools.base.GridEntriesActivity;
+import me.ycdev.android.lib.commonui.activity.GridEntriesActivity;
 import me.ycdev.android.devtools.security.unmarshall.UnmarshallScannerActivity;
 
 public class SecurityScannerActivity extends GridEntriesActivity {

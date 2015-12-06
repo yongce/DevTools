@@ -10,11 +10,11 @@ project(':archLintRules').projectDir = file('submodules/AndroidArch/archLintRule
 include ':archLintRulesAAR'
 project(':archLintRulesAAR').projectDir = file('submodules/AndroidArch/archLintRulesAAR')
 
-include ':androidLib'
-project(':androidLib').projectDir = file('submodules/AndroidLib/lib')
+include ':baseLib'
+project(':baseLib').projectDir = file('submodules/AndroidLib/baseLib')
 
-include ':androidUiLib'
-project(':androidUiLib').projectDir = file('submodules/AndroidUiLib/lib')
+include ':uiLib'
+project(':uiLib').projectDir = file('submodules/AndroidLib/uiLib')
 
 include ':libsuperuser'
 project(':libsuperuser').projectDir = file('submodules/libsuperuser/libsuperuser')

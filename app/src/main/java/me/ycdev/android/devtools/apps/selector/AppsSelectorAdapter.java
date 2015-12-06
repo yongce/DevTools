@@ -1,6 +1,8 @@
 package me.ycdev.android.devtools.apps.selector;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -74,17 +76,18 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {
     }
 
     @Override
-    protected int getItemResId() {
+    protected @LayoutRes int getItemLayoutResId() {
         return R.layout.apps_selector_list_item;
     }
 
+    @NonNull
     @Override
-    protected ViewHolderBase createViewHolder(View itemView, int position) {
+    protected ViewHolderBase createViewHolder(@NonNull View itemView, int position) {
         return new ViewHolder(itemView, position);
     }
 
     @Override
-    protected void bindView(AppInfo item, ViewHolderBase holder) {
+    protected void bindView(@NonNull AppInfo item, @NonNull ViewHolderBase holder) {
         ViewHolder vh = (ViewHolder) holder;
         vh.iconView.setImageDrawable(item.appIcon);
         vh.appNameView.setText(item.appName);

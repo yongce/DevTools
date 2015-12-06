@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">DevTools</string>
 
-    <string name="perm_guard_common_label">Guard permission</string>
-    <string name="perm_guard_common_desc">To guard myself to prevent attacks</string>
-
     <string name="action_sort">Sort</string>
     <string name="action_sort_by_app_name">Sort by app name</string>
     <string name="action_sort_by_pkg_name">Sort by package name</string>
@@ -12,6 +9,8 @@
     <string name="action_sort_by_install_time">Sort by install time</string>
     <string name="action_sort_by_update_time">Sort by update time</string>
     <string name="action_refresh">Refresh</string>
+
+    <string name="tip_no_sdcard">No SD card available</string>
 
     <string name="module_device_info_title">Device Info</string>
     <string name="module_device_info_desc">Explore the device details</string>

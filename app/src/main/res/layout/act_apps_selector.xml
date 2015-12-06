@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.AppTheme.ActivityMargin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -11,16 +12,16 @@
         android:layout_margin="6dp"
         tools:text="5 apps are selected" />
 
-    <View style="@style/AppTheme.HorizontalDivider" />
+    <View style="@style/Widget.AppTheme.HorizontalDivider" />
 
     <ListView
         android:id="@+id/list"
-        style="@style/AppTheme.ListView"
+        style="@style/Widget.AppTheme.ListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <View style="@style/AppTheme.HorizontalDivider" />
+    <View style="@style/Widget.AppTheme.HorizontalDivider" />
 
     <Button
         android:id="@+id/select"

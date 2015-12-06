@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.AppTheme.ActivityMargin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -65,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <View style="@style/AppTheme.HorizontalDivider" />
+    <View style="@style/Widget.AppTheme.HorizontalDivider" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -73,7 +74,7 @@
         android:text="@string/apps_sampler_apps_list_header" />
     <ListView
         android:id="@+id/list"
-        style="@style/AppTheme.ListView"
+        style="@style/Widget.AppTheme.ListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
@@ -83,6 +84,6 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/apps_sampler_apps_list_select" />
 
-    <View style="@style/AppTheme.HorizontalDivider" />
+    <View style="@style/Widget.AppTheme.HorizontalDivider" />
 
 </LinearLayout>
