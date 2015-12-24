@@ -9,8 +9,9 @@ import android.widget.TextView;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
+import me.ycdev.android.lib.commonui.base.ViewHolderBase;
 
-class AppsSelectedAdapter extends ListAdapterBase<AppInfo> {
+class AppsSelectedAdapter extends ListAdapterBase<AppInfo, AppsSelectedAdapter.ViewHolder> {
     public AppsSelectedAdapter(Context cxt) {
         super(cxt);
     }
@@ -22,25 +23,20 @@ class AppsSelectedAdapter extends ListAdapterBase<AppInfo> {
 
     @NonNull
     @Override
-    protected ViewHolderBase createViewHolder(@NonNull View itemView, int position) {
+    protected ViewHolder createViewHolder(@NonNull View itemView, int position) {
         return new ViewHolder(itemView, position);
     }
 
     @Override
-    protected void bindView(@NonNull AppInfo item, @NonNull ViewHolderBase holder) {
-        ViewHolder vh = (ViewHolder) holder;
+    protected void bindView(@NonNull AppInfo item, @NonNull ViewHolder vh) {
         vh.pkgNameView.setText(item.pkgName);
     }
 
-    private static class ViewHolder extends ViewHolderBase {
+    static class ViewHolder extends ViewHolderBase {
         public TextView pkgNameView;
 
         public ViewHolder(View itemView, int position) {
             super(itemView, position);
-        }
-
-        @Override
-        protected void findViews() {
             pkgNameView = (TextView) itemView;
         }
     }

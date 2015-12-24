@@ -11,8 +11,9 @@ import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.compat.ViewsCompat;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
+import me.ycdev.android.lib.commonui.base.ViewHolderBase;
 
-class InstalledAppsAdapter extends ListAdapterBase<AppInfo> {
+class InstalledAppsAdapter extends ListAdapterBase<AppInfo, InstalledAppsAdapter.ViewHolder> {
     private static final int ALPHA_ENABLED = 255;
     private static final int ALPHA_DISABLED = 100;
 
@@ -36,13 +37,12 @@ class InstalledAppsAdapter extends ListAdapterBase<AppInfo> {
 
     @NonNull
     @Override
-    protected ViewHolderBase createViewHolder(@NonNull View itemView, int position) {
+    protected ViewHolder createViewHolder(@NonNull View itemView, int position) {
         return new ViewHolder(itemView, position);
     }
 
     @Override
-    protected void bindView(@NonNull AppInfo item, @NonNull ViewHolderBase holder) {
-        ViewHolder vh = (ViewHolder) holder;
+    protected void bindView(@NonNull AppInfo item, @NonNull ViewHolder vh) {
         vh.iconView.setImageDrawable(item.appIcon);
         vh.appNameView.setText(item.appName);
         vh.appUidView.setText(String.valueOf(item.appUid));
@@ -70,7 +70,7 @@ class InstalledAppsAdapter extends ListAdapterBase<AppInfo> {
         }
     }
 
-    private static class ViewHolder extends ViewHolderBase {
+    static class ViewHolder extends ViewHolderBase {
         public ImageView iconView;
         public TextView appNameView;
         public TextView appUidView;
@@ -83,10 +83,6 @@ class InstalledAppsAdapter extends ListAdapterBase<AppInfo> {
 
         public ViewHolder(@NonNull View itemView, int position) {
             super(itemView, position);
-        }
-
-        @Override
-        protected void findViews() {
             iconView = (ImageView) itemView.findViewById(R.id.app_icon);
             appNameView = (TextView) itemView.findViewById(R.id.app_name);
             appUidView = (TextView) itemView.findViewById(R.id.app_uid);

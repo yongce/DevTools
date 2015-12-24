@@ -17,15 +17,16 @@ import java.util.List;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
+import me.ycdev.android.lib.commonui.base.ViewHolderBase;
 
-class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {
+class AppsSelectorAdapter extends ListAdapterBase<AppInfo, AppsSelectorAdapter.ViewHolder> {
     public interface SelectedAppsChangeListener {
-        public void onSelectedAppsChanged(int newCount);
+        void onSelectedAppsChanged(int newCount);
     }
 
     private SelectedAppsChangeListener mChangeListener;
     private boolean mMultiChoice;
-    private HashSet<AppInfo> mSelectedApps = new HashSet<AppInfo>();
+    private HashSet<AppInfo> mSelectedApps = new HashSet<>();
 
     private View.OnClickListener mCheckedChangeListener = new View.OnClickListener() {
         @Override
@@ -58,7 +59,7 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {
     }
 
     public List<AppInfo> getSelectedApps() {
-        return new ArrayList<AppInfo>(mSelectedApps);
+        return new ArrayList<>(mSelectedApps);
     }
 
     public AppInfo getOneSelectedApp() {
@@ -82,13 +83,12 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {
 
     @NonNull
     @Override
-    protected ViewHolderBase createViewHolder(@NonNull View itemView, int position) {
+    protected ViewHolder createViewHolder(@NonNull View itemView, int position) {
         return new ViewHolder(itemView, position);
     }
 
     @Override
-    protected void bindView(@NonNull AppInfo item, @NonNull ViewHolderBase holder) {
-        ViewHolder vh = (ViewHolder) holder;
+    protected void bindView(@NonNull AppInfo item, @NonNull ViewHolder vh) {
         vh.iconView.setImageDrawable(item.appIcon);
         vh.appNameView.setText(item.appName);
         vh.pkgNameView.setText(item.pkgName);
@@ -97,7 +97,7 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {
         vh.checkBox.setOnClickListener(mCheckedChangeListener);
     }
 
-    private static class ViewHolder extends ViewHolderBase {
+    static class ViewHolder extends ViewHolderBase {
         public ImageView iconView;
         public TextView appNameView;
         public TextView pkgNameView;
@@ -105,10 +105,6 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo> {
 
         public ViewHolder(View itemView, int position) {
             super(itemView, position);
-        }
-
-        @Override
-        protected void findViews() {
             iconView = (ImageView) itemView.findViewById(R.id.app_icon);
             appNameView = (TextView) itemView.findViewById(R.id.app_name);
             pkgNameView = (TextView) itemView.findViewById(R.id.pkg_name);

@@ -9,8 +9,9 @@ import android.widget.TextView;
 
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
+import me.ycdev.android.lib.commonui.base.ViewHolderBase;
 
-public class RunningAppsAdapter extends ListAdapterBase<RunningAppInfo> {
+public class RunningAppsAdapter extends ListAdapterBase<RunningAppInfo, RunningAppsAdapter.ViewHolder> {
     public RunningAppsAdapter(@NonNull Context cxt) {
         super(cxt);
     }
@@ -22,14 +23,13 @@ public class RunningAppsAdapter extends ListAdapterBase<RunningAppInfo> {
 
     @NonNull
     @Override
-    protected ViewHolderBase createViewHolder(@NonNull View itemView, int position) {
+    protected ViewHolder createViewHolder(@NonNull View itemView, int position) {
         return new ViewHolder(itemView, position);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    protected void bindView(@NonNull RunningAppInfo item, @NonNull ViewHolderBase holder) {
-        ViewHolder vh = (ViewHolder) holder;
+    protected void bindView(@NonNull RunningAppInfo item, @NonNull ViewHolder vh) {
         vh.appIconView.setImageDrawable(item.appIcon);
         vh.appNameView.setText(item.appName);
         vh.pkgNameView.setText(item.pkgName);
@@ -47,7 +47,7 @@ public class RunningAppsAdapter extends ListAdapterBase<RunningAppInfo> {
         vh.processesHolderView.setText(sb.toString());
     }
 
-    class ViewHolder extends ViewHolderBase {
+    static class ViewHolder extends ViewHolderBase {
         public ImageView appIconView;
         public TextView appNameView;
         public TextView pkgNameView;
@@ -56,10 +56,6 @@ public class RunningAppsAdapter extends ListAdapterBase<RunningAppInfo> {
 
         public ViewHolder(@NonNull View itemView, int position) {
             super(itemView, position);
-        }
-
-        @Override
-        protected void findViews() {
             appIconView = (ImageView) itemView.findViewById(R.id.app_icon);
             appNameView = (TextView) itemView.findViewById(R.id.app_name);
             pkgNameView = (TextView) itemView.findViewById(R.id.pkg_name);
