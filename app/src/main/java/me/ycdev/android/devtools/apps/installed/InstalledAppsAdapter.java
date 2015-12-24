@@ -3,6 +3,7 @@ package me.ycdev.android.devtools.apps.installed;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,10 +25,11 @@ class InstalledAppsAdapter extends ListAdapterBase<AppInfo, InstalledAppsAdapter
 
     InstalledAppsAdapter(@NonNull Context cxt) {
         super(cxt);
-        mSysAppColor = cxt.getResources().getColor(R.color.apps_sys_app_color);
-        mNormalAppColor = cxt.getResources().getColor(android.R.color.secondary_text_dark);
-        mSharedAppColor = cxt.getResources().getColor(R.color.apps_shared_uid_color);
-        mUnavailableColor = cxt.getResources().getColor(R.color.apps_unavailable_color);
+        mSysAppColor = ContextCompat.getColor(cxt, R.color.apps_sys_app_color);
+        mSysAppColor = ContextCompat.getColor(cxt, R.color.apps_sys_app_color);
+        mNormalAppColor = ContextCompat.getColor(cxt, android.R.color.secondary_text_dark);
+        mSharedAppColor = ContextCompat.getColor(cxt, R.color.apps_shared_uid_color);
+        mUnavailableColor = ContextCompat.getColor(cxt, R.color.apps_unavailable_color);
     }
 
     @Override
