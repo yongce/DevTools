@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">DevTools</string>
 
+    <string name="action_settings">Settings</string>
     <string name="action_sort">Sort</string>
     <string name="action_sort_by_app_name">Sort by app name</string>
     <string name="action_sort_by_pkg_name">Sort by package name</string>

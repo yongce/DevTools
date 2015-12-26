@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="developer_name">DevTools</string>
+    <string name="developer_home_page_url" translatable="false">https://github.com/yongce/DevTools</string>
+
+    <string name="nav_drawer_open">Open navigation drawer</string>
+    <string name="nav_drawer_close">Close navigation drawer</string>
+
+    <string name="nav_visit_homepage">Visit Home Page</string>
+    <string name="nav_send_email">Send Email</string>
+    <string name="nav_share">Share</string>
+
+    <string name="nav_tip_no_web_apps">No Web apps installed</string>
+    <string name="nav_tip_no_email_apps">No Email apps installed</string>
+    <string name="nav_tip_no_available_apps">No available apps</string>
+
+    <string name="nav_send_email_address" translatable="false">yongce.tu@gmail.com</string>
+    <string name="nav_send_subject">Hello DevTools</string>
+</resources>
