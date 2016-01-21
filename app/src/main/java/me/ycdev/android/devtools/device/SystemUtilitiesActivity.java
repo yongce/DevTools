@@ -27,6 +27,12 @@ public class SystemUtilitiesActivity extends GridEntriesActivity {
         activities.add(new IntentEntry(testSettingsIntent,
                 getString(R.string.module_testing_settings_title),
                 getString(R.string.module_testing_settings_desc)));
+
+        Intent bluetoothViewerIntent = new Intent(this, BluetoothViewerActivity.class);
+        activities.add(new IntentEntry(bluetoothViewerIntent,
+                getString(R.string.module_bluetooth_viewer_title),
+                getString(R.string.module_bluetooth_viewer_desc)));
+
         return activities;
     }
 }

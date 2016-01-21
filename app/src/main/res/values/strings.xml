@@ -10,6 +10,8 @@
     <string name="action_sort_by_install_time">Sort by install time</string>
     <string name="action_sort_by_update_time">Sort by update time</string>
     <string name="action_refresh">Refresh</string>
+    <string name="action_enable">Enable</string>
+    <string name="action_disable">Disable</string>
 
     <string name="tip_no_sdcard">No SD card available</string>
 
@@ -28,6 +30,8 @@
     <string name="module_apps_mgr_desc">Bring up Apps Manager in Settings</string>
     <string name="module_testing_settings_title">Testing Settings</string>
     <string name="module_testing_settings_desc">Bring up Testing in Settings</string>
+    <string name="module_bluetooth_viewer_title">Bluetooth Viewer</string>
+    <string name="module_bluetooth_viewer_desc">Enable/disable bluetooth and view bluetooth events</string>
 
     <string name="elapsed_time_hours">"%1$dh%2$dm"</string>
     <string name="elapsed_time_minutes">"%1$dm%2$ds"</string>

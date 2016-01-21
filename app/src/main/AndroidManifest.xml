@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="me.ycdev.android.devtools">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -47,9 +49,19 @@
         <activity
             android:name=".device.DeviceInfoActivity"
             android:label="@string/module_device_info_title" />
+
         <activity
             android:name=".device.SystemUtilitiesActivity"
             android:label="@string/module_system_utilities_title" />
+        <activity
+            android:name=".device.BluetoothViewerActivity"
+            android:label="@string/module_bluetooth_viewer_title"
+            android:parentActivityName=".device.SystemUtilitiesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".device.SystemUtilitiesActivity" />
+        </activity>
+
         <activity
             android:name=".apps.installed.InstalledAppsActivity"
             android:label="@string/module_installed_apps_title" />
@@ -57,12 +69,12 @@
             android:name=".device.BroadcastTesterActivity"
             android:label="@string/module_broadcast_tester_title"
             android:theme="@style/AppTheme.WideGridEntries" />
+
         <activity
             android:name=".sampler.AppsSamplerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/apps_sampler_module_title"
             android:windowSoftInputMode="stateHidden" />
-
         <service android:name=".sampler.AppsSamplerService" />
 
         <activity
