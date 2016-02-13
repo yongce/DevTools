@@ -48,11 +48,21 @@
         </activity>
         <activity
             android:name=".device.DeviceInfoActivity"
-            android:label="@string/module_device_info_title" />
+            android:label="@string/module_device_info_title"
+            android:parentActivityName=".LauncherActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LauncherActivity" />
+        </activity>
 
         <activity
             android:name=".device.SystemUtilitiesActivity"
-            android:label="@string/module_system_utilities_title" />
+            android:label="@string/module_system_utilities_title"
+            android:parentActivityName=".LauncherActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LauncherActivity" />
+        </activity>
         <activity
             android:name=".device.BluetoothViewerActivity"
             android:label="@string/module_bluetooth_viewer_title"
@@ -64,17 +74,32 @@
 
         <activity
             android:name=".apps.installed.InstalledAppsActivity"
-            android:label="@string/module_installed_apps_title" />
+            android:label="@string/module_installed_apps_title"
+            android:parentActivityName=".LauncherActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LauncherActivity" />
+        </activity>
         <activity
             android:name=".device.BroadcastTesterActivity"
             android:label="@string/module_broadcast_tester_title"
-            android:theme="@style/AppTheme.WideGridEntries" />
+            android:theme="@style/AppTheme.WideGridEntries"
+            android:parentActivityName=".LauncherActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LauncherActivity" />
+        </activity>
 
         <activity
             android:name=".sampler.AppsSamplerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/apps_sampler_module_title"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:parentActivityName=".LauncherActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LauncherActivity" />
+        </activity>
         <service android:name=".sampler.AppsSamplerService" />
 
         <activity
@@ -83,13 +108,28 @@
             android:label="@string/apps_selector_title" />
         <activity
             android:name=".apps.running.RunningAppsActivity"
-            android:label="@string/running_apps_module_title" />
+            android:label="@string/running_apps_module_title"
+            android:parentActivityName=".LauncherActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LauncherActivity" />
+        </activity>
         <activity
             android:name=".security.SecurityScannerActivity"
-            android:label="@string/security_scanner_module_title" />
+            android:label="@string/security_scanner_module_title"
+            android:parentActivityName=".LauncherActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LauncherActivity" />
+        </activity>
         <activity
             android:name=".security.unmarshall.UnmarshallScannerActivity"
-            android:label="@string/security_scanner_unmarshall_module_title" />
+            android:label="@string/security_scanner_unmarshall_module_title"
+            android:parentActivityName=".security.SecurityScannerActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".security.SecurityScannerActivity" />
+        </activity>
     </application>
 
 </manifest>

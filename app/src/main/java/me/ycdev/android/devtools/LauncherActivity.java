@@ -149,7 +149,8 @@ public class LauncherActivity extends GridEntriesActivity
     private void sendEmail() {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-        intent.putExtra(Intent.EXTRA_EMAIL, getString(R.string.nav_send_email_address));
+        intent.putExtra(Intent.EXTRA_EMAIL,
+                new String[] {getString(R.string.nav_send_email_address)});
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.nav_send_subject));
         if (intent.resolveActivity(getPackageManager()) != null) {
             String title = getString(R.string.nav_send_email);
