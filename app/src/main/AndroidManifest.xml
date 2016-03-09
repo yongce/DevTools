@@ -18,6 +18,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute">
 
+        <meta-data android:name="git_commit_tag" android:value="${gitCommitSha1}" />
+
         <!-- Receivers -->
         <receiver
             android:name=".receivers.PackageChangeReceiver"
