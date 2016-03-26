@@ -1,9 +1,11 @@
 package me.ycdev.android.devtools.sampler;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,20 +19,34 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
+import me.ycdev.android.arch.utils.AppConfigs;
+import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.arch.wrapper.IntentHelper;
 import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
 import me.ycdev.android.lib.common.apps.AppInfo;
+import me.ycdev.android.lib.common.perms.PermissionCallback;
+import me.ycdev.android.lib.common.perms.PermissionRequestParams;
+import me.ycdev.android.lib.common.perms.PermissionUtils;
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
 import me.ycdev.android.lib.common.utils.StorageUtils;
 import me.ycdev.android.lib.common.utils.WeakHandler;
 
 public class AppsSamplerActivity extends AppCompatBaseActivity
-        implements View.OnClickListener, WeakHandler.MessageHandler {
+        implements View.OnClickListener, WeakHandler.MessageHandler, PermissionCallback {
+    private static final String TAG = "AppsSamplerActivity";
+    private static final boolean DEBUG = AppConfigs.DEBUG_LOG;
+
     private static final int REQUEST_CODE_APPS_SELECTOR = 1;
 
+    private static final int PERMISSION_RC_SAMPLER = 1;
+
     private static final int MSG_REFRESH_SAMPLE_STATUS = 100;
+
+    private static final String[] REQUESTED_PERMISSIONS = new String[] {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     private Button mStartBtn;
     private Button mStopBtn;
@@ -43,7 +59,7 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
 
     private AppsSelectedAdapter mAdapter;
 
-    private ArrayList<String> mPkgNames = new ArrayList<String>();
+    private ArrayList<String> mPkgNames = new ArrayList<>();
     private int mInterval = 5; // seconds
     private int mPeriod = 0; // minutes, forever by default
 
@@ -140,32 +156,7 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
     @Override
     public void onClick(View v) {
         if (v == mStartBtn) {
-            if (!StorageUtils.isExternalStorageAvailable()) {
-                ToastHelper.show(this, R.string.tip_no_sdcard, Toast.LENGTH_SHORT);
-                return;
-            }
-            String intervalStr = mIntervalView.getText().toString();
-            if (intervalStr.length() == 0) {
-                ToastHelper.show(this, R.string.apps_sampler_sample_interval_input_toast,
-                        Toast.LENGTH_SHORT);
-                return;
-            }
-            if (mPkgNames.size() == 0) {
-                ToastHelper.show(this, R.string.apps_sampler_no_apps_toast,
-                        Toast.LENGTH_SHORT);
-                return;
-            }
-
-            String periodStr = mPeriodView.getText().toString();
-            if (periodStr.length() > 0) {
-                mPeriod = Integer.parseInt(periodStr);
-            }
-            mInterval = Integer.parseInt(intervalStr);
-            AppsSamplerService.startSampler(this, mPkgNames, mInterval, mPeriod);
-            ToastHelper.show(this, R.string.apps_sampler_start_sampling_toast,
-                    Toast.LENGTH_SHORT);
-            refreshButtonsState(true);
-            mHandler.sendEmptyMessageDelayed(MSG_REFRESH_SAMPLE_STATUS, mInterval * 1000);
+            startSample();
         } else if (v == mStopBtn) {
             AppsSamplerService.createSampleReport(this);
             AppsSamplerService.stopSampler(this);
@@ -216,5 +207,66 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
     protected void onDestroy() {
         mHandler.removeMessages(MSG_REFRESH_SAMPLE_STATUS);
         super.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+            @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean permissionsGranted = PermissionUtils.verifyPermissions(grantResults);
+        if (DEBUG) AppLogger.d(TAG, "onRequestPermissionsResult: " + permissionsGranted);
+        if (permissionsGranted) {
+            startSample();
+        }
+    }
+
+    @Override
+    public void onRationaleDenied(int requestCode) {
+        // ignore
+    }
+
+    private PermissionRequestParams createPermissionRequestParams() {
+        PermissionRequestParams params = new PermissionRequestParams();
+        params.requestCode = PERMISSION_RC_SAMPLER;
+        params.permissions = REQUESTED_PERMISSIONS;
+        params.rationaleTitle = getString(R.string.title_permission_request);
+        params.rationaleContent = getString(R.string.apps_sampler_permissions_rationale);
+        params.callback = this;
+        return params;
+    }
+
+    private void startSample() {
+        if (!StorageUtils.isExternalStorageAvailable()) {
+            ToastHelper.show(this, R.string.tip_no_sdcard, Toast.LENGTH_SHORT);
+            return;
+        }
+        String intervalStr = mIntervalView.getText().toString();
+        if (intervalStr.length() == 0) {
+            ToastHelper.show(this, R.string.apps_sampler_sample_interval_input_toast,
+                    Toast.LENGTH_SHORT);
+            return;
+        }
+        if (mPkgNames.size() == 0) {
+            ToastHelper.show(this, R.string.apps_sampler_no_apps_toast,
+                    Toast.LENGTH_SHORT);
+            return;
+        }
+
+        if (!PermissionUtils.hasPermissions(this, REQUESTED_PERMISSIONS)) {
+            if (DEBUG) AppLogger.d(TAG, "Need to request the permission");
+            PermissionUtils.requestPermissions(this, createPermissionRequestParams());
+            return;
+        }
+
+        String periodStr = mPeriodView.getText().toString();
+        if (periodStr.length() > 0) {
+            mPeriod = Integer.parseInt(periodStr);
+        }
+        mInterval = Integer.parseInt(intervalStr);
+        AppsSamplerService.startSampler(this, mPkgNames, mInterval, mPeriod);
+        ToastHelper.show(this, R.string.apps_sampler_start_sampling_toast,
+                Toast.LENGTH_SHORT);
+        refreshButtonsState(true);
+        mHandler.sendEmptyMessageDelayed(MSG_REFRESH_SAMPLE_STATUS, mInterval * 1000);
     }
 }

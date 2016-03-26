@@ -13,6 +13,8 @@
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
 
+    <string name="title_permission_request">Permission Request</string>
+
     <string name="tip_no_sdcard">No SD card available</string>
 
     <string name="module_device_info_title">Device Info</string>
@@ -66,6 +68,7 @@
     <string name="apps_sampler_no_apps_toast">Please select apps which to sample!</string>
     <string name="apps_sampler_notification_ticker">Sampling the apps…</string>
     <string name="apps_sampler_sample_status">Start time: %1$s\nClock time (s): %2$d\nSample count: %3$d</string>
+    <string name="apps_sampler_permissions_rationale">The sampler need to access the external storage (or SD card) to write the stats files.</string>
 
     <string name="running_apps_module_title">Running Apps</string>
     <string name="running_apps_module_desc">Show all the running apps</string>
