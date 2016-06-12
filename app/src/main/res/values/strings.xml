@@ -85,4 +85,19 @@
     <string name="security_scanner_unmarshall_option_service">Scan Services</string>
     <string name="security_scanner_unmarshall_option_activity">Scan Activities</string>
     <string name="security_scanner_unmarshall_option_needkill">Need Kill</string>
+
+    <string name="contacts_module_title">Contacts Creator</string>
+    <string name="contacts_module_desc">Create or delete contacts for test purpose</string>
+    <string name="contacts_count_state">%1$d contacts found\n%2$d deleted contacts to sync</string>
+    <string name="contacts_query">Query Contacts</string>
+    <string name="contacts_dump">Dump Contacts</string>
+    <string name="contacts_count_tip">"Number of Contacts:"</string>
+    <string name="contacts_create">Create Contacts</string>
+    <string name="contacts_delete">Delete Contacts</string>
+    <string name="contacts_msg_querying">Querying contacts…</string>
+    <string name="contacts_msg_creating">Creating contacts…</string>
+    <string name="contacts_msg_deleting">Deleting contacts…</string>
+    <string name="contacts_msg_permission_denied">No permissions to visit contacts!</string>
+    <string name="contacts_permissions_rationale">Contacts Creator need to read and write contacts for its features.</string>
+
 </resources>

@@ -18,6 +18,7 @@ import java.util.List;
 import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.apps.installed.InstalledAppsActivity;
 import me.ycdev.android.devtools.apps.running.RunningAppsActivity;
+import me.ycdev.android.devtools.contacts.ContactsActivity;
 import me.ycdev.android.devtools.device.BroadcastTesterActivity;
 import me.ycdev.android.devtools.device.DeviceInfoActivity;
 import me.ycdev.android.devtools.device.SystemUtilitiesActivity;
@@ -82,6 +83,9 @@ public class LauncherActivity extends GridEntriesActivity
         activities.add(new IntentEntry(new Intent(this, SecurityScannerActivity.class),
                 getString(R.string.security_scanner_module_title),
                 getString(R.string.security_scanner_module_desc)));
+        activities.add(new IntentEntry(new Intent(this, ContactsActivity.class),
+                getString(R.string.contacts_module_title),
+                getString(R.string.contacts_module_desc)));
         return activities;
     }
 
