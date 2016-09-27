@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "me.ycdev.android.devtools"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 24
 
         versionName "1.3.2"
         versionCode calculatedVersionCode
@@ -22,6 +22,10 @@ android {
         buildConfigField "boolean", "DISABLE_LOG", rootProject.ext.DISABLE_LOG
 
         manifestPlaceholders = [ gitCommitSha1:gitLatestCommitSha1 ]
+
+        jackOptions {
+            enabled = true
+        }
     }
 
     signingConfigs {
@@ -62,6 +66,12 @@ android {
         disable 'ClickableViewAccessibility','ContentDescription','LabelFor'
         disable 'IconMissingDensityFolder'
         disable 'GoogleAppIndexingWarning'
+
+        // for 'src/main/assets/busybox_static'
+        disable 'UnsafeNativeCodeLocation'
+
+        // for http://code.google.com/p/android/issues/detail?id=223795
+        disable 'PrivateResource'
     }
 }
 

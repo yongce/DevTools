@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">DevTools</string>
 
     <string name="action_settings">Settings</string>
@@ -88,7 +88,7 @@
 
     <string name="contacts_module_title">Contacts Creator</string>
     <string name="contacts_module_desc">Create or delete contacts for test purpose</string>
-    <string name="contacts_count_state">%1$d contacts found\n%2$d deleted contacts to sync</string>
+    <string name="contacts_count_state" tools:ignore="PluralsCandidate">%1$d contacts found\n%2$d deleted contacts to sync</string>
     <string name="contacts_query">Query Contacts</string>
     <string name="contacts_dump">Dump Contacts</string>
     <string name="contacts_count_tip">"Number of Contacts:"</string>
