@@ -26,6 +26,8 @@ android {
         jackOptions {
             enabled = true
         }
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -81,7 +83,25 @@ dependencies {
     compile project(':baseLib')
     compile project(':uiLib')
     compile project(':libsuperuser')
+
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     compile "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
     compile "com.android.support:design:${rootProject.ext.supportLibVersion}"
+
+    compile "com.alibaba:fastjson:${rootProject.ext.fastjsonVersion}"
+
+    // Dependencies for local unit tests
+    testCompile "junit:junit:${rootProject.ext.junitVersion}"
+    testCompile "org.hamcrest:hamcrest-core:${rootProject.ext.hamcrestVersion}"
+    testCompile "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrestVersion}"
+    testCompile "org.mockito:mockito-core:${rootProject.ext.mockitoVersion}"
+    testCompile "org.powermock:powermock-api-mockito:${rootProject.ext.powerMockVersion}"
+    testCompile "org.powermock:powermock-module-junit4:${rootProject.ext.powerMockVersion}"
+
+    // Android Testing Support Library's runner and rules
+    androidTestCompile "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
+    androidTestCompile "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
+
+    // Resolve conflicts between main and test APK
+    androidTestCompile "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
 }

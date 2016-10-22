@@ -1,5 +1,7 @@
 package me.ycdev.android.devtools.sampler.cpu;
 
+import android.support.annotation.Nullable;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,6 +18,7 @@ public class CpuUtils {
     private static final String FILE_SYS_CPU_STAT = "/proc/stat";
     private static final String FILE_PROC_CPU_STAT = "/proc/%d/stat";
 
+    @Nullable
     public static SysCpuStat getCpuStat() {
         BufferedReader br = null;
         try {
@@ -28,7 +31,7 @@ public class CpuUtils {
                     stat.utime = StringUtils.parseLong(fields[1], 0);
                     stat.ntime = StringUtils.parseLong(fields[2], 0);
                     stat.stime = StringUtils.parseLong(fields[3], 0);
-                    stat.itime = StringUtils.parseLong(fields[4], 0);
+//                    stat.itime = StringUtils.parseLong(fields[4], 0);
                     return stat;
                 }
             }
