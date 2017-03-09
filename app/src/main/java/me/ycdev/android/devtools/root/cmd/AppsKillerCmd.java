@@ -4,13 +4,11 @@ import android.content.Context;
 
 import java.util.List;
 
-import me.ycdev.android.arch.utils.AppConfigs;
 import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.root.RootCommandBuilder;
 
 public class AppsKillerCmd extends RootCmdBase {
     private static final String TAG = "AppsKillerCmd";
-    private static final boolean DEBUG = AppConfigs.DEBUG_LOG;
 
     private List<String> mPkgList;
 

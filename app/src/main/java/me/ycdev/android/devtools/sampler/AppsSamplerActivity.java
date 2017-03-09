@@ -19,12 +19,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
-import me.ycdev.android.arch.utils.AppConfigs;
 import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.arch.wrapper.IntentHelper;
 import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
+import me.ycdev.android.devtools.utils.AppConfigs;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.perms.PermissionCallback;
 import me.ycdev.android.lib.common.perms.PermissionRequestParams;

@@ -24,7 +24,8 @@ import android.os.Build;
 import android.provider.Telephony;
 import android.widget.Toast;
 
-import static me.ycdev.android.arch.ArchConstants.*;
+import static me.ycdev.android.arch.ArchConstants.IntentType.INTENT_TYPE_ACTIVITY;
+import static me.ycdev.android.arch.ArchConstants.IntentType.INTENT_TYPE_BROADCAST;
 
 public class BroadcastTesterActivity extends GridEntriesActivity {
     private String mTargetPkgName;

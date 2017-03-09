@@ -1,9 +1,5 @@
 package me.ycdev.android.devtools.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import android.content.Context;
 
 public class StringHelper {

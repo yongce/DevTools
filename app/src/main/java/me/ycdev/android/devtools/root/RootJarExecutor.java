@@ -2,8 +2,8 @@ package me.ycdev.android.devtools.root;
 
 import java.util.Arrays;
 
-import me.ycdev.android.arch.utils.AppConfigs;
 import me.ycdev.android.arch.utils.AppLogger;
+import me.ycdev.android.devtools.utils.AppConfigs;
 import me.ycdev.android.lib.common.internalapi.android.app.ActivityManagerIA;
 
 public class RootJarExecutor {

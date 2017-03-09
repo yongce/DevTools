@@ -18,8 +18,7 @@ android {
         versionName "1.3.2"
         versionCode calculatedVersionCode
 
-        buildConfigField "boolean", "DEBUG_LOG", rootProject.ext.DEBUG_LOG
-        buildConfigField "boolean", "DISABLE_LOG", rootProject.ext.DISABLE_LOG
+        buildConfigField "boolean", "DEBUG_LOG", "true"
 
         manifestPlaceholders = [ gitCommitSha1:gitLatestCommitSha1 ]
 
@@ -49,6 +48,8 @@ android {
 
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+
+            buildConfigField "boolean", "DEBUG_LOG", "false"
         }
     }
 
@@ -79,9 +80,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':archLib')
-    compile project(':baseLib')
-    compile project(':uiLib')
     compile project(':libsuperuser')
 
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
@@ -89,6 +87,8 @@ dependencies {
     compile "com.android.support:design:${rootProject.ext.supportLibVersion}"
 
     compile "com.alibaba:fastjson:${rootProject.ext.fastjsonVersion}"
+    compile "me.ycdev.android:common-arch:${rootProject.ext.ycdevCommonVersion}"
+    compile "me.ycdev.android:common-ui:${rootProject.ext.ycdevCommonVersion}"
 
     // Dependencies for local unit tests
     testCompile "junit:junit:${rootProject.ext.junitVersion}"

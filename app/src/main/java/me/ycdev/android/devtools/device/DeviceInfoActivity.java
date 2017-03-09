@@ -26,6 +26,7 @@ import me.ycdev.android.devtools.utils.ViewHelper;
 import me.ycdev.android.lib.common.internalapi.android.os.EnvironmentIA;
 import me.ycdev.android.lib.common.internalapi.android.os.SystemPropertiesIA;
 
+@SuppressWarnings("deprecation")
 public class DeviceInfoActivity extends AppCompatBaseActivity {
     private static final String TAG = "DeviceInfoActivity";
 
@@ -79,54 +80,46 @@ public class DeviceInfoActivity extends AppCompatBaseActivity {
         ViewHelper.addTextView(holder, "Mask", SystemPropertiesIA.get("dhcp.eth0.mask", "N/A"));
 
         ViewHelper.addLineView(holder, 0xff00ff00); // green
-        if (Build.VERSION.SDK_INT >= 9) {
-            ViewHelper.addTextView(holder, "Encrypted FS: " +
-                    EnvironmentIA.isEncryptedFilesystemEnabled());
-        }
+        ViewHelper.addTextView(holder, "Encrypted FS: " +
+                EnvironmentIA.isEncryptedFilesystemEnabled());
         ViewHelper.addTextView(holder, "Data Dir: " +
                 Environment.getDataDirectory().getAbsolutePath());
         ViewHelper.addTextView(holder, "Download Cache Dir: " +
                 Environment.getDownloadCacheDirectory());
 
-        if (Build.VERSION.SDK_INT >= 9) {
-            ViewHelper.addTextView(holder, "Android Secure Data Dir: " +
-                    EnvironmentIA.getSecureDataDirectory());
-            ViewHelper.addTextView(holder, "Android System Secure Dir: " +
-                    EnvironmentIA.getSystemSecureDirectory());
-        }
+        ViewHelper.addTextView(holder, "Android Secure Data Dir: " +
+                EnvironmentIA.getSecureDataDirectory());
+        ViewHelper.addTextView(holder, "Android System Secure Dir: " +
+                EnvironmentIA.getSystemSecureDirectory());
 
         ViewHelper.addTextView(holder, "External Storage Dir: " +
                 Environment.getExternalStorageDirectory());
         ViewHelper.addTextView(holder, "External Storage state: " +
                 Environment.getExternalStorageState());
         ViewHelper.addTextView(holder, "External Storage size: " + getExternalStorageSize());
-        if (Build.VERSION.SDK_INT >= 9) {
-            ViewHelper.addTextView(holder, "External storage removable: " +
-                    Environment.isExternalStorageRemovable());
-        }
+        ViewHelper.addTextView(holder, "External storage removable: " +
+                Environment.isExternalStorageRemovable());
         ViewHelper.addTextView(holder, "External Storage Data Dir: " +
                 EnvironmentIA.getExternalStorageAndroidDataDir());
 
-        if (Build.VERSION.SDK_INT >= 8) {
-            ViewHelper.addTextView(holder, "Alarms audio: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS));
-            ViewHelper.addTextView(holder, "DCIM: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM));
-            ViewHelper.addTextView(holder, "Download: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
-            ViewHelper.addTextView(holder, "Movies: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES));
-            ViewHelper.addTextView(holder, "Music: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC));
-            ViewHelper.addTextView(holder, "Notification audio: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS));
-            ViewHelper.addTextView(holder, "Pictures: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
-            ViewHelper.addTextView(holder, "Podcasts: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS));
-            ViewHelper.addTextView(holder, "Ringtones: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES));
-        }
+        ViewHelper.addTextView(holder, "Alarms audio: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS));
+        ViewHelper.addTextView(holder, "DCIM: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM));
+        ViewHelper.addTextView(holder, "Download: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+        ViewHelper.addTextView(holder, "Movies: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES));
+        ViewHelper.addTextView(holder, "Music: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC));
+        ViewHelper.addTextView(holder, "Notification audio: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS));
+        ViewHelper.addTextView(holder, "Pictures: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+        ViewHelper.addTextView(holder, "Podcasts: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS));
+        ViewHelper.addTextView(holder, "Ringtones: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES));
     }
 
     private String getScreenLayoutSizeType() {
@@ -152,18 +145,13 @@ public class DeviceInfoActivity extends AppCompatBaseActivity {
         WindowManager wm = (WindowManager) cxt.getSystemService(Context.WINDOW_SERVICE);
         Display screen = wm.getDefaultDisplay();
         Point pt = new Point();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            try {
-                Method getRealSizeMethod = Display.class.getMethod("getRealSize",
-                        new Class[] { Point.class });
-                getRealSizeMethod.invoke(screen, pt);
-            } catch (Exception e) {
-                AppLogger.w(TAG, "Unexpected exception: ", e);
-                screen.getSize(pt); // exclude window decor size (eg, statusbar)
-            }
-        } else {
-            pt.x = screen.getWidth();
-            pt.y = screen.getHeight();
+        try {
+            Method getRealSizeMethod = Display.class.getMethod("getRealSize",
+                    Point.class);
+            getRealSizeMethod.invoke(screen, pt);
+        } catch (Exception e) {
+            AppLogger.w(TAG, "Unexpected exception: ", e);
+            screen.getSize(pt); // exclude window decor size (eg, statusbar)
         }
         return pt;
     }
@@ -206,7 +194,7 @@ public class DeviceInfoActivity extends AppCompatBaseActivity {
             if (br != null) {
                 try {
                     br.close();
-                } catch (IOException e) {
+                } catch (IOException ignored) {
                 }
             }
         }

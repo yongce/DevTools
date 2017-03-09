@@ -406,47 +406,51 @@ public class AppsSamplerService extends Service implements Handler.Callback {
                 File statFile = new File(appDir, AppsSamplerService.generateStatsFileName(
                         pkgName, taskInfo.startTime));
                 BufferedReader reader = new BufferedReader(new FileReader(statFile));
-                AppStatReport appReport = new AppStatReport(pkgName);
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    StatFileLine entry = AppStat.readStat(line);
-                    if (entry == null) {
-                        continue; // skip header line
-                    }
+                try {
+                    AppStatReport appReport = new AppStatReport(pkgName);
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        StatFileLine entry = AppStat.readStat(line);
+                        if (entry == null) {
+                            continue; // skip header line
+                        }
 
-                    if (appReport.sysTimeStampStart == null) {
-                        appReport.sysTimeStampStart = entry.sysTimeStamp;
-                    }
-                    appReport.sysTimeStampEnd = entry.sysTimeStamp;
+                        if (appReport.sysTimeStampStart == null) {
+                            appReport.sysTimeStampStart = entry.sysTimeStamp;
+                        }
+                        appReport.sysTimeStampEnd = entry.sysTimeStamp;
 
-                    appReport.sampleCount++;
-                    appReport.totalTimeUsage += entry.timeUsage;
-                    appReport.totalCpuTime += entry.cpuTime;
-                    if (entry.processCount > appReport.maxProcessCount) {
-                        appReport.maxProcessCount = entry.processCount;
-                    }
+                        appReport.sampleCount++;
+                        appReport.totalTimeUsage += entry.timeUsage;
+                        appReport.totalCpuTime += entry.cpuTime;
+                        if (entry.processCount > appReport.maxProcessCount) {
+                            appReport.maxProcessCount = entry.processCount;
+                        }
 
-                    if (appReport.minMemPss == 0 || entry.memPss < appReport.minMemPss) {
-                        appReport.minMemPss = entry.memPss;
-                    } else if (entry.memPss > appReport.maxMemPss) {
-                        appReport.maxMemPss = entry.memPss;
-                    }
-                    appReport.totalMemPss += entry.memPss;
+                        if (appReport.minMemPss == 0 || entry.memPss < appReport.minMemPss) {
+                            appReport.minMemPss = entry.memPss;
+                        } else if (entry.memPss > appReport.maxMemPss) {
+                            appReport.maxMemPss = entry.memPss;
+                        }
+                        appReport.totalMemPss += entry.memPss;
 
-                    if (appReport.minMemPrivate == 0 || entry.memPrivate < appReport.minMemPrivate) {
-                        appReport.minMemPrivate = entry.memPrivate;
-                    } else if (entry.memPrivate > appReport.maxMemPrivate) {
-                        appReport.maxMemPrivate = entry.memPrivate;
-                    }
-                    appReport.totalMemPrivate += entry.memPrivate;
+                        if (appReport.minMemPrivate == 0 || entry.memPrivate < appReport.minMemPrivate) {
+                            appReport.minMemPrivate = entry.memPrivate;
+                        } else if (entry.memPrivate > appReport.maxMemPrivate) {
+                            appReport.maxMemPrivate = entry.memPrivate;
+                        }
+                        appReport.totalMemPrivate += entry.memPrivate;
 
-                    appReport.totalTrafficRecv += entry.trafficRecv;
-                    appReport.totalTrafficSend += entry.trafficSend;
-                }
-                if (appReport.sampleCount > 0) {
-                    appReport.dumpStat(cxt, writer);
-                } else {
-                    AppLogger.w(TAG, "no stats for " + appReport.pkgName);
+                        appReport.totalTrafficRecv += entry.trafficRecv;
+                        appReport.totalTrafficSend += entry.trafficSend;
+                    }
+                    if (appReport.sampleCount > 0) {
+                        appReport.dumpStat(cxt, writer);
+                    } else {
+                        AppLogger.w(TAG, "no stats for " + appReport.pkgName);
+                    }
+                } finally {
+                    IoUtils.closeQuietly(reader);
                 }
             }
             writer.flush();
