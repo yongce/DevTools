@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "me.ycdev.android.devtools"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
 
         versionName "1.3.2"
         versionCode calculatedVersionCode
