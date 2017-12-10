@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: "${rootDir}/android_module_common.gradle"
+apply from: "${androidModuleCommon}"
 
 // 版本号规则如下：
 // 1. versionNameBase定义为：<主版本号X>.<次版本号Y>.<hotfix版本号Z>
