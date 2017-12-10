@@ -18,9 +18,9 @@ import android.widget.TextView;
 
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
 import me.ycdev.android.arch.utils.AppLogger;
-import me.ycdev.android.arch.wrapper.BroadcastHelper;
-import me.ycdev.android.arch.wrapper.IntentHelper;
 import me.ycdev.android.devtools.R;
+import me.ycdev.android.lib.common.wrapper.BroadcastHelper;
+import me.ycdev.android.lib.common.wrapper.IntentHelper;
 
 public class BluetoothViewerActivity extends AppCompatBaseActivity implements View.OnClickListener {
     private static final String TAG = "BluetoothViewerActivity";

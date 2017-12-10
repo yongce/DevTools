@@ -9,9 +9,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializeFilter;
-import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -117,8 +115,7 @@ public class SysSamplerService extends Service implements Handler.Callback {
 
         List<SysCpuStat> snapshotList = mSysCpuTracker.getSnapshotList();
         if (snapshotList != null) {
-            SerializeFilter filter = new SimplePropertyPreFilter("utime", "ntime", "stime");
-            AppLogger.i(TAG, "snapshot list: " + JSON.toJSONString(snapshotList, filter));
+            AppLogger.i(TAG, "snapshot list: " + new Gson().toJson(snapshotList));
         }
 
         stopSelf();

@@ -2,7 +2,8 @@ package me.ycdev.android.devtools.sampler.sys;
 
 import android.os.SystemClock;
 
-import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class SysCpuTrackerTest {
                 "{\"ntime\":38611,\"stime\":1315255,\"utime\":2165277}," +
                 "{\"ntime\":38611,\"stime\":1315353,\"utime\":2165330}," +
                 "{\"ntime\":38611,\"stime\":1315426,\"utime\":2165377}]";
-        final List<SysCpuStat> snapshots = JSON.parseArray(jsonData, SysCpuStat.class);
+        final List<SysCpuStat> snapshots = new Gson().fromJson(jsonData, new TypeToken<List<SysCpuStat>>(){}.getType());
 
         mockStatic(SystemClock.class);
         mockStatic(CpuUtils.class);
@@ -71,4 +72,6 @@ public class SysCpuTrackerTest {
         assertThat(cpuUsage.ntime, equalTo(5L));
         assertThat(cpuUsage.stime, equalTo(1376L));
     }
+
+
 }

@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import me.ycdev.android.arch.utils.AppLogger;
-import me.ycdev.android.arch.wrapper.IntentHelper;
+import me.ycdev.android.lib.common.wrapper.IntentHelper;
 
 public class PackageChangeReceiver extends BroadcastReceiver {
     private static final String TAG = "PackageChangeReceiver";

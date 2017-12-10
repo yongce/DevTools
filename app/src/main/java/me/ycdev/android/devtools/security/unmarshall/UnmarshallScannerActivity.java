@@ -14,14 +14,14 @@ import java.util.ArrayList;
 
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
 import me.ycdev.android.arch.utils.AppLogger;
-import me.ycdev.android.arch.wrapper.IntentHelper;
 import me.ycdev.android.devtools.CommonIntentService;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
 import me.ycdev.android.lib.common.utils.WeakHandler;
+import me.ycdev.android.lib.common.wrapper.IntentHelper;
 
 public class UnmarshallScannerActivity extends AppCompatBaseActivity
-        implements View.OnClickListener, WeakHandler.MessageHandler {
+        implements View.OnClickListener, WeakHandler.Callback {
     private static final String TAG = "UnmarshallScannerActivity";
 
     private static final int MSG_CHECK_DONE = 1;
@@ -39,8 +39,9 @@ public class UnmarshallScannerActivity extends AppCompatBaseActivity
     private String mTargetPkgName;
     private Handler mHandler = new WeakHandler(this);
 
+
     @Override
-    public void handleMessage(Message msg) {
+    public boolean handleMessage(Message msg) {
         switch (msg.what) {
             case MSG_CHECK_DONE: {
                 if (sScanTask == null || !sScanTask.taskRunning) {
@@ -49,9 +50,10 @@ public class UnmarshallScannerActivity extends AppCompatBaseActivity
                 } else {
                     mHandler.sendEmptyMessageDelayed(MSG_CHECK_DONE, 3000);
                 }
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     @Override

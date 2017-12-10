@@ -3,10 +3,8 @@ package me.ycdev.android.devtools.sampler.cpu;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.serializer.SerializeFilter;
-import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 import me.ycdev.android.arch.utils.AppLogger;
 
@@ -18,11 +16,11 @@ import me.ycdev.android.arch.utils.AppLogger;
 public class SysCpuStat {
     private static final String TAG = "SysCpuStat";
 
-    @JSONField(name="utime")
+    @SerializedName("utime")
     public long utime; // user mode
-    @JSONField(name="ntime")
+    @SerializedName("ntime")
     public long ntime; // user mode with low priority (nice)
-    @JSONField(name="stime")
+    @SerializedName("stime")
     public long stime; // kernel mode
 
     public long getTimeUsed() {
@@ -53,12 +51,12 @@ public class SysCpuStat {
 
     @Override
     public String toString() {
-        SerializeFilter filter = new SimplePropertyPreFilter("utime", "ntime", "stime");
-        return JSON.toJSONString(this, filter);
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 
     @Nullable
     public static SysCpuStat parseJsonString(String json) {
-        return JSON.parseObject(json, SysCpuStat.class);
+        return new Gson().fromJson(json, SysCpuStat.class);
     }
 }

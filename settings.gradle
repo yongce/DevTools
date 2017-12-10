@@ -1,4 +1,7 @@
-include ':app'
+rootProject.name = "DevToolsProject"
+
+include ':DevTools'
+project(':DevTools').projectDir = file('app')
 
 include ':libsuperuser'
 project(':libsuperuser').projectDir = file('submodules/libsuperuser/libsuperuser')

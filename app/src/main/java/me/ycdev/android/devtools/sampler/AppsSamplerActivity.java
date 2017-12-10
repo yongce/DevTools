@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
 import me.ycdev.android.arch.utils.AppLogger;
-import me.ycdev.android.arch.wrapper.IntentHelper;
 import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
@@ -32,9 +31,10 @@ import me.ycdev.android.lib.common.perms.PermissionUtils;
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
 import me.ycdev.android.lib.common.utils.StorageUtils;
 import me.ycdev.android.lib.common.utils.WeakHandler;
+import me.ycdev.android.lib.common.wrapper.IntentHelper;
 
 public class AppsSamplerActivity extends AppCompatBaseActivity
-        implements View.OnClickListener, WeakHandler.MessageHandler, PermissionCallback {
+        implements View.OnClickListener, WeakHandler.Callback, PermissionCallback {
     private static final String TAG = "AppsSamplerActivity";
     private static final boolean DEBUG = AppConfigs.DEBUG_LOG;
 
@@ -197,10 +197,12 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
     }
 
     @Override
-    public void handleMessage(Message msg) {
+    public boolean handleMessage(Message msg) {
         if (msg.what == MSG_REFRESH_SAMPLE_STATUS) {
             refreshSamplingInfo();
+            return true;
         }
+        return false;
     }
 
     @Override

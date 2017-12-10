@@ -3,8 +3,8 @@ package me.ycdev.android.devtools.device;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.ycdev.android.arch.wrapper.BroadcastHelper;
 import me.ycdev.android.arch.wrapper.ToastHelper;
+import me.ycdev.android.lib.common.wrapper.BroadcastHelper;
 import me.ycdev.android.lib.commonui.activity.GridEntriesActivity;
 import me.ycdev.android.devtools.utils.Constants;
 

@@ -21,7 +21,12 @@
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute">
 
-        <meta-data android:name="git_commit_tag" android:value="${gitCommitSha1}" />
+        <meta-data
+            android:name="module_git_commit_tag"
+            android:value="${MODULE_GIT_COMMIT_SHA1}" />
+        <meta-data
+            android:name="root_git_commit_tag"
+            android:value="${ROOT_GIT_COMMIT_SHA1}" />
 
         <!-- Receivers -->
         <receiver

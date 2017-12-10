@@ -7,15 +7,14 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ServiceInfo;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
-import android.support.v4.content.IntentCompat;
 
 import java.util.Collections;
 
 import me.ycdev.android.arch.utils.AppLogger;
-import me.ycdev.android.arch.wrapper.BroadcastHelper;
 import me.ycdev.android.devtools.root.cmd.AppsKillerCmd;
 import me.ycdev.android.devtools.security.foo.ParcelableTest;
 import me.ycdev.android.lib.common.utils.PackageUtils;
+import me.ycdev.android.lib.common.wrapper.BroadcastHelper;
 
 public class IntentUnmarshallScanner {
     private static final String TAG = "IntentUnmarshallScanner";
@@ -56,7 +55,7 @@ public class IntentUnmarshallScanner {
         try {
             Intent intent = buildScanIntent(target);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             cxt.startActivity(intent);
             return true;
         } catch (Exception e) {

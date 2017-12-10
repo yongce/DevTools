@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
-import me.ycdev.android.arch.wrapper.IntentHelper;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.apps.AppsLoadConfig;
 import me.ycdev.android.lib.common.apps.AppsLoadFilter;
 import me.ycdev.android.lib.common.apps.AppsLoadListener;
 import me.ycdev.android.lib.common.apps.AppsLoader;
+import me.ycdev.android.lib.common.wrapper.IntentHelper;
 import me.ycdev.android.lib.commonui.base.LoadingAsyncTaskBase;
 
 public class AppsSelectorActivity extends AppCompatBaseActivity

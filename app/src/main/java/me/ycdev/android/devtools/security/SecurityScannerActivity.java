@@ -12,7 +12,7 @@ import me.ycdev.android.devtools.security.unmarshall.UnmarshallScannerActivity;
 public class SecurityScannerActivity extends GridEntriesActivity {
     @Override
     protected List<IntentEntry> getIntents() {
-        List<IntentEntry> activities = new ArrayList<IntentEntry>();
+        List<IntentEntry> activities = new ArrayList<>();
         activities.add(new IntentEntry(new Intent(this, UnmarshallScannerActivity.class),
                 getString(R.string.security_scanner_unmarshall_module_title),
                 getString(R.string.security_scanner_unmarshall_module_desc)));
