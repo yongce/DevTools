@@ -11,7 +11,7 @@ apply from: "${androidModuleCommon}"
 //   "1.13.1"  --> 1131
 int majorVersion = 1
 int minorVersion = 3
-int hotfixVersion = 2
+int hotfixVersion = 3
 
 String versionNameBase = "${majorVersion}.${minorVersion}.${hotfixVersion}"
 int versionCodeBase = majorVersion * 1000 + minorVersion * 10 + hotfixVersion
