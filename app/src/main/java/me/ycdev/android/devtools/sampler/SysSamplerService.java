@@ -17,6 +17,7 @@ import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.sampler.cpu.SysCpuStat;
 import me.ycdev.android.devtools.sampler.sys.SysCpuTracker;
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
+import me.ycdev.android.lib.common.wrapper.IntentHelper;
 
 public class SysSamplerService extends Service implements Handler.Callback {
     private static final String TAG = "SysSamplerService";
@@ -61,10 +62,10 @@ public class SysSamplerService extends Service implements Handler.Callback {
         if (mSysCpuTracker != null) {
             AppLogger.i(TAG, "already started, ignore request");
         } else if (ACTION_SAMPLE_SYSTEM.equals(action)) {
-            mSampleInterval = intent.getIntExtra(EXTRA_SAMPLE_INTERVAL, DEFAULT_SAMPLE_INTERVAL) * 1000;
-            mSampleTime = intent.getIntExtra(EXTRA_SAMPLE_TIME, DEFAULT_SAMPLE_TIME) * 1000;
-            mKeepSnapshots = intent.getBooleanExtra(EXTRA_KEEP_SNAPSHOTS, DEFAULT_KEEP_SNAPSHOTS);
-            mKeepWakelock = intent.getBooleanExtra(EXTRA_KEEP_WAKELOCK, DEFAULT_KEEP_WAKELOCK);
+            mSampleInterval = IntentHelper.getIntExtra(intent, EXTRA_SAMPLE_INTERVAL, DEFAULT_SAMPLE_INTERVAL) * 1000;
+            mSampleTime = IntentHelper.getIntExtra(intent, EXTRA_SAMPLE_TIME, DEFAULT_SAMPLE_TIME) * 1000;
+            mKeepSnapshots = IntentHelper.getBooleanExtra(intent, EXTRA_KEEP_SNAPSHOTS, DEFAULT_KEEP_SNAPSHOTS);
+            mKeepWakelock = IntentHelper.getBooleanExtra(intent, EXTRA_KEEP_WAKELOCK, DEFAULT_KEEP_WAKELOCK);
             startTracker();
         }
 
