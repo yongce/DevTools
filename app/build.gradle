@@ -60,15 +60,12 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    implementation project(':libsuperuser')
+    implementation project(':baseLib')
+    implementation project(':archLib')
+    implementation project(':uiLib')
 
     implementation deps.support.appcompat
     implementation deps.support.design
-    implementation deps.ycdev.androidBase
-    implementation deps.ycdev.androidArch
-    implementation deps.ycdev.androidUi
     implementation deps.gson
 
     // Dependencies for local unit tests
