@@ -1,0 +1,27 @@
+apply plugin: 'com.android.library'
+apply from: "${androidModuleCommon}"
+
+android {
+    defaultConfig {
+        minSdkVersion 15
+    }
+}
+
+dependencies {
+    implementation project(':baseLib')
+
+    implementation deps.support.compat
+    implementation deps.timber
+
+    // Dependencies for local unit tests
+    testImplementation deps.test.junit
+    testImplementation deps.test.mockitoCore
+    testImplementation deps.test.hamcrestCore
+    testImplementation deps.test.hamcrestLibrary
+    testImplementation deps.test.powermockMockito
+    testImplementation deps.test.powermockJunit
+
+    // Android Testing Support Library's runner and rules
+    androidTestImplementation deps.test.supportRunner
+    androidTestImplementation deps.test.supportRules
+}

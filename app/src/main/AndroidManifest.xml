@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name=".DevToolsApplication"
+        android:name=".PhoneApp"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:icon="@mipmap/ic_launcher"

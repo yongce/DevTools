@@ -4,8 +4,8 @@ apply from: "${androidModuleCommon}"
 android {
     defaultConfig {
         applicationId "me.ycdev.android.devtools"
-        minSdkVersion 15
-        targetSdkVersion 26
+        minSdkVersion 23
+        targetSdkVersion 28
 
         versionName getAppVersionNameBase() // + build type suffix
         versionCode getAppVersionCodeBase() * 10000 + calculatedVersionCode
@@ -35,12 +35,6 @@ android {
         disable 'ClickableViewAccessibility','ContentDescription','LabelFor'
         disable 'IconMissingDensityFolder'
         disable 'GoogleAppIndexingWarning'
-
-        // for 'src/main/assets/busybox_static'
-        disable 'UnsafeNativeCodeLocation'
-
-        // for http://code.google.com/p/android/issues/detail?id=223795
-        disable 'PrivateResource'
     }
 }
 
@@ -54,6 +48,8 @@ dependencies {
     implementation deps.support.design
     implementation deps.gson
     implementation deps.timber
+    implementation deps.support.wear
+    implementation deps.google.wearableSupport
 
     // Dependencies for local unit tests
     testImplementation deps.test.junit

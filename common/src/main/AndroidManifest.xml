@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="me.ycdev.android.devtools.common" >
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application>
+        <service
+            android:name=".DebugService"
+            android:exported="true"
+            tools:ignore="ExportedService" />
+    </application>
+</manifest>

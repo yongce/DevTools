@@ -4,13 +4,15 @@ import android.app.Application;
 import android.os.Process;
 
 import me.ycdev.android.arch.utils.AppLogger;
+import timber.log.Timber;
 
-public class DevToolsApplication extends Application {
-    private static final String TAG = "DevToolsApplication";
+public class PhoneApp extends Application {
+    private static final String TAG = "DevToolsApp";
 
     @Override
     public void onCreate() {
         super.onCreate();
+        Timber.plant(new Timber.DebugTree());
         AppLogger.i(TAG, "app start...");
         checkAppReplacingState();
     }
