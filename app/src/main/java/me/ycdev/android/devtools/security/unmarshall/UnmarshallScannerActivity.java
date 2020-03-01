@@ -13,16 +13,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
-import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.CommonIntentService;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
 import me.ycdev.android.lib.common.utils.WeakHandler;
 import me.ycdev.android.lib.common.wrapper.IntentHelper;
+import timber.log.Timber;
 
 public class UnmarshallScannerActivity extends AppCompatBaseActivity
         implements View.OnClickListener, WeakHandler.Callback {
-    private static final String TAG = "UnmarshallScannerActivity";
+    private static final String TAG = "UnmarshallScanner";
 
     private static final int MSG_CHECK_DONE = 1;
 
@@ -60,7 +60,7 @@ public class UnmarshallScannerActivity extends AppCompatBaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_unmarshall_scanner);
-        AppLogger.i(TAG, "onCreate()");
+        Timber.tag(TAG).i("onCreate()");
 
         mAppSelectedStateView = (TextView) findViewById(R.id.app_selected_state);
         mAppSelectBtn = (Button) findViewById(R.id.app_select);
@@ -88,14 +88,15 @@ public class UnmarshallScannerActivity extends AppCompatBaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        AppLogger.i(TAG, "onDestroy()");
+        Timber.tag(TAG).i("onDestroy()");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_APP_SELECTOR) {
             if (resultCode == RESULT_OK) {
-                ArrayList<String> pkgNames = IntentHelper.getStringArrayListExtra(data,
+                ArrayList<String> pkgNames = IntentHelper.INSTANCE.getStringArrayListExtra(data,
                         AppsSelectorActivity.RESULT_EXTRA_APPS_PKG_NAMES);
                 if (pkgNames != null && pkgNames.size() > 0) {
                     updateSelectedApp(pkgNames.get(0));
@@ -201,7 +202,7 @@ public class UnmarshallScannerActivity extends AppCompatBaseActivity
     public static void scanUnmarshallIssue(Context cxt) {
         ScanTask task = sScanTask;
         if (task == null) {
-            AppLogger.w(TAG, "Cannot scan unmarshall issues, no task");
+            Timber.tag(TAG).w("Cannot scan unmarshall issues, no task");
             return;
         }
 

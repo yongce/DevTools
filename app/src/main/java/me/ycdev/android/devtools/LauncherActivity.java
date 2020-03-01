@@ -3,20 +3,20 @@ package me.ycdev.android.devtools;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import me.ycdev.android.arch.utils.AppLogger;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import me.ycdev.android.devtools.apps.installed.InstalledAppsActivity;
 import me.ycdev.android.devtools.apps.running.RunningAppsActivity;
 import me.ycdev.android.devtools.contacts.ContactsActivity;
@@ -26,6 +26,7 @@ import me.ycdev.android.devtools.device.SystemUtilitiesActivity;
 import me.ycdev.android.devtools.sampler.AppsSamplerActivity;
 import me.ycdev.android.devtools.security.SecurityScannerActivity;
 import me.ycdev.android.lib.commonui.activity.GridEntriesActivity;
+import timber.log.Timber;
 
 public class LauncherActivity extends GridEntriesActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,7 +36,7 @@ public class LauncherActivity extends GridEntriesActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AppLogger.d(TAG, "#onCreate()");
+        Timber.tag(TAG).d("#onCreate()");
         super.onCreate(savedInstanceState);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -106,7 +107,7 @@ public class LauncherActivity extends GridEntriesActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Snackbar.make(mGridView, "Not implemented yet!", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(gridView, "Not implemented yet!", Snackbar.LENGTH_SHORT).show();
             return true;
         }
 
@@ -146,7 +147,7 @@ public class LauncherActivity extends GridEntriesActivity
             String title = getString(R.string.nav_visit_homepage);
             startActivity(Intent.createChooser(intent, title));
         } else {
-            Snackbar.make(mGridView, R.string.nav_tip_no_web_apps, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(gridView, R.string.nav_tip_no_web_apps, Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -160,7 +161,7 @@ public class LauncherActivity extends GridEntriesActivity
             String title = getString(R.string.nav_send_email);
             startActivity(Intent.createChooser(intent, title));
         } else {
-            Snackbar.make(mGridView, R.string.nav_tip_no_email_apps, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(gridView, R.string.nav_tip_no_email_apps, Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -172,7 +173,7 @@ public class LauncherActivity extends GridEntriesActivity
             String title = getString(R.string.nav_share);
             startActivity(Intent.createChooser(intent, title));
         } else {
-            Snackbar.make(mGridView, R.string.nav_tip_no_available_apps, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(gridView, R.string.nav_tip_no_available_apps, Snackbar.LENGTH_SHORT).show();
         }
     }
 }

@@ -10,17 +10,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
-import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper;
 import me.ycdev.android.lib.common.wrapper.IntentHelper;
+import timber.log.Timber;
 
 public class BluetoothViewerActivity extends AppCompatBaseActivity implements View.OnClickListener {
     private static final String TAG = "BluetoothViewerActivity";
@@ -68,19 +68,19 @@ public class BluetoothViewerActivity extends AppCompatBaseActivity implements Vi
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
-                int preState = IntentHelper.getIntExtra(intent,
+                int preState = IntentHelper.INSTANCE.getIntExtra(intent,
                         BluetoothAdapter.EXTRA_PREVIOUS_STATE, STATE_UNKNOWN);
-                int newState = IntentHelper.getIntExtra(intent,
+                int newState = IntentHelper.INSTANCE.getIntExtra(intent,
                         BluetoothAdapter.EXTRA_STATE, STATE_UNKNOWN);
                 addStateChangeLog(preState, newState);
             } else if (BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED.equals(action)) {
                 @SuppressLint("InlinedApi")
-                int preState = IntentHelper.getIntExtra(intent,
+                int preState = IntentHelper.INSTANCE.getIntExtra(intent,
                         BluetoothAdapter.EXTRA_PREVIOUS_CONNECTION_STATE, STATE_UNKNOWN);
                 @SuppressLint("InlinedApi")
-                int newState = IntentHelper.getIntExtra(intent,
+                int newState = IntentHelper.INSTANCE.getIntExtra(intent,
                         BluetoothAdapter.EXTRA_CONNECTION_STATE, STATE_UNKNOWN);
-                String remoteDevice = IntentHelper.getStringExtra(intent,
+                String remoteDevice = IntentHelper.INSTANCE.getStringExtra(intent,
                         BluetoothDevice.EXTRA_DEVICE);
                 addConnectionChangeLog(preState, newState, remoteDevice);
             }
@@ -92,7 +92,7 @@ public class BluetoothViewerActivity extends AppCompatBaseActivity implements Vi
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         intentFilter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
-        BroadcastHelper.registerForExternal(this, mReceiver, intentFilter);
+        BroadcastHelper.INSTANCE.registerForExternal(this, mReceiver, intentFilter);
     }
 
     private void unregisterBluetoothReceiver() {
@@ -111,7 +111,7 @@ public class BluetoothViewerActivity extends AppCompatBaseActivity implements Vi
     }
 
     private void appendNewLog(String log) {
-        AppLogger.i(TAG, log);
+        Timber.tag(TAG).i(log);
         mLogContents = log + "\n" + mLogContents;
         mLoggerView.setText(mLogContents);
     }

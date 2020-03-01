@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-import me.ycdev.android.arch.utils.AppLogger;
+import timber.log.Timber;
 
 class SampleTaskInfo {
     private static final String TAG = "SampleTaskInfo";
@@ -45,7 +45,7 @@ class SampleTaskInfo {
             json.put(KEY_SAMPLE_COUNT, sampleCount);
             return json.toString();
         } catch (JSONException e) {
-            AppLogger.w(TAG, "failed to create sample task info backup");
+            Timber.tag(TAG).w(e, "failed to create sample task info backup");
         }
         return null;
     }
@@ -66,7 +66,7 @@ class SampleTaskInfo {
             taskInfo.sampleCount = json.getInt(KEY_SAMPLE_COUNT);
             return taskInfo;
         } catch (JSONException e) {
-            AppLogger.w(TAG, "failed to restore sample task info from backup");
+            Timber.tag(TAG).w(e, "failed to restore sample task info from backup");
         }
         return null;
     }

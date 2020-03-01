@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
@@ -22,12 +21,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import me.ycdev.android.arch.utils.AppLogger;
+import androidx.core.app.NotificationCompat;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.utils.Constants;
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
 import me.ycdev.android.lib.common.utils.IoUtils;
 import me.ycdev.android.lib.common.wrapper.IntentHelper;
+import timber.log.Timber;
 
 public class AppsSamplerService extends Service implements Handler.Callback {
     private static final String TAG = "AppsSamplerService";
@@ -99,7 +99,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
     @Override
     public void onCreate() {
         super.onCreate();
-        AppLogger.i(TAG, "Apps sampler service is creating...");
+        Timber.tag(TAG).i("Apps sampler service is creating...");
         mHandlerThread = new HandlerThread("AppsSampler");
         mHandlerThread.start();
         mHandler = new Handler(mHandlerThread.getLooper(), this);
@@ -108,9 +108,9 @@ public class AppsSamplerService extends Service implements Handler.Callback {
 
     @Override
     public void onDestroy() {
-        AppLogger.i(TAG, "Apps sampler service is destroying...");
+        Timber.tag(TAG).i("Apps sampler service is destroying...");
         mHandlerThread.getLooper().quit();
-        IoUtils.closeQuietly(mSampleLogger);
+        IoUtils.INSTANCE.closeQuietly(mSampleLogger);
         super.onDestroy();
     }
 
@@ -135,9 +135,9 @@ public class AppsSamplerService extends Service implements Handler.Callback {
             SampleTaskInfo taskInfo = restoreSampleTaskInfo();
             if (taskInfo == null) {
                 taskInfo = new SampleTaskInfo();
-                taskInfo.pkgNames = IntentHelper.getStringArrayListExtra(intent, EXTRA_PKG_NAMES);
-                taskInfo.sampleInterval = IntentHelper.getIntExtra(intent, EXTRA_INTERVAL, 0);
-                taskInfo.samplePeriod = IntentHelper.getIntExtra(intent, EXTRA_PERIOD, 0);
+                taskInfo.pkgNames = IntentHelper.INSTANCE.getStringArrayListExtra(intent, EXTRA_PKG_NAMES);
+                taskInfo.sampleInterval = IntentHelper.INSTANCE.getIntExtra(intent, EXTRA_INTERVAL, 0);
+                taskInfo.samplePeriod = IntentHelper.INSTANCE.getIntExtra(intent, EXTRA_PERIOD, 0);
                 taskInfo.startTime = System.currentTimeMillis();
             } else {
                 mSampleLogger.logInfo(TAG, "start sampler, use backup: " + taskInfo.backupTaskInfo());
@@ -158,21 +158,21 @@ public class AppsSamplerService extends Service implements Handler.Callback {
 
     private static void backupSampleTaskInfo(SampleTaskInfo taskInfo) {
         if (taskInfo == null) {
-            AppLogger.w(TAG, "cannot backup sample task info, no task info yet");
+            Timber.tag(TAG).w("cannot backup sample task info, no task info yet");
             return;
         }
 
         String taskInfoBackup = taskInfo.backupTaskInfo();
         if (taskInfoBackup == null) {
-            AppLogger.w(TAG, "failed to create sample task info backup");
+            Timber.tag(TAG).w("failed to create sample task info backup");
             return;
         }
 
         try {
             File backupFile = SamplerUtils.getFileForSampler(FILENAME_SAMPLE_TASK_BACKUP, true);
-            IoUtils.saveAsFile(taskInfoBackup, backupFile.getAbsolutePath());
+            IoUtils.INSTANCE.saveAsFile(taskInfoBackup, backupFile.getAbsolutePath());
         } catch (IOException e) {
-            AppLogger.w(TAG, "failed to save sample task info into backup file", e);
+            Timber.tag(TAG).w(e, "failed to save sample task info into backup file");
         }
     }
 
@@ -184,13 +184,13 @@ public class AppsSamplerService extends Service implements Handler.Callback {
 
         String taskInfoBackup;
         try {
-            taskInfoBackup = IoUtils.readAllLines(backupFile.getAbsolutePath());
+            taskInfoBackup = IoUtils.INSTANCE.readAllLines(backupFile.getAbsolutePath());
         } catch (IOException e) {
-            AppLogger.w(TAG, "failed to create sampler log file", e);
+            Timber.tag(TAG).w(e, "failed to create sampler log file");
             return null;
         }
         if (TextUtils.isEmpty(taskInfoBackup)) {
-            AppLogger.w(TAG, "no task info backup");
+            Timber.tag(TAG).w("no task info backup");
             return null;
         }
 
@@ -203,11 +203,11 @@ public class AppsSamplerService extends Service implements Handler.Callback {
     }
 
     private static String generateStatsFileName(String pkgName, long startTime) {
-        return DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_STATS + pkgName + ".txt";
+        return DateTimeUtils.INSTANCE.generateFileName(startTime) + FILENAME_TAG_STATS + pkgName + ".txt";
     }
 
     private static String generateReportFileName(long startTime) {
-        return DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_REPORT + ".txt";
+        return DateTimeUtils.INSTANCE.generateFileName(startTime) + FILENAME_TAG_REPORT + ".txt";
     }
 
     private Notification buildNotification() {
@@ -289,7 +289,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
 
     private void doStartSampler(int startId, SampleTaskInfo taskInfo) {
         if (sTaskInfo != null && sTaskInfo.isSampling) {
-            AppLogger.i(TAG, "the sampler is running, igonre the new request");
+            Timber.tag(TAG).i("the sampler is running, igonre the new request");
             return;
         }
 
@@ -320,7 +320,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
                 writer.flush();
                 taskInfo.fileWriters.add(writer);
             } catch (IOException e) {
-                AppLogger.w(TAG, "failed to write header: " + pkgName, e);
+                Timber.tag(TAG).w(e, "failed to write header: %s", pkgName);
                 stopSelf(startId);
                 return;
             }
@@ -334,12 +334,12 @@ public class AppsSamplerService extends Service implements Handler.Callback {
     }
 
     private void doSampleSnapshot(SampleTaskInfo taskInfo) {
-        AppLogger.i(TAG, "sample stats snapshot begin...");
+        Timber.tag(TAG).i("sample stats snapshot begin...");
 
         AppsSetStat appsSetStat = AppsSetStat.createSnapshot(this, taskInfo.pkgNames);
         if (taskInfo.preAppsSetStat != null) {
             AppsSetStat appsUsage = AppsSetStat.computeUsage(taskInfo.preAppsSetStat, appsSetStat);
-            String timeStamp = DateTimeUtils.getReadableTimeStamp(appsUsage.sampleTime);
+            String timeStamp = DateTimeUtils.INSTANCE.getReadableTimeStamp(appsUsage.sampleTime);
 
             final int N = taskInfo.pkgNames.size();
             for (int i = 0; i < N; i++) {
@@ -353,7 +353,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
                     appStat.dumpStat(writer, timeStamp, appsUsage.clockTime);
                     writer.flush();
                 } catch (IOException e) {
-                    AppLogger.w(TAG, "ignored IO exception", e);
+                    Timber.tag(TAG).w(e, "ignored IO exception");
                 }
             }
 
@@ -366,7 +366,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
         // backup the current task info state
         backupSampleTaskInfo(taskInfo);
 
-        AppLogger.i(TAG, "sample stats snapshot done");
+        Timber.tag(TAG).i("sample stats snapshot done");
     }
 
     private void doStopSampler(SampleTaskInfo taskInfo) {
@@ -384,7 +384,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
                 writer.flush();
                 writer.close();
             } catch (IOException e) {
-                AppLogger.w(TAG, "failed to flush data: " + taskInfo.pkgNames.get(i), e);
+                Timber.tag(TAG).w(e, "failed to flush data: %s", taskInfo.pkgNames.get(i));
             }
         }
 
@@ -447,17 +447,17 @@ public class AppsSamplerService extends Service implements Handler.Callback {
                     if (appReport.sampleCount > 0) {
                         appReport.dumpStat(cxt, writer);
                     } else {
-                        AppLogger.w(TAG, "no stats for " + appReport.pkgName);
+                        Timber.tag(TAG).w("no stats for %s", appReport.pkgName);
                     }
                 } finally {
-                    IoUtils.closeQuietly(reader);
+                    IoUtils.INSTANCE.closeQuietly(reader);
                 }
             }
             writer.flush();
         } catch (IOException e) {
-            AppLogger.w(TAG, "failed to dump stats report", e);
+            Timber.tag(TAG).w(e, "failed to dump stats report");
         } finally {
-            IoUtils.closeQuietly(writer);
+            IoUtils.INSTANCE.closeQuietly(writer);
         }
     }
 
@@ -474,7 +474,7 @@ public class AppsSamplerService extends Service implements Handler.Callback {
             String fileName = file.getName();
             int statsTagIndex = fileName.indexOf(FILENAME_TAG_STATS);
             if (statsTagIndex == -1) {
-                AppLogger.i(TAG, "not stats file, skip: " + fileName);
+                Timber.tag(TAG).i("not stats file, skip: %s", fileName);
                 continue;
             }
 
@@ -483,9 +483,9 @@ public class AppsSamplerService extends Service implements Handler.Callback {
             if (taskInfo == null) {
                 taskInfo = new SampleTaskInfo();
                 try {
-                    taskInfo.startTime = DateTimeUtils.parseFileName(timeStr);
+                    taskInfo.startTime = DateTimeUtils.INSTANCE.parseFileName(timeStr);
                 } catch (ParseException e) {
-                    AppLogger.w(TAG, "bad file name when parsing time: " + fileName, e);
+                    Timber.tag(TAG).w(e, "bad file name when parsing time: %s", fileName);
                     continue;
                 }
                 taskInfo.pkgNames = new ArrayList<>();

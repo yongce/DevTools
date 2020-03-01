@@ -2,9 +2,9 @@ package me.ycdev.android.devtools.root;
 
 import java.util.Arrays;
 
-import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.utils.AppConfigs;
 import me.ycdev.android.lib.common.internalapi.android.app.ActivityManagerIA;
+import timber.log.Timber;
 
 public class RootJarExecutor {
     private static final String TAG = "RootJarExecutor";
@@ -15,9 +15,9 @@ public class RootJarExecutor {
     private String[] mArgs;
 
     public static void main(String[] args) {
-        if (DEBUG) AppLogger.d(TAG, "Received params: " + Arrays.toString(args));
+        if (DEBUG) Timber.tag(TAG).d("Received params: " + Arrays.toString(args));
         if (args.length < 1) {
-            if (DEBUG) AppLogger.e(TAG, "Usage: RootJarExecutor <command> [command parameters]");
+            if (DEBUG) Timber.tag(TAG).e("Usage: RootJarExecutor <command> [command parameters]");
             return;
         }
 
@@ -35,18 +35,18 @@ public class RootJarExecutor {
                 String filePath = mArgs[1];
                 forceStopPackage(filePath);
             } else {
-                AppLogger.e(TAG, "Usage: RootJarExecutor amForceStop <file path>");
+                Timber.tag(TAG).e("Usage: RootJarExecutor amForceStop <file path>");
             }
         }
     }
 
     public static void forceStopPackage(String params) {
         String[] pkgNames = params.split("#");
-        Object service = ActivityManagerIA.getIActivityManager();
+        Object service = ActivityManagerIA.INSTANCE.getIActivityManager();
         if (service != null) {
-            if (DEBUG) AppLogger.d(TAG, "to kill apps: " + Arrays.toString(pkgNames));
+            if (DEBUG) Timber.tag(TAG).d("to kill apps: %s", Arrays.toString(pkgNames));
             for (String pkg : pkgNames) {
-                ActivityManagerIA.forceStopPackage(service, pkg);
+                ActivityManagerIA.INSTANCE.forceStopPackage(service, pkg);
             }
         }
     }

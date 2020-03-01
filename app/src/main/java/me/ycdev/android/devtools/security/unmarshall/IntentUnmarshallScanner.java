@@ -6,15 +6,15 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ServiceInfo;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
 
 import java.util.Collections;
 
-import me.ycdev.android.arch.utils.AppLogger;
+import androidx.annotation.NonNull;
 import me.ycdev.android.devtools.root.cmd.AppsKillerCmd;
 import me.ycdev.android.devtools.security.foo.ParcelableTest;
 import me.ycdev.android.lib.common.utils.PackageUtils;
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper;
+import timber.log.Timber;
 
 public class IntentUnmarshallScanner {
     private static final String TAG = "IntentUnmarshallScanner";
@@ -27,31 +27,31 @@ public class IntentUnmarshallScanner {
     }
 
     public static boolean scanReceiverTarget(Context cxt, ComponentName target, String perm) {
-        AppLogger.i(TAG, "scan receiver: " + target + ", with perm: " + perm);
+        Timber.tag(TAG).i("scan receiver: " + target + ", with perm: " + perm);
         try {
             Intent intent = buildScanIntent(target);
-            BroadcastHelper.sendToExternal(cxt, intent, perm);
+            BroadcastHelper.INSTANCE.sendToExternal(cxt, intent, perm);
             return true;
         } catch (Exception e) {
-            AppLogger.w(TAG, "failed to send broadcast", e);
+            Timber.tag(TAG).w(e, "failed to send broadcast");
         }
         return false;
     }
 
     public static boolean scanServiceTarget(Context cxt, ComponentName target) {
-        AppLogger.i(TAG, "scan service: " + target);
+        Timber.tag(TAG).i("scan service: %s", target);
         try {
             Intent intent = buildScanIntent(target);
             cxt.startService(intent);
             return true;
         } catch (Exception e) {
-            AppLogger.w(TAG, "failed to send broadcast", e);
+            Timber.tag(TAG).w(e, "failed to send broadcast");
         }
         return false;
     }
 
     public static boolean scanActivityTarget(Context cxt, ComponentName target) {
-        AppLogger.i(TAG, "scan activity: " + target);
+        Timber.tag(TAG).i("scan activity: %s", target);
         try {
             Intent intent = buildScanIntent(target);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -59,19 +59,19 @@ public class IntentUnmarshallScanner {
             cxt.startActivity(intent);
             return true;
         } catch (Exception e) {
-            AppLogger.w(TAG, "failed to send broadcast", e);
+            Timber.tag(TAG).w(e, "failed to send broadcast");
         }
         return false;
     }
 
     public static void scanAllReceivers(@NonNull Context cxt, @NonNull IScanController controller) {
         String pkgName = controller.getTargetPackageName();
-        ActivityInfo[] allReceivers = PackageUtils.getAllReceivers(cxt, pkgName, true);
+        ActivityInfo[] allReceivers = PackageUtils.INSTANCE.getAllReceivers(cxt, pkgName, true);
         if (allReceivers == null || allReceivers.length == 0) {
             return;
         }
 
-        AppLogger.i(TAG, allReceivers.length + " receivers to scan...");
+        Timber.tag(TAG).i("%s receivers to scan...", allReceivers.length);
         AppsKillerCmd appsKillerCmd = null;
         if (controller.needKillApp()) {
             appsKillerCmd = new AppsKillerCmd(cxt);
@@ -79,7 +79,7 @@ public class IntentUnmarshallScanner {
         }
         for (ActivityInfo receiverInfo : allReceivers) {
             if (controller.isCanceled()) {
-                AppLogger.i(TAG, "scan canceled");
+                Timber.tag(TAG).i("scan canceled");
                 return;
             }
             if (appsKillerCmd != null) {
@@ -93,17 +93,17 @@ public class IntentUnmarshallScanner {
                 SystemClock.sleep(500);
             }
         }
-        AppLogger.i(TAG, "receivers scan done");
+        Timber.tag(TAG).i("receivers scan done");
     }
 
     public static void scanAllServices(@NonNull Context cxt, @NonNull IScanController controller) {
         String pkgName = controller.getTargetPackageName();
-        ServiceInfo[] allServices = PackageUtils.getAllServices(cxt, pkgName, true);
+        ServiceInfo[] allServices = PackageUtils.INSTANCE.getAllServices(cxt, pkgName, true);
         if (allServices == null || allServices.length == 0) {
             return;
         }
 
-        AppLogger.i(TAG, allServices.length + " services to check...");
+        Timber.tag(TAG).i("%s services to check...", allServices.length);
         AppsKillerCmd appsKillerCmd = null;
         if (controller.needKillApp()) {
             appsKillerCmd = new AppsKillerCmd(cxt);
@@ -111,7 +111,7 @@ public class IntentUnmarshallScanner {
         }
         for (ServiceInfo serviceInfo : allServices) {
             if (controller.isCanceled()) {
-                AppLogger.i(TAG, "scan canceled");
+                Timber.tag(TAG).i("scan canceled");
                 return;
             }
             if (appsKillerCmd != null) {
@@ -125,17 +125,17 @@ public class IntentUnmarshallScanner {
                 SystemClock.sleep(500);
             }
         }
-        AppLogger.i(TAG, "services scan done");
+        Timber.tag(TAG).i("services scan done");
     }
 
     public static void scanAllActivities(@NonNull Context cxt, @NonNull IScanController controller) {
         String pkgName = controller.getTargetPackageName();
-        ActivityInfo[] allActivities = PackageUtils.getAllActivities(cxt, pkgName, true);
+        ActivityInfo[] allActivities = PackageUtils.INSTANCE.getAllActivities(cxt, pkgName, true);
         if (allActivities == null || allActivities.length == 0) {
             return;
         }
 
-        AppLogger.i(TAG, allActivities.length + " activities to check...");
+        Timber.tag(TAG).i("%s activities to check...", allActivities.length);
         AppsKillerCmd appsKillerCmd = null;
         if (controller.needKillApp()) {
             appsKillerCmd = new AppsKillerCmd(cxt);
@@ -143,7 +143,7 @@ public class IntentUnmarshallScanner {
         }
         for (ActivityInfo activityInfo : allActivities) {
             if (controller.isCanceled()) {
-                AppLogger.i(TAG, "scan canceled");
+                Timber.tag(TAG).i("scan canceled");
                 return;
             }
             if (appsKillerCmd != null) {
@@ -153,6 +153,6 @@ public class IntentUnmarshallScanner {
             scanActivityTarget(cxt, cn);
             SystemClock.sleep(5000);
         }
-        AppLogger.i(TAG, "activities scan done");
+        Timber.tag(TAG).i("activities scan done");
     }
 }

@@ -1,15 +1,14 @@
 package me.ycdev.android.devtools.sampler.cpu;
 
-import android.support.annotation.Nullable;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Locale;
 
-import me.ycdev.android.arch.utils.AppLogger;
+import androidx.annotation.Nullable;
 import me.ycdev.android.lib.common.utils.IoUtils;
 import me.ycdev.android.lib.common.utils.StringUtils;
+import timber.log.Timber;
 
 public class CpuUtils {
     private static final String TAG = "CpuUtils";
@@ -28,17 +27,17 @@ public class CpuUtils {
                 String[] fields = line.split("\\s+");
                 if (fields.length >= 5 && fields[0].equals("cpu")) {
                     SysCpuStat stat = new SysCpuStat();
-                    stat.utime = StringUtils.parseLong(fields[1], 0);
-                    stat.ntime = StringUtils.parseLong(fields[2], 0);
-                    stat.stime = StringUtils.parseLong(fields[3], 0);
+                    stat.utime = StringUtils.INSTANCE.parseLong(fields[1], 0);
+                    stat.ntime = StringUtils.INSTANCE.parseLong(fields[2], 0);
+                    stat.stime = StringUtils.INSTANCE.parseLong(fields[3], 0);
 //                    stat.itime = StringUtils.parseLong(fields[4], 0);
                     return stat;
                 }
             }
         } catch (IOException e) {
-            AppLogger.w(TAG, "failed to read sys cpu stat", e);
+            Timber.tag(TAG).w(e, "failed to read sys cpu stat");
         } finally {
-            IoUtils.closeQuietly(br);
+            IoUtils.INSTANCE.closeQuietly(br);
         }
         return null;
     }
@@ -58,15 +57,15 @@ public class CpuUtils {
                 String[] fields = line.split("\\s+");
                 if (fields.length >= 15) {
                     ProcCpuStat stat = new ProcCpuStat(pid);
-                    stat.utime = StringUtils.parseLong(fields[13], 0);
-                    stat.stime = StringUtils.parseLong(fields[14], 0);
+                    stat.utime = StringUtils.INSTANCE.parseLong(fields[13], 0);
+                    stat.stime = StringUtils.INSTANCE.parseLong(fields[14], 0);
                     return stat;
                 }
             }
         } catch (IOException e) {
-            AppLogger.w(TAG, "failed to read proc cpu stat: " + pid, e);
+            Timber.tag(TAG).w(e, "failed to read proc cpu stat: %s", pid);
         } finally {
-            IoUtils.closeQuietly(br);
+            IoUtils.INSTANCE.closeQuietly(br);
         }
         return null;
     }

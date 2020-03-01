@@ -1,12 +1,11 @@
 package me.ycdev.android.devtools.sampler.cpu;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-import me.ycdev.android.arch.utils.AppLogger;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import timber.log.Timber;
 
 /**
  * We have to ignore "idle time" for CPU time stats. For devices with multiple CPU cores,
@@ -40,7 +39,7 @@ public class SysCpuStat {
 
     public void sum(@NonNull SysCpuStat previousSnapshot, @NonNull SysCpuStat curSnapshot) {
         if (!checkStatSnapshot(previousSnapshot, curSnapshot)) {
-            AppLogger.w(TAG, "bad CPU stats, previous: %s, current: %s", previousSnapshot, curSnapshot);
+            Timber.tag(TAG).w("bad CPU stats, previous: %s, current: %s", previousSnapshot, curSnapshot);
             return;
         }
 

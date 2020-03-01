@@ -3,8 +3,8 @@ package me.ycdev.android.devtools.common;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.Nullable;
 import me.ycdev.android.lib.common.net.NetworkUtils;
 import timber.log.Timber;
 
@@ -32,7 +32,7 @@ public class DebugService extends Service {
         String action = intent.getAction();
         if (ACTION_CMD_DUMP_NETWORK_INFO.equals(action)) {
             Timber.tag(TAG).d("Dump of active network info:\n%s",
-                    NetworkUtils.dumpActiveNetworkInfo(this));
+                    NetworkUtils.INSTANCE.dumpActiveNetworkInfo(this));
         } else {
             Timber.tag(TAG).w("unknown cmd: %s", action);
         }

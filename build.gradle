@@ -1,17 +1,18 @@
-ext {
-    androidProjectCommon = "${rootDir}/submodules/AndroidLib/android_project_common.gradle"
-    androidModuleCommon = "${rootDir}/submodules/AndroidLib/android_module_common.gradle"
-}
-
-apply from: "${androidProjectCommon}"
-
 buildscript {
+    ext {
+        androidProjectCommon = "${rootDir}/submodules/AndroidLib/android_project_common.gradle"
+        androidModuleCommon = "${rootDir}/submodules/AndroidLib/android_module_common.gradle"
+    }
+    apply from: "${androidProjectCommon}"
+
     repositories {
         jcenter()
         google()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
     }
 }
 

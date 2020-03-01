@@ -20,11 +20,11 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
-import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.utils.ViewHelper;
 import me.ycdev.android.lib.common.internalapi.android.os.EnvironmentIA;
 import me.ycdev.android.lib.common.internalapi.android.os.SystemPropertiesIA;
+import timber.log.Timber;
 
 @SuppressWarnings("deprecation")
 public class DeviceInfoActivity extends AppCompatBaseActivity {
@@ -69,28 +69,28 @@ public class DeviceInfoActivity extends AppCompatBaseActivity {
         ViewHelper.addTextView(holder, "LCD size in DIP",
                 screenMetrics.widthPixels / screenMetrics.density + " x " +
                         screenMetrics.heightPixels / screenMetrics.density);
-        ViewHelper.addTextView(holder, "VM heap", SystemPropertiesIA.get("dalvik.vm.heapsize", "N/A"));
-        ViewHelper.addTextView(holder, "ANR trace", SystemPropertiesIA.get("dalvik.vm.stack-trace-file", "N/A"));
+        ViewHelper.addTextView(holder, "VM heap", SystemPropertiesIA.INSTANCE.get("dalvik.vm.heapsize", "N/A"));
+        ViewHelper.addTextView(holder, "ANR trace", SystemPropertiesIA.INSTANCE.get("dalvik.vm.stack-trace-file", "N/A"));
 
         ViewHelper.addLineView(holder, 0xff00ff00); // green
-        ViewHelper.addTextView(holder, "DNS1", SystemPropertiesIA.get("dhcp.eth0.dns1", "N/A"));
-        ViewHelper.addTextView(holder, "DNS2", SystemPropertiesIA.get("dhcp.eth0.dns2", "N/A"));
-        ViewHelper.addTextView(holder, "IP", SystemPropertiesIA.get("dhcp.eth0.ipaddress", "N/A"));
-        ViewHelper.addTextView(holder, "Gateway", SystemPropertiesIA.get("dhcp.eth0.gateway", "N/A"));
-        ViewHelper.addTextView(holder, "Mask", SystemPropertiesIA.get("dhcp.eth0.mask", "N/A"));
+        ViewHelper.addTextView(holder, "DNS1", SystemPropertiesIA.INSTANCE.get("dhcp.eth0.dns1", "N/A"));
+        ViewHelper.addTextView(holder, "DNS2", SystemPropertiesIA.INSTANCE.get("dhcp.eth0.dns2", "N/A"));
+        ViewHelper.addTextView(holder, "IP", SystemPropertiesIA.INSTANCE.get("dhcp.eth0.ipaddress", "N/A"));
+        ViewHelper.addTextView(holder, "Gateway", SystemPropertiesIA.INSTANCE.get("dhcp.eth0.gateway", "N/A"));
+        ViewHelper.addTextView(holder, "Mask", SystemPropertiesIA.INSTANCE.get("dhcp.eth0.mask", "N/A"));
 
         ViewHelper.addLineView(holder, 0xff00ff00); // green
         ViewHelper.addTextView(holder, "Encrypted FS: " +
-                EnvironmentIA.isEncryptedFilesystemEnabled());
+                EnvironmentIA.INSTANCE.isEncryptedFilesystemEnabled());
         ViewHelper.addTextView(holder, "Data Dir: " +
                 Environment.getDataDirectory().getAbsolutePath());
         ViewHelper.addTextView(holder, "Download Cache Dir: " +
                 Environment.getDownloadCacheDirectory());
 
         ViewHelper.addTextView(holder, "Android Secure Data Dir: " +
-                EnvironmentIA.getSecureDataDirectory());
+                EnvironmentIA.INSTANCE.getSecureDataDirectory());
         ViewHelper.addTextView(holder, "Android System Secure Dir: " +
-                EnvironmentIA.getSystemSecureDirectory());
+                EnvironmentIA.INSTANCE.getSystemSecureDirectory());
 
         ViewHelper.addTextView(holder, "External Storage Dir: " +
                 Environment.getExternalStorageDirectory());
@@ -100,7 +100,7 @@ public class DeviceInfoActivity extends AppCompatBaseActivity {
         ViewHelper.addTextView(holder, "External storage removable: " +
                 Environment.isExternalStorageRemovable());
         ViewHelper.addTextView(holder, "External Storage Data Dir: " +
-                EnvironmentIA.getExternalStorageAndroidDataDir());
+                EnvironmentIA.INSTANCE.getExternalStorageAndroidDataDir());
 
         ViewHelper.addTextView(holder, "Alarms audio: " +
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS));
@@ -150,7 +150,7 @@ public class DeviceInfoActivity extends AppCompatBaseActivity {
                     Point.class);
             getRealSizeMethod.invoke(screen, pt);
         } catch (Exception e) {
-            AppLogger.w(TAG, "Unexpected exception: ", e);
+            Timber.tag(TAG).w(e, "Unexpected exception: ");
             screen.getSize(pt); // exclude window decor size (eg, statusbar)
         }
         return pt;

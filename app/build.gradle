@@ -4,8 +4,8 @@ apply from: "${androidModuleCommon}"
 android {
     defaultConfig {
         applicationId "me.ycdev.android.devtools"
-        minSdkVersion 15
-        targetSdkVersion 26
+        minSdkVersion 21
+        targetSdkVersion 29
 
         versionName getAppVersionNameBase() // + build type suffix
         versionCode getAppVersionCodeBase() * 10000 + calculatedVersionCode
@@ -50,8 +50,8 @@ dependencies {
     implementation project(':uiLib')
     implementation project(':common')
 
-    implementation deps.support.appcompat
-    implementation deps.support.design
+    implementation deps.androidx.core
+    implementation deps.androidx.material
     implementation deps.gson
     implementation deps.timber
 
@@ -64,6 +64,6 @@ dependencies {
     testImplementation deps.test.powermockJunit
 
     // Android Testing Support Library's runner and rules
-    androidTestImplementation deps.test.supportRunner
-    androidTestImplementation deps.test.supportRules
+    androidTestImplementation deps.test.runner
+    androidTestImplementation deps.test.rules
 }

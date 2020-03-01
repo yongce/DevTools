@@ -19,11 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
-import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.utils.MiscUtils;
 import me.ycdev.android.lib.commonui.base.LoadingAsyncTaskBase;
+import timber.log.Timber;
 
 public class RunningAppsActivity extends AppCompatBaseActivity {
     private static final String TAG = "RunningAppsActivity";
@@ -83,8 +83,8 @@ public class RunningAppsActivity extends AppCompatBaseActivity {
 
         @Override
         protected List<RunningAppInfo> doInBackground(Void... params) {
-            PackageManager pm = mActivity.getPackageManager();
-            ActivityManager am = (ActivityManager) mActivity.getSystemService(Context.ACTIVITY_SERVICE);
+            PackageManager pm = getActivity().getPackageManager();
+            ActivityManager am = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
             HashMap<String, RunningAppInfo> runningApps = new HashMap<>();
 
@@ -110,20 +110,19 @@ public class RunningAppsActivity extends AppCompatBaseActivity {
                 String pkgName = procInfo.pkgList[0];
                 RunningAppInfo appItem = runningApps.get(pkgName);
                 if (appItem == null) {
-                    appItem = new RunningAppInfo();
-                    appItem.pkgName = pkgName;
+                    appItem = new RunningAppInfo(pkgName);
                     try {
                         PackageInfo pkgInfo = pm.getPackageInfo(pkgName, 0);
-                        appItem.appName = pkgInfo.applicationInfo.loadLabel(pm).toString();
-                        appItem.appIcon = pkgInfo.applicationInfo.loadIcon(pm);
+                        appItem.appInfo.setAppName(pkgInfo.applicationInfo.loadLabel(pm).toString());
+                        appItem.appInfo.setAppIcon(pkgInfo.applicationInfo.loadIcon(pm));
                     } catch (PackageManager.NameNotFoundException e) {
-                        AppLogger.w(TAG, "unexpected exception", e);
+                        Timber.tag(TAG).w(e, "unexpected exception");
                     }
                     runningApps.put(pkgName, appItem);
                 }
                 appItem.allProcesses.add(procItem);
 
-                int percent = MiscUtils.calcProgressPercent(1, 40, i + 1, N);
+                int percent = MiscUtils.INSTANCE.calcProgressPercent(1, 40, i + 1, N);
                 publishProgress(percent);
             }
 
@@ -136,7 +135,7 @@ public class RunningAppsActivity extends AppCompatBaseActivity {
                 Debug.MemoryInfo memInfo = pidsMemInfo[i];
                 procInfoList[i].memPss = memInfo.getTotalPss();
 
-                int percent = MiscUtils.calcProgressPercent(41, 80, i + 1, N);
+                int percent = MiscUtils.INSTANCE.calcProgressPercent(41, 80, i + 1, N);
                 publishProgress(percent);
             }
 
@@ -155,11 +154,11 @@ public class RunningAppsActivity extends AppCompatBaseActivity {
                 }
 
                 i++;
-                int percent = MiscUtils.calcProgressPercent(81, 95, i, RUNNING_APPS_N);
+                int percent = MiscUtils.INSTANCE.calcProgressPercent(81, 95, i, RUNNING_APPS_N);
                 publishProgress(percent);
             }
 
-            Collections.sort(result, new AppInfo.AppNameComparator());
+            Collections.sort(result, new RunningAppInfo.AppNameComparator());
             publishProgress(100);
 
             return result;

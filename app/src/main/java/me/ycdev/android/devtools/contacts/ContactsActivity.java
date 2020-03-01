@@ -12,7 +12,6 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -25,14 +24,15 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 
+import androidx.annotation.NonNull;
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
-import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.perms.PermissionCallback;
 import me.ycdev.android.lib.common.perms.PermissionRequestParams;
 import me.ycdev.android.lib.common.perms.PermissionUtils;
 import me.ycdev.android.lib.commonui.utils.WaitingAsyncTask;
+import timber.log.Timber;
 
 public class ContactsActivity extends AppCompatBaseActivity implements View.OnClickListener,
         PermissionCallback {
@@ -102,8 +102,8 @@ public class ContactsActivity extends AppCompatBaseActivity implements View.OnCl
             }
         });
 
-        if (!PermissionUtils.hasPermissions(this, REQUESTED_PERMISSIONS)) {
-            PermissionUtils.requestPermissions(this, createPermissionRequestParams());
+        if (!PermissionUtils.INSTANCE.hasPermissions(this, REQUESTED_PERMISSIONS)) {
+            PermissionUtils.INSTANCE.requestPermissions(this, createPermissionRequestParams());
         } else {
             refreshContactsState();
         }
@@ -119,7 +119,7 @@ public class ContactsActivity extends AppCompatBaseActivity implements View.OnCl
         } else if (v == mCreateBtn) {
             String countStr = mCountView.getText().toString();
             if (countStr.length() == 0) {
-                ToastHelper.show(this, R.string.apps_sampler_sample_interval_input_toast,
+                ToastHelper.INSTANCE.show(this, R.string.apps_sampler_sample_interval_input_toast,
                         Toast.LENGTH_SHORT);
                 return;
             }
@@ -176,7 +176,7 @@ public class ContactsActivity extends AppCompatBaseActivity implements View.OnCl
                 RawContacts.STARRED, // 2
                 RawContacts.DELETED, // 3
         };
-        AppLogger.d(TAG, "query selection: " + selection);
+        Timber.tag(TAG).d("query selection: %s", selection);
         Cursor cursor = getContentResolver().query(RawContacts.CONTENT_URI,
                 projection, selection, null, null);
         if (cursor == null) {
@@ -186,13 +186,13 @@ public class ContactsActivity extends AppCompatBaseActivity implements View.OnCl
         try {
             final int COUNT = cursor.getCount();
             if (dump && COUNT > 0) {
-                AppLogger.d(TAG, "Dump contacts: " + COUNT);
+                Timber.tag(TAG).d("Dump contacts: %s", COUNT);
                 while (cursor.moveToNext()) {
                     long rowId = cursor.getLong(0);
                     String name = cursor.getString(1);
                     int starred = cursor.getInt(2);
                     int deleted = cursor.getInt(3);
-                    AppLogger.d(TAG, "contact: " + rowId + ", name: " + name
+                    Timber.tag(TAG).d("contact: " + rowId + ", name: " + name
                             + ", starred: " + starred + ", deleted: " + deleted);
                 }
             }
@@ -279,17 +279,17 @@ public class ContactsActivity extends AppCompatBaseActivity implements View.OnCl
 
     private PermissionRequestParams createPermissionRequestParams() {
         PermissionRequestParams params = new PermissionRequestParams();
-        params.requestCode = PERMISSION_RC_CONTACTS;
-        params.permissions = REQUESTED_PERMISSIONS;
-        params.rationaleTitle = getString(R.string.title_permission_request);
-        params.rationaleContent = getString(R.string.contacts_permissions_rationale);
-        params.callback = this;
+        params.setRequestCode(PERMISSION_RC_CONTACTS);
+        params.setPermissions(REQUESTED_PERMISSIONS);
+        params.setRationaleTitle(getString(R.string.title_permission_request));
+        params.setRationaleContent(getString(R.string.contacts_permissions_rationale));
+        params.setCallback(this);
         return params;
     }
 
     @Override
     public void onRationaleDenied(int requestCode) {
-        ToastHelper.show(this, R.string.contacts_msg_permission_denied, Toast.LENGTH_SHORT);
+        ToastHelper.INSTANCE.show(this, R.string.contacts_msg_permission_denied, Toast.LENGTH_SHORT);
         finish();
     }
 
@@ -297,7 +297,7 @@ public class ContactsActivity extends AppCompatBaseActivity implements View.OnCl
     public void onRequestPermissionsResult(int requestCode,
             @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        boolean permissionsGranted = PermissionUtils.verifyPermissions(grantResults);
+        boolean permissionsGranted = PermissionUtils.INSTANCE.verifyPermissions(grantResults);
         if (permissionsGranted) {
             refreshContactsState();
         } else {

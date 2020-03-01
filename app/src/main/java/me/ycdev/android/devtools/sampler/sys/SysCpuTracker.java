@@ -5,9 +5,9 @@ import android.os.SystemClock;
 import java.util.LinkedList;
 import java.util.List;
 
-import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.sampler.cpu.CpuUtils;
 import me.ycdev.android.devtools.sampler.cpu.SysCpuStat;
+import timber.log.Timber;
 
 public class SysCpuTracker {
     private static final String TAG = "SysCpuTracker";
@@ -40,18 +40,18 @@ public class SysCpuTracker {
 
     public void sample() {
         if (mEndClockTime > 0) {
-            AppLogger.w(TAG, "tracker already stopped");
+            Timber.tag(TAG).w("tracker already stopped");
             return;
         }
 
         SysCpuStat sysCpu = CpuUtils.getCpuStat();
         if (sysCpu == null) {
-            AppLogger.w(TAG, "failed to get CPU stats");
+            Timber.tag(TAG).w("failed to get CPU stats");
             return;
         }
         if (mSnapshotList != null) {
             mSnapshotList.add(sysCpu);
-            AppLogger.i(TAG, "snapshot: " + sysCpu);
+            Timber.tag(TAG).i("snapshot: %s", sysCpu);
         }
 
         if (mBaseCpuStat != null) {

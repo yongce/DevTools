@@ -1,11 +1,11 @@
 package me.ycdev.android.devtools.sampler;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
@@ -29,7 +29,7 @@ class AppsSelectedAdapter extends ListAdapterBase<AppInfo, AppsSelectedAdapter.V
 
     @Override
     protected void bindView(@NonNull AppInfo item, @NonNull ViewHolder vh) {
-        vh.pkgNameView.setText(item.pkgName);
+        vh.pkgNameView.setText(item.getPkgName());
     }
 
     static class ViewHolder extends ViewHolderBase {

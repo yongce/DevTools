@@ -13,7 +13,6 @@ import android.widget.ListView;
 import java.util.List;
 
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
-import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.common.apps.AppsLoadConfig;
@@ -21,6 +20,7 @@ import me.ycdev.android.lib.common.apps.AppsLoadFilter;
 import me.ycdev.android.lib.common.apps.AppsLoadListener;
 import me.ycdev.android.lib.common.apps.AppsLoader;
 import me.ycdev.android.lib.commonui.base.LoadingAsyncTaskBase;
+import timber.log.Timber;
 
 public class InstalledAppsActivity extends AppCompatBaseActivity
         implements AdapterView.OnItemClickListener {
@@ -87,7 +87,7 @@ public class InstalledAppsActivity extends AppCompatBaseActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         AppInfo item = mAdapter.getItem(position);
-        AppLogger.i(TAG, "clicked item: " + item.toString());
+        Timber.tag(TAG).i("clicked item: %s", item.toString());
     }
 
     @Override
@@ -106,8 +106,8 @@ public class InstalledAppsActivity extends AppCompatBaseActivity
         @Override
         protected List<AppInfo> doInBackground(Void... params) {
             AppsLoadFilter filter = new AppsLoadFilter();
-            filter.onlyMounted = false;
-            filter.onlyEnabled = false;
+            filter.setOnlyMounted(false);
+            filter.setOnlyEnabled(false);
 
             AppsLoadConfig config = new AppsLoadConfig();
 
@@ -123,7 +123,7 @@ public class InstalledAppsActivity extends AppCompatBaseActivity
                 }
             };
 
-            return AppsLoader.getInstance(mActivity).loadInstalledApps(filter, config, listener);
+            return AppsLoader.Companion.getInstance(getActivity()).loadInstalledApps(filter, config, listener);
         }
 
         @Override

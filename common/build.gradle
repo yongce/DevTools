@@ -10,7 +10,7 @@ android {
 dependencies {
     implementation project(':baseLib')
 
-    implementation deps.support.compat
+    implementation deps.androidx.core
     implementation deps.timber
 
     // Dependencies for local unit tests
@@ -22,6 +22,6 @@ dependencies {
     testImplementation deps.test.powermockJunit
 
     // Android Testing Support Library's runner and rules
-    androidTestImplementation deps.test.supportRunner
-    androidTestImplementation deps.test.supportRules
+    androidTestImplementation deps.test.runner
+    androidTestImplementation deps.test.rules
 }

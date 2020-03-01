@@ -1,8 +1,6 @@
 package me.ycdev.android.devtools.apps.selector;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -14,6 +12,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
@@ -32,10 +33,10 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo, AppsSelectorAdapter.V
         @Override
         public void onClick(View v) {
             AppInfo item = (AppInfo) v.getTag();
-            item.isSelected = !item.isSelected;
-            if (item.isSelected) {
+            item.setSelected(!item.isSelected());
+            if (item.isSelected()) {
                 if (!mMultiChoice && mSelectedApps.size() > 0) {
-                    getOneSelectedApp().isSelected = false;
+                    getOneSelectedApp().setSelected(false);
                     mSelectedApps.clear();
                 }
                 mSelectedApps.add(item);
@@ -71,9 +72,11 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo, AppsSelectorAdapter.V
     }
 
     @Override
-    public void setData(List<AppInfo> data) {
+    public void setData(@Nullable List<? extends AppInfo> data) {
+        if (data != null) {
+            Collections.sort(data, new AppInfo.AppNameComparator());
+        }
         super.setData(data);
-        Collections.sort(mList, new AppInfo.AppNameComparator());
     }
 
     @Override
@@ -89,10 +92,10 @@ class AppsSelectorAdapter extends ListAdapterBase<AppInfo, AppsSelectorAdapter.V
 
     @Override
     protected void bindView(@NonNull AppInfo item, @NonNull ViewHolder vh) {
-        vh.iconView.setImageDrawable(item.appIcon);
-        vh.appNameView.setText(item.appName);
-        vh.pkgNameView.setText(item.pkgName);
-        vh.checkBox.setChecked(item.isSelected);
+        vh.iconView.setImageDrawable(item.getAppIcon());
+        vh.appNameView.setText(item.getAppName());
+        vh.pkgNameView.setText(item.getPkgName());
+        vh.checkBox.setChecked(item.isSelected());
         vh.checkBox.setTag(item);
         vh.checkBox.setOnClickListener(mCheckedChangeListener);
     }

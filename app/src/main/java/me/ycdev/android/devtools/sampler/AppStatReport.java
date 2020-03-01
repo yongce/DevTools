@@ -45,7 +45,7 @@ public class AppStatReport {
         writer.append("Phone model: " + Build.MODEL).append("\n");
         writer.append("Android OS: " + Build.VERSION.RELEASE).append("\n");
         writer.append("Sample count: " + sampleCount).append("\n");
-        String timeUsageStr = DateTimeUtils.getReadableTimeUsage(totalTimeUsage);
+        String timeUsageStr = DateTimeUtils.INSTANCE.getReadableTimeUsage(totalTimeUsage);
         writer.append("Time usage (ms): " + totalTimeUsage).append(", str: ").append(timeUsageStr).append("\n");
         writer.append("Total CPU time (ms): " + totalCpuTime).append("\n");
         double averageCpu = totalCpuTime * 60 * 1000;

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
@@ -57,13 +58,13 @@ public class AppsSelectorActivity extends AppCompatBaseActivity
         setContentView(R.layout.act_apps_selector);
 
         Intent intent = getIntent();
-        boolean multiChoice = IntentHelper.getBooleanExtra(intent,
+        boolean multiChoice = IntentHelper.INSTANCE.getBooleanExtra(intent,
                 EXTRA_MULTICHOICE, DEFAULT_MULTICHOICE);
-        mExcludeUninstalled = IntentHelper.getBooleanExtra(intent,
+        mExcludeUninstalled = IntentHelper.INSTANCE.getBooleanExtra(intent,
                 EXTRA_EXCLUDE_UNINSTALLED, DEFAULT_EXCLUDE_UNINSTALLED);
-        mExcludeDisabled = IntentHelper.getBooleanExtra(intent,
+        mExcludeDisabled = IntentHelper.INSTANCE.getBooleanExtra(intent,
                 EXTRA_EXCLUDE_DISABLED, DEFAULT_EXCLUDE_DISABLED);
-        mExcludeSystem = IntentHelper.getBooleanExtra(intent,
+        mExcludeSystem = IntentHelper.INSTANCE.getBooleanExtra(intent,
                 EXTRA_EXCLUDE_SYSTEM, DEFAULT_EXCLUDE_SYSTEM);
 
         mStatusView = (TextView) findViewById(R.id.status);
@@ -92,7 +93,7 @@ public class AppsSelectorActivity extends AppCompatBaseActivity
             mStatusView.setText(R.string.apps_selector_status_no_apps_selected);
         } else if (newCount == 1) {
             String status = getString(R.string.apps_selector_status_one_app_selected,
-                    mAdapter.getOneSelectedApp().pkgName);
+                    mAdapter.getOneSelectedApp().getPkgName());
             mStatusView.setText(status);
         } else {
             String status = getResources().getQuantityString(
@@ -105,7 +106,7 @@ public class AppsSelectorActivity extends AppCompatBaseActivity
         List<AppInfo> apps = mAdapter.getSelectedApps();
         ArrayList<String> pkgNames = new ArrayList<>(apps.size());
         for (AppInfo appInfo : apps) {
-            pkgNames.add(appInfo.pkgName);
+            pkgNames.add(appInfo.getPkgName());
         }
 
         Intent result = new Intent();
@@ -149,9 +150,9 @@ public class AppsSelectorActivity extends AppCompatBaseActivity
         @Override
         protected List<AppInfo> doInBackground(Void... params) {
             AppsLoadFilter filter = new AppsLoadFilter();
-            filter.onlyMounted = mExcludeUninstalled;
-            filter.onlyEnabled = mExcludeDisabled;
-            filter.includeSysApp = !mExcludeSystem;
+            filter.setOnlyMounted(mExcludeUninstalled);
+            filter.setOnlyEnabled(mExcludeDisabled);
+            filter.setIncludeSysApp(!mExcludeSystem);
 
             AppsLoadConfig config = new AppsLoadConfig();
 
@@ -162,12 +163,12 @@ public class AppsSelectorActivity extends AppCompatBaseActivity
                 }
 
                 @Override
-                public void onProgressUpdated(int percent, AppInfo appInfo) {
+                public void onProgressUpdated(int percent, @NonNull AppInfo appInfo) {
                     publishProgress(percent);
                 }
             };
 
-            return AppsLoader.getInstance(mActivity).loadInstalledApps(filter, config, listener);
+            return AppsLoader.Companion.getInstance(getActivity()).loadInstalledApps(filter, config, listener);
         }
 
         @Override

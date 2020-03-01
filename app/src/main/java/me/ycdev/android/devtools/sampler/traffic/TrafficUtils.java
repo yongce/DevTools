@@ -18,12 +18,12 @@ public class TrafficUtils {
         AppTrafficStat trafficStat = new AppTrafficStat(uid);
         try {
             String rcvFile = String.format(Locale.US, DEV_UID_RCV_FILE, uid);
-            String rcvData = IoUtils.readAllLines(rcvFile);
-            trafficStat.recvBytes = StringUtils.parseLong(rcvData, 0);
+            String rcvData = IoUtils.INSTANCE.readAllLines(rcvFile);
+            trafficStat.recvBytes = StringUtils.INSTANCE.parseLong(rcvData, 0);
 
             String sndFile = String.format(Locale.US, DEV_UID_SND_FILE, uid);
-            String sndData = IoUtils.readAllLines(sndFile);
-            trafficStat.sendBytes = StringUtils.parseLong(sndData, 0);
+            String sndData = IoUtils.INSTANCE.readAllLines(sndFile);
+            trafficStat.sendBytes = StringUtils.INSTANCE.parseLong(sndData, 0);
 
             return trafficStat;
         } catch (IOException e) {

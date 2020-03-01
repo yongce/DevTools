@@ -1,16 +1,15 @@
 package me.ycdev.android.devtools.apps.installed;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.common.apps.AppInfo;
-import me.ycdev.android.lib.common.compat.ViewsCompat;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
 import me.ycdev.android.lib.commonui.base.ViewHolderBase;
 
@@ -45,29 +44,29 @@ class InstalledAppsAdapter extends ListAdapterBase<AppInfo, InstalledAppsAdapter
 
     @Override
     protected void bindView(@NonNull AppInfo item, @NonNull ViewHolder vh) {
-        vh.iconView.setImageDrawable(item.appIcon);
-        vh.appNameView.setText(item.appName);
-        vh.appUidView.setText(String.valueOf(item.appUid));
-        vh.sharedUidView.setText(item.sharedUid);
-        vh.pkgNameView.setText(item.pkgName);
+        vh.iconView.setImageDrawable(item.getAppIcon());
+        vh.appNameView.setText(item.getAppName());
+        vh.appUidView.setText(String.valueOf(item.getAppUid()));
+        vh.sharedUidView.setText(item.getSharedUid());
+        vh.pkgNameView.setText(item.getPkgName());
         vh.sharedUidView.setTextColor(mSharedAppColor);
-        if (item.isSysApp) {
+        if (item.isSysApp()) {
             vh.pkgNameView.setTextColor(mSysAppColor);
         } else {
             vh.pkgNameView.setTextColor(mNormalAppColor);
         }
-        vh.versionNameView.setText(item.versionName);
-        vh.versionCodeView.setText(String.valueOf(item.versionCode));
-        vh.apkPathView.setText(item.apkPath);
+        vh.versionNameView.setText(item.getVersionName());
+        vh.versionCodeView.setText(String.valueOf(item.getVersionCode()));
+        vh.apkPathView.setText(item.getApkPath());
 
-        String stateStr = mContext.getString(R.string.apps_app_state,
-                String.valueOf(item.isDisabled), String.valueOf(item.isUnmounted));
+        String stateStr = getContext().getString(R.string.apps_app_state,
+                String.valueOf(item.isDisabled()), String.valueOf(item.isUnmounted()));
         vh.stateView.setText(stateStr);
-        if (item.isDisabled || item.isUnmounted) {
-            ViewsCompat.setImageViewAlpha(vh.iconView, ALPHA_DISABLED);
+        if (item.isDisabled() || item.isUnmounted()) {
+            vh.iconView.setImageAlpha(ALPHA_DISABLED);
             vh.stateView.setTextColor(mUnavailableColor);
         } else {
-            ViewsCompat.setImageViewAlpha(vh.iconView, ALPHA_ENABLED);
+            vh.iconView.setImageAlpha(ALPHA_ENABLED);
             vh.stateView.setTextColor(mNormalAppColor);
         }
     }

@@ -44,11 +44,11 @@ dependencies {
     implementation project(':uiLib')
     implementation project(':common')
 
-    implementation deps.support.appcompat
-    implementation deps.support.design
+    implementation deps.androidx.core
+    implementation deps.androidx.material
     implementation deps.gson
     implementation deps.timber
-    implementation deps.support.wear
+    implementation deps.androidx.wear
     implementation deps.google.wearableSupport
 
     // Dependencies for local unit tests
@@ -60,6 +60,6 @@ dependencies {
     testImplementation deps.test.powermockJunit
 
     // Android Testing Support Library's runner and rules
-    androidTestImplementation deps.test.supportRunner
-    androidTestImplementation deps.test.supportRules
+    androidTestImplementation deps.test.runner
+    androidTestImplementation deps.test.rules
 }

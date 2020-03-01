@@ -3,6 +3,7 @@ package me.ycdev.android.devtools.device;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper;
 import me.ycdev.android.lib.commonui.activity.GridEntriesActivity;
@@ -24,8 +25,8 @@ import android.os.Build;
 import android.provider.Telephony;
 import android.widget.Toast;
 
-import static me.ycdev.android.arch.ArchConstants.IntentType.INTENT_TYPE_ACTIVITY;
-import static me.ycdev.android.arch.ArchConstants.IntentType.INTENT_TYPE_BROADCAST;
+import static me.ycdev.android.arch.ArchConstants.INTENT_TYPE_ACTIVITY;
+import static me.ycdev.android.arch.ArchConstants.INTENT_TYPE_BROADCAST;
 
 public class BroadcastTesterActivity extends GridEntriesActivity {
     private String mTargetPkgName;
@@ -33,7 +34,7 @@ public class BroadcastTesterActivity extends GridEntriesActivity {
     private BroadcastReceiver mReceiver1 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ToastHelper.show(getApplicationContext(), "Received1: " + intent.getAction(),
+            ToastHelper.INSTANCE.show(getApplicationContext(), "Received1: " + intent.getAction(),
                     Toast.LENGTH_LONG);
         }
     };
@@ -41,7 +42,7 @@ public class BroadcastTesterActivity extends GridEntriesActivity {
     private BroadcastReceiver mReceiver2 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ToastHelper.show(getApplicationContext(), "Received2: " + intent.getAction(),
+            ToastHelper.INSTANCE.show(getApplicationContext(), "Received2: " + intent.getAction(),
                     Toast.LENGTH_LONG);
         }
     };
@@ -50,9 +51,9 @@ public class BroadcastTesterActivity extends GridEntriesActivity {
     protected void onResume() {
         super.onResume();
 
-        BroadcastHelper.registerForExternal(this, mReceiver1,
+        BroadcastHelper.INSTANCE.registerForExternal(this, mReceiver1,
                 new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-        BroadcastHelper.registerForInternal(this, mReceiver2,
+        BroadcastHelper.INSTANCE.registerForInternal(this, mReceiver2,
                 new IntentFilter(Constants.ACTION_DYNAMIC_BROADCAST_TEST));
     }
 
@@ -95,12 +96,12 @@ public class BroadcastTesterActivity extends GridEntriesActivity {
 
     @SuppressLint("MyBroadcastHelper")
     @Override
-    protected void onItemClicked(IntentEntry item) {
+    protected void onItemClicked(@NonNull IntentEntry item) {
         try {
-            if (item.type == INTENT_TYPE_ACTIVITY) {
-                startActivity(item.intent);
-            } else if (item.type == INTENT_TYPE_BROADCAST) {
-                sendBroadcast(item.intent, item.perm);
+            if (item.getType() == INTENT_TYPE_ACTIVITY) {
+                startActivity(item.getIntent());
+            } else if (item.getType() == INTENT_TYPE_BROADCAST) {
+                sendBroadcast(item.getIntent(), item.getPerm());
             }
         } catch (Exception e) {
             showCrashInfo(e);
@@ -119,7 +120,7 @@ public class BroadcastTesterActivity extends GridEntriesActivity {
         Intent intent = new Intent(Constants.ACTION_DYNAMIC_BROADCAST_TEST);
         IntentEntry item = new IntentEntry(INTENT_TYPE_BROADCAST, intent, "Broadcast#1",
                 "Send Broadcast with perm: " + intent.getAction());
-        item.perm = BroadcastHelper.getInternalBroadcastPerm(this);
+        item.setPerm(BroadcastHelper.INSTANCE.getInternalBroadcastPerm(this));
         itemsList.add(item);
     }
 

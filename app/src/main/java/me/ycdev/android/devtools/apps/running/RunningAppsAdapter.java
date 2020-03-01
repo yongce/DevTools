@@ -2,11 +2,11 @@ package me.ycdev.android.devtools.apps.running;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
 import me.ycdev.android.lib.commonui.base.ViewHolderBase;
@@ -30,9 +30,9 @@ public class RunningAppsAdapter extends ListAdapterBase<RunningAppInfo, RunningA
     @SuppressLint("SetTextI18n")
     @Override
     protected void bindView(@NonNull RunningAppInfo item, @NonNull ViewHolder vh) {
-        vh.appIconView.setImageDrawable(item.appIcon);
-        vh.appNameView.setText(item.appName);
-        vh.pkgNameView.setText(item.pkgName);
+        vh.appIconView.setImageDrawable(item.appInfo.getAppIcon());
+        vh.appNameView.setText(item.appInfo.getAppName());
+        vh.pkgNameView.setText(item.appInfo.getPkgName());
         vh.memoryUsageView.setText(String.valueOf(item.totalMemPss) + "KB");
 
         StringBuilder sb = new StringBuilder();

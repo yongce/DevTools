@@ -4,8 +4,8 @@ import android.content.Context;
 
 import java.util.List;
 
-import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.devtools.root.RootCommandBuilder;
+import timber.log.Timber;
 
 public class AppsKillerCmd extends RootCmdBase {
     private static final String TAG = "AppsKillerCmd";
@@ -23,7 +23,7 @@ public class AppsKillerCmd extends RootCmdBase {
     @Override
     public void run() {
         if (mPkgList == null || mPkgList.size() == 0) {
-            AppLogger.w(TAG, "no apps to kill");
+            Timber.tag(TAG).w("no apps to kill");
             return;
         }
 

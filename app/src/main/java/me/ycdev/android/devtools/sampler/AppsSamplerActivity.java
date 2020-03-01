@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,8 +17,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
-import me.ycdev.android.arch.utils.AppLogger;
 import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.devtools.R;
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity;
@@ -32,6 +31,7 @@ import me.ycdev.android.lib.common.utils.DateTimeUtils;
 import me.ycdev.android.lib.common.utils.StorageUtils;
 import me.ycdev.android.lib.common.utils.WeakHandler;
 import me.ycdev.android.lib.common.wrapper.IntentHelper;
+import timber.log.Timber;
 
 public class AppsSamplerActivity extends AppCompatBaseActivity
         implements View.OnClickListener, WeakHandler.Callback, PermissionCallback {
@@ -125,7 +125,7 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
         SampleTaskInfo taskInfo = AppsSamplerService.getLastSampleTask();
         if (taskInfo != null && taskInfo.isSampling) {
             String status = getString(R.string.apps_sampler_sample_status,
-                    DateTimeUtils.getReadableTimeStamp(taskInfo.startTime),
+                    DateTimeUtils.INSTANCE.getReadableTimeStamp(taskInfo.startTime),
                     taskInfo.sampleClockTime / 1000,
                     taskInfo.sampleCount);
             mSampleStatusView.setText(status);
@@ -146,7 +146,7 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.clear) {
             AppsSamplerService.clearLogs(this);
-            ToastHelper.show(this, R.string.apps_sampler_clear_logs_toast,
+            ToastHelper.INSTANCE.show(this, R.string.apps_sampler_clear_logs_toast,
                     Toast.LENGTH_SHORT);
             return true;
         }
@@ -160,12 +160,12 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
         } else if (v == mStopBtn) {
             AppsSamplerService.createSampleReport(this);
             AppsSamplerService.stopSampler(this);
-            ToastHelper.show(this, R.string.apps_sampler_stop_sampling_toast,
+            ToastHelper.INSTANCE.show(this, R.string.apps_sampler_stop_sampling_toast,
                     Toast.LENGTH_SHORT);
             refreshButtonsState(false);
         } else if (v == mCreateReportBtn) {
             AppsSamplerService.createSampleReport(this);
-            ToastHelper.show(this, R.string.apps_sampler_create_report_toast,
+            ToastHelper.INSTANCE.show(this, R.string.apps_sampler_create_report_toast,
                     Toast.LENGTH_SHORT);
         } else if (v == mAppsSelectBtn) {
             Intent intent = new Intent(this, AppsSelectorActivity.class);
@@ -176,9 +176,10 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_APPS_SELECTOR) {
             if (resultCode == RESULT_OK) {
-                ArrayList<String> pkgNames = IntentHelper.getStringArrayListExtra(data,
+                ArrayList<String> pkgNames = IntentHelper.INSTANCE.getStringArrayListExtra(data,
                         AppsSelectorActivity.RESULT_EXTRA_APPS_PKG_NAMES);
                 updateSelectedApps(pkgNames);
             }
@@ -189,8 +190,7 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
         mPkgNames = pkgNames;
         ArrayList<AppInfo> appsList = new ArrayList<>(pkgNames.size());
         for (String pkgName : pkgNames) {
-            AppInfo item = new AppInfo();
-            item.pkgName = pkgName;
+            AppInfo item = new AppInfo(pkgName);
             appsList.add(item);
         }
         mAdapter.setData(appsList);
@@ -215,8 +215,8 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
     public void onRequestPermissionsResult(int requestCode,
             @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        boolean permissionsGranted = PermissionUtils.verifyPermissions(grantResults);
-        if (DEBUG) AppLogger.d(TAG, "onRequestPermissionsResult: " + permissionsGranted);
+        boolean permissionsGranted = PermissionUtils.INSTANCE.verifyPermissions(grantResults);
+        if (DEBUG) Timber.tag(TAG).d("onRequestPermissionsResult: %s", permissionsGranted);
         if (permissionsGranted) {
             startSample();
         }
@@ -229,34 +229,34 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
 
     private PermissionRequestParams createPermissionRequestParams() {
         PermissionRequestParams params = new PermissionRequestParams();
-        params.requestCode = PERMISSION_RC_SAMPLER;
-        params.permissions = REQUESTED_PERMISSIONS;
-        params.rationaleTitle = getString(R.string.title_permission_request);
-        params.rationaleContent = getString(R.string.apps_sampler_permissions_rationale);
-        params.callback = this;
+        params.setRequestCode(PERMISSION_RC_SAMPLER);
+        params.setPermissions(REQUESTED_PERMISSIONS);
+        params.setRationaleTitle(getString(R.string.title_permission_request));
+        params.setRationaleContent(getString(R.string.apps_sampler_permissions_rationale));
+        params.setCallback(this);
         return params;
     }
 
     private void startSample() {
-        if (!StorageUtils.isExternalStorageAvailable()) {
-            ToastHelper.show(this, R.string.tip_no_sdcard, Toast.LENGTH_SHORT);
+        if (!StorageUtils.INSTANCE.isExternalStorageAvailable()) {
+            ToastHelper.INSTANCE.show(this, R.string.tip_no_sdcard, Toast.LENGTH_SHORT);
             return;
         }
         String intervalStr = mIntervalView.getText().toString();
         if (intervalStr.length() == 0) {
-            ToastHelper.show(this, R.string.apps_sampler_sample_interval_input_toast,
+            ToastHelper.INSTANCE.show(this, R.string.apps_sampler_sample_interval_input_toast,
                     Toast.LENGTH_SHORT);
             return;
         }
         if (mPkgNames.size() == 0) {
-            ToastHelper.show(this, R.string.apps_sampler_no_apps_toast,
+            ToastHelper.INSTANCE.show(this, R.string.apps_sampler_no_apps_toast,
                     Toast.LENGTH_SHORT);
             return;
         }
 
-        if (!PermissionUtils.hasPermissions(this, REQUESTED_PERMISSIONS)) {
-            if (DEBUG) AppLogger.d(TAG, "Need to request the permission");
-            PermissionUtils.requestPermissions(this, createPermissionRequestParams());
+        if (!PermissionUtils.INSTANCE.hasPermissions(this, REQUESTED_PERMISSIONS)) {
+            if (DEBUG) Timber.tag(TAG).d("Need to request the permission");
+            PermissionUtils.INSTANCE.requestPermissions(this, createPermissionRequestParams());
             return;
         }
 
@@ -266,7 +266,7 @@ public class AppsSamplerActivity extends AppCompatBaseActivity
         }
         mInterval = Integer.parseInt(intervalStr);
         AppsSamplerService.startSampler(this, mPkgNames, mInterval, mPeriod);
-        ToastHelper.show(this, R.string.apps_sampler_start_sampling_toast,
+        ToastHelper.INSTANCE.show(this, R.string.apps_sampler_start_sampling_toast,
                 Toast.LENGTH_SHORT);
         refreshButtonsState(true);
         mHandler.sendEmptyMessageDelayed(MSG_REFRESH_SAMPLE_STATUS, mInterval * 1000);
