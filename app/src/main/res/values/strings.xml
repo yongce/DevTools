@@ -69,6 +69,7 @@
     <string name="apps_sampler_notification_ticker">Sampling the apps…</string>
     <string name="apps_sampler_sample_status">Start time: %1$s\nClock time (s): %2$d\nSample count: %3$d</string>
     <string name="apps_sampler_permissions_rationale">The sampler need to access the external storage (or SD card) to write the stats files.</string>
+    <string name="apps_sampler_notification_channel">Sampler ongoing notification</string>
 
     <string name="running_apps_module_title">Running Apps</string>
     <string name="running_apps_module_desc">Show all the running apps</string>

@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "me.ycdev.android.devtools"
         minSdkVersion 23
-        targetSdkVersion 28
+        targetSdkVersion 29
 
         versionName getAppVersionNameBase() // + build type suffix
         versionCode getAppVersionCodeBase() * 10000 + calculatedVersionCode
@@ -49,6 +49,8 @@ dependencies {
     implementation deps.gson
     implementation deps.timber
     implementation deps.androidx.wear
+
+    compileOnly deps.google.wearableFramework
     implementation deps.google.wearableSupport
 
     // Dependencies for local unit tests

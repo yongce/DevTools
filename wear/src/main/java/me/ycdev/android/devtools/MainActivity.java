@@ -1,9 +1,11 @@
 package me.ycdev.android.devtools;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.widget.TextView;
 
+@SuppressLint("MyBaseActivity")
 public class MainActivity extends WearableActivity {
 
     private TextView mTextView;

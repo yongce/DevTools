@@ -6,8 +6,8 @@ buildscript {
     apply from: "${androidProjectCommon}"
 
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
 
     dependencies {
@@ -16,16 +16,23 @@ buildscript {
     }
 }
 
+// Add plugin for 'spotless'
+plugins {
+    id "com.diffplug.gradle.spotless" version "3.27.1"
+}
+
 allprojects {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-    delete rootProject.ext.appsOutDir
+spotless {
+    kotlin {
+        target "**/*.kt"
+        ktlint(versions.ktlint)
+    }
 }
 
 // 版本号规则如下：
@@ -37,7 +44,7 @@ task clean(type: Delete) {
 //   "1.3.2"   --> 1032
 //   "1.13.1"  --> 1131
 int majorVersion = 1
-int minorVersion = 4
+int minorVersion = 5
 int hotfixVersion = 0
 
 ext.getAppVersionNameBase = {
@@ -46,4 +53,9 @@ ext.getAppVersionNameBase = {
 
 ext.getAppVersionCodeBase = {
     return majorVersion * 1000 + minorVersion * 10 + hotfixVersion
+}
+
+ext {
+    versions.minSdk = 21
+    versions.ndkVersion = "21.0.6113669"
 }
