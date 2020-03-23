@@ -24,6 +24,12 @@
                 <item
                     android:id="@+id/action_sort_by_update_time"
                     android:title="@string/action_sort_by_update_time" />
+                <item
+                    android:id="@+id/action_sort_by_target_sdk"
+                    android:title="@string/action_sort_by_target_sdk" />
+                <item
+                    android:id="@+id/action_sort_byt_min_sdk"
+                    android:title="@string/action_sort_by_min_sdk" />
             </group>
         </menu>
     </item>

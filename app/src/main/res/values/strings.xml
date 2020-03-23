@@ -9,6 +9,8 @@
     <string name="action_sort_by_uid">Sort by uid</string>
     <string name="action_sort_by_install_time">Sort by install time</string>
     <string name="action_sort_by_update_time">Sort by update time</string>
+    <string name="action_sort_by_target_sdk">Sort by targetSdk</string>
+    <string name="action_sort_by_min_sdk">Sort by minSdk</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
@@ -40,6 +42,7 @@
     <string name="elapsed_time_seconds">"%1$ds"</string>
 
     <string name="apps_app_state">Disabled: %1$s, uninstalled: %2$s</string>
+    <string name="apps_app_target_min_sdk">targetSdk: %1$d, minSdk: %2$d</string>
 
     <string name="apps_selector_title">Apps Selector</string>
     <string name="apps_selector_status_no_apps_selected">No apps are selected</string>

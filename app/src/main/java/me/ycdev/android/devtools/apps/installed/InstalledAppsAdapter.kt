@@ -76,6 +76,12 @@ internal class InstalledAppsAdapter(cxt: Context) : RecyclerView.Adapter<ViewHol
             holder.binding.state.setTextColor(defaultTextColor)
         }
 
+        holder.binding.targetMinSdk.text = holder.itemView.context.getString(
+            R.string.apps_app_target_min_sdk,
+            item.targetSdkVersion,
+            item.minSdkVersion
+        )
+
         holder.itemView.setOnClickListener {
             Timber.tag(TAG).i("clicked item: %s", item)
         }

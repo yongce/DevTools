@@ -13,7 +13,9 @@ import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.databinding.ActCommonListBinding
 import me.ycdev.android.lib.common.apps.AppInfo.AppNameComparator
 import me.ycdev.android.lib.common.apps.AppInfo.InstallTimeComparator
+import me.ycdev.android.lib.common.apps.AppInfo.MinSdkComparator
 import me.ycdev.android.lib.common.apps.AppInfo.PkgNameComparator
+import me.ycdev.android.lib.common.apps.AppInfo.TargetSdkComparator
 import me.ycdev.android.lib.common.apps.AppInfo.UidComparator
 import me.ycdev.android.lib.common.apps.AppInfo.UpdateTimeComparator
 import timber.log.Timber
@@ -79,6 +81,16 @@ class InstalledAppsActivity : AppCompatBaseActivity() {
             }
             R.id.action_sort_by_update_time -> {
                 listAdapter.sort(UpdateTimeComparator())
+                item.isChecked = true
+                return true
+            }
+            R.id.action_sort_by_target_sdk -> {
+                listAdapter.sort(TargetSdkComparator())
+                item.isChecked = true
+                return true
+            }
+            R.id.action_sort_byt_min_sdk -> {
+                listAdapter.sort(MinSdkComparator())
                 item.isChecked = true
                 return true
             }
