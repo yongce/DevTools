@@ -1,46 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.AppTheme.ListViewItem"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/app_icon"
         android:layout_width="@dimen/app_icon_size"
         android:layout_height="@dimen/app_icon_size"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/list_item_horizontal_space"
-        android:layout_marginEnd="@dimen/list_item_horizontal_space"
-        tools:ignore="ContentDescription"
-        tools:src="@drawable/ic_launcher" />
-    <CheckBox
-        android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="ContentDescription" />
     <TextView
         android:id="@+id/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/app_icon"
-        android:layout_toEndOf="@id/app_icon"
-        android:layout_toLeftOf="@id/checkbox"
-        android:layout_toStartOf="@id/checkbox"
-        android:layout_alignTop="@id/app_icon"
-        android:layout_marginTop="@dimen/list_item_vertial_space"
+        android:layout_marginStart="@dimen/list_item_horizontal_space"
+        app:layout_constraintLeft_toRightOf="@id/app_icon"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Test app name" />
     <TextView
         android:id="@+id/pkg_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/app_icon"
-        android:layout_toEndOf="@id/app_icon"
-        android:layout_toLeftOf="@id/checkbox"
-        android:layout_toStartOf="@id/checkbox"
-        android:layout_below="@id/app_name"
+        app:layout_constraintLeft_toLeftOf="@id/app_name"
+        app:layout_constraintTop_toBottomOf="@id/app_name"
         tools:text="pkgname.test.com"/>
-
-</RelativeLayout>
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/list_item_horizontal_space"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

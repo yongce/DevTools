@@ -74,9 +74,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/apps_sampler_apps_list_header" />
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
-        style="@style/Widget.AppTheme.ListView"
+        style="@style/Widget.AppTheme.RecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button

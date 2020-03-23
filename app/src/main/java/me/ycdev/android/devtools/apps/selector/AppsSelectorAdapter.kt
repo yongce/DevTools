@@ -1,25 +1,24 @@
 package me.ycdev.android.devtools.apps.selector
 
-import android.content.Context
+import android.annotation.SuppressLint
+import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
-import androidx.annotation.LayoutRes
-import me.ycdev.android.devtools.R.layout
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.apps.selector.AppsSelectorAdapter.ViewHolder
 import me.ycdev.android.devtools.databinding.AppsSelectorListItemBinding
 import me.ycdev.android.lib.common.apps.AppInfo
-import me.ycdev.android.lib.common.apps.AppInfo.AppNameComparator
-import me.ycdev.android.lib.commonui.base.ListAdapterBase
-import me.ycdev.android.lib.commonui.base.ViewHolderBase
 import java.util.ArrayList
 import java.util.Collections
+import java.util.Comparator
 import java.util.HashSet
 
 open class AppsSelectorAdapter(
-    cxt: Context,
     private val changeListener: SelectedAppsChangeListener,
     private val multiChoice: Boolean
-) : ListAdapterBase<AppInfo, ViewHolder>(cxt) {
+) : RecyclerView.Adapter<ViewHolder>() {
 
     interface SelectedAppsChangeListener {
         fun onSelectedAppsChanged(newCount: Int)
@@ -53,21 +52,32 @@ open class AppsSelectorAdapter(
             return if (it.hasNext()) it.next() else null
         }
 
-    override fun setData(data: List<AppInfo>?) {
-        if (data != null) {
-            Collections.sort(data, AppNameComparator())
+    var data: List<AppInfo>? = null
+
+    fun sort(comparator: Comparator<AppInfo>) {
+        data?.let {
+            Collections.sort(it, comparator)
+            notifyDataSetChanged()
         }
-        super.setData(data)
     }
 
-    @LayoutRes
-    override val itemLayoutResId: Int = layout.apps_selector_list_item
-
-    override fun createViewHolder(itemView: View, position: Int): ViewHolder {
-        return ViewHolder(itemView, position)
+    private fun getItem(position: Int): AppInfo {
+        return data!![position]
     }
 
-    override fun bindView(item: AppInfo, holder: ViewHolder) {
+    override fun getItemCount(): Int {
+        return data?.size ?: 0
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.apps_selector_list_item, parent, false)
+        return ViewHolder(itemView)
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position)
         holder.binding.appIcon.setImageDrawable(item.appIcon)
         holder.binding.appName.text = item.appName
         holder.binding.pkgName.text = item.pkgName
@@ -76,7 +86,7 @@ open class AppsSelectorAdapter(
         holder.binding.checkbox.setOnClickListener(checkedChangeListener)
     }
 
-    class ViewHolder(itemView: View, position: Int) : ViewHolderBase(itemView, position) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding: AppsSelectorListItemBinding = AppsSelectorListItemBinding.bind(itemView)
     }
 }

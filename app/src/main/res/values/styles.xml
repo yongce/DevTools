@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources>
     <style name="Widget.AppTheme" parent="@style/Widget.CommonUiTheme.Light" />
 
     <style name="Widget.AppTheme.ActivityMargin" parent="@style/Widget.CommonUiTheme.ActivityMargin" />
     <style name="Widget.AppTheme.HorizontalDivider" parent="@style/Widget.CommonUiTheme.HorizontalDivider" />
     <style name="Widget.AppTheme.ScrollView" parent="@style/Widget.CommonUiTheme.ScrollView" />
 
-    <style name="Widget.AppTheme.ListView" parent="@style/Widget.CommonUiTheme.ListView" />
-    <style name="Widget.AppTheme.ListEntries" parent="@style/Widget.CommonUiTheme.ListEntries" />
-    <style name="Widget.AppTheme.ListEntries.FastScroll" parent="@style/Widget.CommonUiTheme.ListEntries.FastScroll" />
     <style name="Widget.AppTheme.ListViewItem" parent="@style/Widget.CommonUiTheme.ListViewItem"/>
+
+    <style name="Widget.AppTheme.RecyclerView" parent="@style/Widget.CommonUiTheme.RecyclerView" />
+    <style name="Widget.AppTheme.RecyclerView.FastScroll" parent="@style/Widget.CommonUiTheme.RecyclerView.FastScroll" />
 </resources>

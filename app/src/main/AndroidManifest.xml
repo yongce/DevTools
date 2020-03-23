@@ -68,7 +68,8 @@
         <activity
             android:name=".device.SystemUtilitiesActivity"
             android:label="@string/module_system_utilities_title"
-            android:parentActivityName=".LauncherActivity">
+            android:parentActivityName=".LauncherActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LauncherActivity" />
@@ -85,7 +86,8 @@
         <activity
             android:name=".apps.installed.InstalledAppsActivity"
             android:label="@string/module_installed_apps_title"
-            android:parentActivityName=".LauncherActivity">
+            android:parentActivityName=".LauncherActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LauncherActivity" />
@@ -93,8 +95,8 @@
         <activity
             android:name=".device.BroadcastTesterActivity"
             android:label="@string/module_broadcast_tester_title"
-            android:theme="@style/AppTheme.WideGridEntries"
-            android:parentActivityName=".LauncherActivity">
+            android:parentActivityName=".LauncherActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LauncherActivity" />
@@ -119,7 +121,8 @@
         <activity
             android:name=".apps.running.RunningAppsActivity"
             android:label="@string/running_apps_module_title"
-            android:parentActivityName=".LauncherActivity">
+            android:parentActivityName=".LauncherActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LauncherActivity" />
@@ -127,7 +130,8 @@
         <activity
             android:name=".security.SecurityScannerActivity"
             android:label="@string/security_scanner_module_title"
-            android:parentActivityName=".LauncherActivity">
+            android:parentActivityName=".LauncherActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LauncherActivity" />

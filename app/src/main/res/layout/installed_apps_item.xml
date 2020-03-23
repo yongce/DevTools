@@ -1,77 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.AppTheme.ListViewItem"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/app_icon"
         android:layout_width="@dimen/app_icon_size"
         android:layout_height="@dimen/app_icon_size"
-        android:layout_marginRight="4dp"
-        android:layout_marginEnd="4dp"
         android:scaleType="fitCenter"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
     <TextView
         android:id="@+id/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/app_icon"
-        android:layout_toEndOf="@id/app_icon" />
-    <TextView
-        android:id="@+id/app_uid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/app_name"
-        android:layout_toEndOf="@id/app_name"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp" />
-    <TextView
-        android:id="@+id/shared_uid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/app_uid"
-        android:layout_toEndOf="@id/app_uid"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textColor="@color/apps_shared_uid_color"
-        android:gravity="end" />
+        android:layout_marginStart="@dimen/list_item_horizontal_space"
+        app:layout_constraintLeft_toRightOf="@id/app_icon"
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/pkg_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/app_name"
-        android:layout_alignLeft="@id/app_name"
-        android:layout_alignStart="@id/app_name" />
+        app:layout_constraintLeft_toLeftOf="@id/app_name"
+        app:layout_constraintTop_toBottomOf="@id/app_name" />
+    <TextView
+        android:id="@+id/app_uid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/pkg_name"
+        app:layout_constraintTop_toBottomOf="@id/pkg_name" />
+    <TextView
+        android:id="@+id/shared_uid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/apps_shared_uid_color"
+        app:layout_constraintLeft_toRightOf="@id/app_uid"
+        app:layout_constraintTop_toTopOf="@id/app_uid" />
+
     <TextView
         android:id="@+id/version_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pkg_name"
-        android:layout_alignLeft="@id/app_name"
-        android:layout_alignStart="@id/app_name" />
+        app:layout_constraintLeft_toLeftOf="@id/app_uid"
+        app:layout_constraintTop_toBottomOf="@id/app_uid" />
     <TextView
         android:id="@+id/version_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_toRightOf="@id/version_name"
-        android:layout_toEndOf="@id/version_name"
-        android:layout_alignTop="@id/version_name" />
+        app:layout_constraintLeft_toRightOf="@id/version_name"
+        app:layout_constraintTop_toTopOf="@id/version_name" />
     <TextView
         android:id="@+id/apk_path"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/version_name"
-        android:layout_alignLeft="@id/app_name"
-        android:layout_alignStart="@id/app_name" />
+        app:layout_constraintLeft_toLeftOf="@id/version_name"
+        app:layout_constraintTop_toBottomOf="@id/version_name" />
     <TextView
         android:id="@+id/state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/apk_path"
-        android:layout_alignLeft="@id/app_name"
-        android:layout_alignStart="@id/app_name" />
-</RelativeLayout>
+        app:layout_constraintLeft_toLeftOf="@id/apk_path"
+        app:layout_constraintTop_toBottomOf="@id/apk_path" />
+</androidx.constraintlayout.widget.ConstraintLayout>

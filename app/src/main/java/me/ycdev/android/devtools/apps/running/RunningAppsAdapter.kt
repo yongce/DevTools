@@ -1,26 +1,34 @@
 package me.ycdev.android.devtools.apps.running
 
 import android.annotation.SuppressLint
-import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.apps.running.RunningAppsAdapter.ViewHolder
 import me.ycdev.android.devtools.databinding.RunningAppsItemBinding
-import me.ycdev.android.lib.commonui.base.ListAdapterBase
-import me.ycdev.android.lib.commonui.base.ViewHolderBase
 
-class RunningAppsAdapter(cxt: Context) : ListAdapterBase<RunningAppInfo, ViewHolder>(cxt) {
-    override val itemLayoutResId: Int = R.layout.running_apps_item
+class RunningAppsAdapter : RecyclerView.Adapter<ViewHolder>() {
+    var data: List<RunningAppInfo>? = null
 
-    override fun createViewHolder(itemView: View, position: Int): ViewHolder {
-        return ViewHolder(itemView, position)
+    private fun getItem(position: Int): RunningAppInfo {
+        return data!![position]
+    }
+
+    override fun getItemCount(): Int {
+        return data?.size ?: 0
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.running_apps_item, parent, false)
+        return ViewHolder(itemView)
     }
 
     @SuppressLint("SetTextI18n")
-    override fun bindView(
-        item: RunningAppInfo,
-        holder: ViewHolder
-    ) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position)
         holder.binding.appIcon.setImageDrawable(item.appInfo.appIcon)
         holder.binding.appName.text = item.appInfo.appName
         holder.binding.pkgName.text = item.appInfo.pkgName
@@ -37,7 +45,7 @@ class RunningAppsAdapter(cxt: Context) : ListAdapterBase<RunningAppInfo, ViewHol
         holder.binding.processesHolder.text = sb.toString()
     }
 
-    class ViewHolder(itemView: View, position: Int) : ViewHolderBase(itemView, position) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding: RunningAppsItemBinding = RunningAppsItemBinding.bind(itemView)
     }
 }

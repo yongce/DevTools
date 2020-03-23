@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.AppTheme.ListViewItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -8,39 +9,37 @@
         android:id="@+id/app_icon"
         android:layout_width="@dimen/app_icon_size"
         android:layout_height="@dimen/app_icon_size"
-        android:layout_marginRight="4dp"
-        android:layout_marginEnd="4dp"
         android:scaleType="fitCenter"
-        android:layout_centerVertical="true" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
         android:id="@+id/app_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/app_icon"
-        android:layout_toEndOf="@id/app_icon" />
+        android:layout_marginStart="@dimen/list_item_horizontal_space"
+        app:layout_constraintLeft_toRightOf="@id/app_icon"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/pkg_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/app_name"
-        android:layout_alignLeft="@id/app_name"
-        android:layout_alignStart="@id/app_name" />
+        app:layout_constraintLeft_toLeftOf="@id/app_name"
+        app:layout_constraintTop_toBottomOf="@id/app_name" />
 
     <TextView
         android:id="@+id/memory_usage"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pkg_name"
-        android:layout_alignLeft="@id/pkg_name"
-        android:layout_alignStart="@id/pkg_name" />
+        app:layout_constraintLeft_toLeftOf="@id/pkg_name"
+        app:layout_constraintTop_toBottomOf="@id/pkg_name" />
 
     <TextView
         android:id="@+id/processes_holder"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/memory_usage"
-        android:layout_alignLeft="@id/memory_usage"
-        android:layout_alignStart="@id/memory_usage" />
-</RelativeLayout>
+        app:layout_constraintLeft_toLeftOf="@id/memory_usage"
+        app:layout_constraintTop_toBottomOf="@id/memory_usage"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

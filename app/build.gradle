@@ -60,6 +60,12 @@ dependencies {
 
     implementation deps.androidx.coreKtx
     implementation deps.androidx.material
+    implementation deps.androidx.constraintLayout
+    implementation deps.androidx.recyclerview
+    implementation deps.lifecycle.runtime
+    implementation deps.lifecycle.extensions
+    implementation deps.lifecycle.viewModelKtx
+    implementation deps.lifecycle.liveDataKtx
     implementation deps.gson
     implementation deps.timber
 

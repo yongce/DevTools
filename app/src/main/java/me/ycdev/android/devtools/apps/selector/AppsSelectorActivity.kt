@@ -1,23 +1,21 @@
 package me.ycdev.android.devtools.apps.selector
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.os.AsyncTask.Status.FINISHED
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.apps.selector.AppsSelectorAdapter.SelectedAppsChangeListener
 import me.ycdev.android.devtools.databinding.ActAppsSelectorBinding
-import me.ycdev.android.lib.common.apps.AppInfo
-import me.ycdev.android.lib.common.apps.AppsLoadConfig
-import me.ycdev.android.lib.common.apps.AppsLoadFilter
-import me.ycdev.android.lib.common.apps.AppsLoadListener
-import me.ycdev.android.lib.common.apps.AppsLoader
+import me.ycdev.android.lib.common.apps.AppInfo.AppNameComparator
 import me.ycdev.android.lib.common.wrapper.IntentHelper
-import me.ycdev.android.lib.commonui.base.LoadingAsyncTaskBase
+import timber.log.Timber
 import java.util.ArrayList
 
 class AppsSelectorActivity : AppCompatBaseActivity(), SelectedAppsChangeListener, OnClickListener {
@@ -27,8 +25,7 @@ class AppsSelectorActivity : AppCompatBaseActivity(), SelectedAppsChangeListener
     private var excludeDisabled = false
     private var excludeSystem = false
 
-    private lateinit var adapter: AppsSelectorAdapter
-    private var appsLoader: AppsLoadingTask? = null
+    private lateinit var listAdapter: AppsSelectorAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +35,8 @@ class AppsSelectorActivity : AppCompatBaseActivity(), SelectedAppsChangeListener
         val intent = intent
         val multiChoice = IntentHelper.getBooleanExtra(
             intent,
-            EXTRA_MULTICHOICE,
-            DEFAULT_MULTICHOICE
+            EXTRA_MULTIPLE_CHOICE,
+            DEFAULT_MULTIPLE_CHOICE
         )
         excludeUninstalled = IntentHelper.getBooleanExtra(
             intent,
@@ -57,19 +54,31 @@ class AppsSelectorActivity : AppCompatBaseActivity(), SelectedAppsChangeListener
             DEFAULT_EXCLUDE_SYSTEM
         )
 
-        adapter = AppsSelectorAdapter(this, this, multiChoice)
-        binding.list.adapter = adapter
-        binding.select.setOnClickListener(this)
-
-        loadApps()
-    }
-
-    private fun loadApps() {
-        if (appsLoader != null && appsLoader!!.status != FINISHED) {
-            appsLoader?.cancel(true)
+        listAdapter = AppsSelectorAdapter(this, multiChoice)
+        binding.list.apply {
+            adapter = listAdapter
+            layoutManager = LinearLayoutManager(this@AppsSelectorActivity)
+            addItemDecoration(
+                DividerItemDecoration(this@AppsSelectorActivity, DividerItemDecoration.VERTICAL)
+            )
         }
-        appsLoader = AppsLoadingTask(this)
-        appsLoader?.execute()
+        binding.select.setOnClickListener(this)
+        onSelectedAppsChanged(0)
+
+        val viewModelFactory = AppsSelectorViewModel.Factory(
+            application,
+            excludeUninstalled,
+            excludeDisabled,
+            excludeSystem
+        )
+        val viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(AppsSelectorViewModel::class.java)
+        viewModel.apps.observe(this, Observer {
+            Timber.tag(TAG).d("apps loaded: ${it.size}")
+            listAdapter.data = it
+            listAdapter.sort(AppNameComparator())
+            binding.progress.visibility = View.GONE
+        })
     }
 
     override fun onSelectedAppsChanged(newCount: Int) {
@@ -78,7 +87,7 @@ class AppsSelectorActivity : AppCompatBaseActivity(), SelectedAppsChangeListener
         } else if (newCount == 1) {
             val status = getString(
                 R.string.apps_selector_status_one_app_selected,
-                adapter.oneSelectedApp?.pkgName
+                listAdapter.oneSelectedApp?.pkgName
             )
             binding.status.text = status
         } else {
@@ -90,7 +99,7 @@ class AppsSelectorActivity : AppCompatBaseActivity(), SelectedAppsChangeListener
     }
 
     private fun setSelectedApps() {
-        val apps = adapter.selectedApps
+        val apps = listAdapter.selectedApps
         val pkgNames = ArrayList<String>(apps.size)
         for (appInfo in apps) {
             pkgNames.add(appInfo.pkgName)
@@ -108,56 +117,16 @@ class AppsSelectorActivity : AppCompatBaseActivity(), SelectedAppsChangeListener
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (appsLoader?.status != FINISHED) {
-            appsLoader?.cancel(true)
-        }
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class AppsLoadingTask(activity: Activity) :
-        LoadingAsyncTaskBase<Void, List<AppInfo>>(activity) {
-        override fun onPreExecute() {
-            super.onPreExecute()
-            onSelectedAppsChanged(0)
-        }
-
-        override fun doInBackground(vararg params: Void): List<AppInfo> {
-            val filter = AppsLoadFilter()
-            filter.onlyMounted = excludeUninstalled
-            filter.onlyEnabled = excludeDisabled
-            filter.includeSysApp = !excludeSystem
-            val config = AppsLoadConfig()
-            val listener: AppsLoadListener = object : AppsLoadListener {
-                override fun isCancelled(): Boolean {
-                    return this@AppsLoadingTask.isCancelled
-                }
-
-                override fun onProgressUpdated(
-                    percent: Int,
-                    appInfo: AppInfo
-                ) {
-                    publishProgress(percent)
-                }
-            }
-            return AppsLoader.getInstance(activity).loadInstalledApps(filter, config, listener)
-        }
-
-        override fun onPostExecute(result: List<AppInfo>) {
-            super.onPostExecute(result)
-            adapter.setData(result)
-        }
-    }
-
     companion object {
+        private const val TAG = "AppsSelectorActivity"
+
         /** Type: boolean, default value: {@value #DEFAULT_MULTICHOICE}  */
-        const val EXTRA_MULTICHOICE = "extra.multichoice"
+        const val EXTRA_MULTIPLE_CHOICE = "extra.multiple_choice"
         /** Type: boolean, default value: {@value #DEFAULT_EXCLUDE_UNINSTALLED} */
         const val EXTRA_EXCLUDE_UNINSTALLED = "extra.exclude_uninstalled"
         /** Type: boolean, default value: {@value #DEFAULT_EXCLUDE_DISABLED  */
@@ -167,7 +136,7 @@ class AppsSelectorActivity : AppCompatBaseActivity(), SelectedAppsChangeListener
         /** Type: ArrayList<String> </String> */
         const val RESULT_EXTRA_APPS_PKG_NAMES = "extra.pkg_names"
 
-        private const val DEFAULT_MULTICHOICE = false
+        private const val DEFAULT_MULTIPLE_CHOICE = false
         private const val DEFAULT_EXCLUDE_UNINSTALLED = true
         private const val DEFAULT_EXCLUDE_DISABLED = true
         private const val DEFAULT_EXCLUDE_SYSTEM = false

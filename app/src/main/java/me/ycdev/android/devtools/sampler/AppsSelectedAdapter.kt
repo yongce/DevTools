@@ -1,28 +1,37 @@
 package me.ycdev.android.devtools.sampler
 
-import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.RecyclerView
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.sampler.AppsSelectedAdapter.ViewHolder
 import me.ycdev.android.lib.common.apps.AppInfo
-import me.ycdev.android.lib.commonui.base.ListAdapterBase
-import me.ycdev.android.lib.commonui.base.ViewHolderBase
 
-internal class AppsSelectedAdapter(cxt: Context) : ListAdapterBase<AppInfo, ViewHolder>(cxt) {
-    @LayoutRes
-    override val itemLayoutResId: Int = R.layout.apps_selected_list_item
+internal class AppsSelectedAdapter : RecyclerView.Adapter<ViewHolder>() {
+    var data: List<AppInfo>? = null
 
-    override fun createViewHolder(itemView: View, position: Int): ViewHolder {
-        return ViewHolder(itemView, position)
+    private fun getItem(position: Int): AppInfo {
+        return data!![position]
     }
 
-    override fun bindView(item: AppInfo, holder: ViewHolder) {
+    override fun getItemCount(): Int {
+        return data?.size ?: 0
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.apps_selected_list_item, parent, false)
+        return ViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position)
         holder.pkgNameView.text = item.pkgName
     }
 
-    class ViewHolder(itemView: View, position: Int) : ViewHolderBase(itemView, position) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var pkgNameView: TextView = itemView as TextView
     }
 }

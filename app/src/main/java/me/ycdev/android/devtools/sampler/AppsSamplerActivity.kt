@@ -12,6 +12,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
 import me.ycdev.android.arch.wrapper.ToastHelper
 import me.ycdev.android.devtools.R
@@ -33,7 +35,7 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
 
     private lateinit var binding: ActAppsSamplerBinding
 
-    private lateinit var adapter: AppsSelectedAdapter
+    private lateinit var appsAdapter: AppsSelectedAdapter
     private var pkgNames: ArrayList<String> = ArrayList()
     private var interval = 5 // seconds
     private var period = 0 // minutes, forever by default
@@ -59,8 +61,14 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
         binding.interval.setText(interval.toString())
         binding.period.setText(period.toString())
 
-        adapter = AppsSelectedAdapter(this)
-        binding.list.adapter = adapter
+        appsAdapter = AppsSelectedAdapter()
+        binding.list.apply {
+            adapter = appsAdapter
+            layoutManager = LinearLayoutManager(this@AppsSamplerActivity)
+            addItemDecoration(
+                DividerItemDecoration(this@AppsSamplerActivity, DividerItemDecoration.VERTICAL)
+            )
+        }
         binding.appsSelect.setOnClickListener(this)
         if (pkgNames.size > 0) {
             updateSelectedApps(pkgNames)
@@ -148,7 +156,7 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
             }
             v === binding.appsSelect -> {
                 val intent = Intent(this, AppsSelectorActivity::class.java)
-                intent.putExtra(AppsSelectorActivity.EXTRA_MULTICHOICE, true)
+                intent.putExtra(AppsSelectorActivity.EXTRA_MULTIPLE_CHOICE, true)
                 startActivityForResult(intent, REQUEST_CODE_APPS_SELECTOR)
             }
         }
@@ -168,13 +176,15 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
     }
 
     private fun updateSelectedApps(pkgNames: ArrayList<String>) {
+        Timber.tag(TAG).d("updateSelectedApps: $pkgNames")
         this.pkgNames = pkgNames
         val appsList = ArrayList<AppInfo>(pkgNames.size)
         for (pkgName in pkgNames) {
             val item = AppInfo(pkgName)
             appsList.add(item)
         }
-        adapter.setData(appsList)
+        appsAdapter.data = appsList
+        appsAdapter.notifyDataSetChanged()
     }
 
     override fun handleMessage(msg: Message): Boolean {
