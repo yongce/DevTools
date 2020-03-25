@@ -15,7 +15,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
-import me.ycdev.android.arch.wrapper.ToastHelper
+import me.ycdev.android.devtools.arch.wrapper.ToastHelper
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity
 import me.ycdev.android.devtools.databinding.ActAppsSamplerBinding

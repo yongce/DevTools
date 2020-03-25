@@ -14,11 +14,11 @@ import android.net.wifi.WifiManager
 import android.os.Build.VERSION_CODES
 import android.provider.Telephony.Sms.Intents
 import android.widget.Toast
-import me.ycdev.android.arch.ArchConstants
-import me.ycdev.android.arch.ArchConstants.INTENT_TYPE_BROADCAST
-import me.ycdev.android.arch.ArchConstants.IntentType
-import me.ycdev.android.arch.wrapper.ToastHelper
+import me.ycdev.android.devtools.arch.wrapper.ToastHelper
 import me.ycdev.android.devtools.utils.AppConstants
+import me.ycdev.android.lib.common.utils.IntentUtils
+import me.ycdev.android.lib.common.utils.IntentUtils.INTENT_TYPE_ACTIVITY
+import me.ycdev.android.lib.common.utils.IntentUtils.INTENT_TYPE_BROADCAST
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper.getInternalBroadcastPerm
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper.registerForExternal
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper.registerForInternal
@@ -27,7 +27,7 @@ import java.util.ArrayList
 
 class BroadcastTesterActivity : GridEntriesActivity() {
     private inner class MyIntentEntry(
-        @IntentType type: Int = ArchConstants.INTENT_TYPE_ACTIVITY,
+        @IntentUtils.IntentType type: Int = INTENT_TYPE_ACTIVITY,
         intent: Intent,
         title: String,
         desc: String,

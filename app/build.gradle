@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
+apply from: '../build_common.gradle'
 
 android {
     defaultConfig {
@@ -49,10 +50,9 @@ android {
 }
 
 dependencies {
-    implementation project(':baseLib')
-    implementation project(':archLib')
-    implementation project(':uiLib')
-    implementation project(':common')
+    implementation deps.ycdev.androidBase
+    implementation deps.ycdev.androidUi
+    implementation project(':devToolsCommon')
 
     implementation deps.kotlin.stdlib
     implementation deps.kotlin.coroutinesCore

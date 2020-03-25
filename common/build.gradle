@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
+apply from: '../build_common.gradle'
 
 android {
     defaultConfig {
@@ -10,7 +11,7 @@ android {
 }
 
 dependencies {
-    implementation project(':baseLib')
+    implementation deps.ycdev.androidBase
 
     implementation deps.androidx.core
     implementation deps.timber

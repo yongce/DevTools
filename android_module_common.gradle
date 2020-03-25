@@ -1,0 +1,161 @@
+/*
+ * File: 'android_module_common.gradle'
+ * Location: https://raw.githubusercontent.com/yongce/AndroidLib/master/android_module_common.gradle
+ * Version: 2020.03.26
+ * All android projects can copy and include this file.
+ */
+
+// Define some common closures (methods) for code share
+ext.getModuleProjectCommitCount = {
+    String gitCommitCountCmd = "git rev-list HEAD --count"
+    Process process = gitCommitCountCmd.execute((String[])null, project.projectDir)
+    String errText = process.err.text
+    try {
+        return process.text.trim().toInteger()
+    } catch (Exception e) {
+        println String.format("Failed to execute #getModuleProjectCommitCount() with error [%s], " +
+                "which is caused by [%s].", e.toString(), errText)
+    }
+}
+
+ext.getModuleProjectLastCommitSha1 = {
+    String gitCommitCountCmd = "git log --format=\"%H\" -1"
+    String cmdResult = gitCommitCountCmd.execute((String[])null, project.projectDir).text
+    return cmdResult.trim().replace('\"', '')
+}
+
+ext.getRootProjectLastCommitSha1 = {
+    String gitCommitCountCmd = "git log --format=\"%H\" -1"
+    String cmdResult = gitCommitCountCmd.execute((String[])null, rootProject.projectDir).text
+    return cmdResult.trim().replace('\"', '')
+}
+
+ext.getBuildIdSuffix = {
+    if (project.hasProperty('build_id')) {
+        return "." + project.property('build_id')
+    }
+    return ""
+}
+
+ext.isIgnoreLintWarnings = {
+    if (project.hasProperty('lint_ignore_warnings')) {
+        return true
+    }
+    return false
+}
+
+ext.isApkSplitsEnabled = {
+    return project.hasProperty('enable_apk_splits')
+}
+
+ext {
+    calculatedVersionCode = getModuleProjectCommitCount()
+    buildIdSuffix = getBuildIdSuffix()
+}
+
+android {
+    compileSdkVersion versions.compileSdk
+
+    defaultConfig {
+        manifestPlaceholders = [
+                MODULE_GIT_COMMIT_SHA1: getModuleProjectLastCommitSha1(),
+                ROOT_GIT_COMMIT_SHA1: getRootProjectLastCommitSha1()
+        ]
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    if (project.plugins.hasPlugin("com.android.application")) {
+        signingConfigs {
+            androidTestKey {
+                storeFile file("${rootDir}/aosp.keystore")
+                storePassword "android"
+                keyAlias "android.testkey"
+                keyPassword "android"
+            }
+
+            androidPlatformKey {
+                storeFile file("${rootDir}/aosp.keystore")
+                storePassword "android"
+                keyAlias "android.platformkey"
+                keyPassword "android"
+            }
+        }
+
+        buildTypes {
+            debug {
+                signingConfig signingConfigs.androidTestKey
+            }
+
+            release {
+                signingConfig signingConfigs.androidTestKey
+
+                minifyEnabled true
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+        }
+
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                String buildType = variant.buildType.name
+                String abi = output.getFilter("ABI")
+                if (buildType != "debug") {
+                    String fileName = "${project.name}"
+                    if (variant.flavorName != null && !variant.flavorName.isEmpty()) {
+                        fileName += "-${variant.flavorName}"
+                    }
+                    if (abi != null && !abi.isEmpty()) {
+                        fileName += "-${abi}"
+                    }
+                    fileName += "-${variant.versionName}-${variant.versionCode}"
+                    output.outputFileName = "${fileName}.apk"
+                }
+
+                if (buildType == 'release') {
+                    variant.getAssembleProvider().configure() {
+                        it.doLast {
+                            copy {
+                                from output.outputFile.getAbsolutePath()
+                                into "${rootProject.ext.appsOutDir}"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    lintOptions {
+        textReport true
+        textOutput 'stdout'
+
+        abortOnError true
+        ignoreWarnings isIgnoreLintWarnings()
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    pluginManager.withPlugin('kotlin-android') {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+
+    testOptions {
+        unitTests.all {
+            // All the usual Gradle options.
+            testLogging {
+                events "passed", "skipped", "failed", "standardOut", "standardError"
+                outputs.upToDateWhen {false}
+                showStandardStreams = true
+            }
+        }
+
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}

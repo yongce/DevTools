@@ -16,7 +16,7 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
-import me.ycdev.android.arch.wrapper.ToastHelper
+import me.ycdev.android.devtools.arch.wrapper.ToastHelper
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.databinding.ActContactsBinding
 import me.ycdev.android.lib.common.perms.PermissionCallback

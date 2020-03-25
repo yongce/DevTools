@@ -1,20 +1,10 @@
 rootProject.name = "DevToolsProject"
 
-include ':common', ':wear'
+include ':devToolsCommon'
+project(':devToolsCommon').projectDir = new File('common')
 
-include ':DevTools'
-project(':DevTools').projectDir = file('app')
+include ':devToolsPhone'
+project(':devToolsPhone').projectDir = new File('app')
 
-include ':baseLib'
-project(':baseLib').projectDir = file('submodules/AndroidLib/baseLib')
-
-include ':archLib'
-project(':archLib').projectDir = file('submodules/AndroidLib/archLib')
-include ':archLintRules'
-project(':archLintRules').projectDir = file('submodules/AndroidLib/archLintRules')
-
-include ':uiLib'
-project(':uiLib').projectDir = file('submodules/AndroidLib/uiLib')
-
-include ':testLib'
-project(':testLib').projectDir = file('submodules/AndroidLib/testLib')
+include ':devToolsWear'
+project(':devToolsWear').projectDir = new File('wear')
