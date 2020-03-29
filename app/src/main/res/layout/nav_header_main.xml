@@ -5,10 +5,10 @@
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:paddingBottom="?attr/commonuiActivityVerticalMargin"
-    android:paddingLeft="?attr/commonuiActivityHorizontalMargin"
-    android:paddingRight="?attr/commonuiActivityHorizontalMargin"
-    android:paddingTop="?attr/commonuiActivityVerticalMargin"
+    android:paddingBottom="?attr/ycdevActivityVerticalMargin"
+    android:paddingLeft="?attr/ycdevActivityHorizontalMargin"
+    android:paddingRight="?attr/ycdevActivityHorizontalMargin"
+    android:paddingTop="?attr/ycdevActivityVerticalMargin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView

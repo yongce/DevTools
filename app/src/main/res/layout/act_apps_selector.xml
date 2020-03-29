@@ -40,8 +40,8 @@
         style="@style/Widget.AppTheme.RecyclerView.FastScroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="?attr/commonuiDividerMargin"
-        android:layout_marginBottom="?attr/commonuiDividerMargin"
+        android:layout_marginTop="?attr/ycdevDividerMargin"
+        android:layout_marginBottom="?attr/ycdevDividerMargin"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/top_divider"
         app:layout_constraintBottom_toTopOf="@id/bottom_divider" />

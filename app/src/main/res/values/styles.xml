@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Widget.AppTheme" parent="@style/Widget.CommonUiTheme.Light" />
+    <style name="Widget.AppTheme" parent="@style/YcdevWidget.Light" />
 
-    <style name="Widget.AppTheme.ActivityMargin" parent="@style/Widget.CommonUiTheme.ActivityMargin" />
-    <style name="Widget.AppTheme.HorizontalDivider" parent="@style/Widget.CommonUiTheme.HorizontalDivider" />
-    <style name="Widget.AppTheme.ScrollView" parent="@style/Widget.CommonUiTheme.ScrollView" />
+    <style name="Widget.AppTheme.ActivityMargin" parent="@style/YcdevWidget.ActivityMargin" />
+    <style name="Widget.AppTheme.HorizontalDivider" parent="@style/YcdevWidget.HorizontalDivider" />
+    <style name="Widget.AppTheme.ScrollView" parent="@style/YcdevWidget.ScrollView" />
 
-    <style name="Widget.AppTheme.ListViewItem" parent="@style/Widget.CommonUiTheme.ListViewItem"/>
+    <style name="Widget.AppTheme.ListViewItem" parent="@style/YcdevWidget.ListViewItem"/>
 
-    <style name="Widget.AppTheme.RecyclerView" parent="@style/Widget.CommonUiTheme.RecyclerView" />
-    <style name="Widget.AppTheme.RecyclerView.FastScroll" parent="@style/Widget.CommonUiTheme.RecyclerView.FastScroll" />
+    <style name="Widget.AppTheme.RecyclerView" parent="@style/YcdevWidget.RecyclerView" />
+    <style name="Widget.AppTheme.RecyclerView.FastScroll" parent="@style/YcdevWidget.RecyclerView.FastScroll" />
 </resources>
