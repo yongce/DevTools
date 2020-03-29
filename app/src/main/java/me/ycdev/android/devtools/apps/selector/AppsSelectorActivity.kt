@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import java.util.ArrayList
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.apps.selector.AppsSelectorAdapter.SelectedAppsChangeListener
@@ -16,7 +17,6 @@ import me.ycdev.android.devtools.databinding.ActAppsSelectorBinding
 import me.ycdev.android.lib.common.apps.AppInfo.AppNameComparator
 import me.ycdev.android.lib.common.wrapper.IntentHelper
 import timber.log.Timber
-import java.util.ArrayList
 
 class AppsSelectorActivity : AppCompatBaseActivity(), SelectedAppsChangeListener, OnClickListener {
     private lateinit var binding: ActAppsSelectorBinding

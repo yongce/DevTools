@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 import android.os.Build.VERSION
-import me.ycdev.android.lib.common.utils.DateTimeUtils.getReadableTimeUsage
 import java.io.IOException
 import java.io.Writer
+import me.ycdev.android.lib.common.utils.DateTimeUtils.getReadableTimeUsage
 
 class AppStatReport(var pkgName: String) {
     var sysTimeStampStart: String? = null

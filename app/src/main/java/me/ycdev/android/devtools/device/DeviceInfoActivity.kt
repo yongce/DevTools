@@ -14,6 +14,9 @@ import android.os.StatFs
 import android.util.DisplayMetrics
 import android.view.Display
 import android.view.WindowManager
+import java.io.BufferedReader
+import java.io.FileReader
+import java.io.IOException
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
 import me.ycdev.android.devtools.databinding.DeviceInfoActivityBinding
 import me.ycdev.android.devtools.utils.ViewHelper
@@ -24,9 +27,6 @@ import me.ycdev.android.lib.common.internalapi.android.os.EnvironmentIA.isEncryp
 import me.ycdev.android.lib.common.internalapi.android.os.SystemPropertiesIA
 import me.ycdev.android.lib.common.utils.ReflectionUtils
 import timber.log.Timber
-import java.io.BufferedReader
-import java.io.FileReader
-import java.io.IOException
 
 class DeviceInfoActivity : AppCompatBaseActivity() {
     private lateinit var binding: DeviceInfoActivityBinding

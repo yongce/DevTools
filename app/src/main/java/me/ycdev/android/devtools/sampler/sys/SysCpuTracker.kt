@@ -1,10 +1,10 @@
 package me.ycdev.android.devtools.sampler.sys
 
 import android.os.SystemClock
+import java.util.LinkedList
 import me.ycdev.android.devtools.sampler.cpu.CpuUtils
 import me.ycdev.android.devtools.sampler.cpu.SysCpuStat
 import timber.log.Timber
-import java.util.LinkedList
 
 class SysCpuTracker {
     var startSysTime: Long = 0

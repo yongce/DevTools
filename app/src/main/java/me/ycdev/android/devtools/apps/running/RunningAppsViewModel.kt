@@ -9,6 +9,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import java.util.ArrayList
+import java.util.Collections
+import java.util.HashMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -17,9 +20,6 @@ import kotlinx.coroutines.withContext
 import me.ycdev.android.devtools.apps.running.RunningAppInfo.AppNameComparator
 import me.ycdev.android.devtools.apps.running.RunningAppInfo.ProcInfo
 import timber.log.Timber
-import java.util.ArrayList
-import java.util.Collections
-import java.util.HashMap
 
 class RunningAppsViewModel(val app: Application) : AndroidViewModel(app) {
     private var _apps: MutableLiveData<List<RunningAppInfo>> = MutableLiveData()

@@ -6,14 +6,14 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import me.ycdev.android.devtools.R
-import me.ycdev.android.devtools.apps.selector.AppsSelectorAdapter.ViewHolder
-import me.ycdev.android.devtools.databinding.AppsSelectorListItemBinding
-import me.ycdev.android.lib.common.apps.AppInfo
 import java.util.ArrayList
 import java.util.Collections
 import java.util.Comparator
 import java.util.HashSet
+import me.ycdev.android.devtools.R
+import me.ycdev.android.devtools.apps.selector.AppsSelectorAdapter.ViewHolder
+import me.ycdev.android.devtools.databinding.AppsSelectorListItemBinding
+import me.ycdev.android.lib.common.apps.AppInfo
 
 open class AppsSelectorAdapter(
     private val changeListener: SelectedAppsChangeListener,

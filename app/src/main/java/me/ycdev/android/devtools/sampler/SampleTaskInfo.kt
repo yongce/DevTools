@@ -1,10 +1,10 @@
 package me.ycdev.android.devtools.sampler
 
+import java.io.FileWriter
+import java.util.ArrayList
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
-import java.io.FileWriter
-import java.util.ArrayList
 
 class SampleTaskInfo {
     val pkgNames: ArrayList<String> = arrayListOf()

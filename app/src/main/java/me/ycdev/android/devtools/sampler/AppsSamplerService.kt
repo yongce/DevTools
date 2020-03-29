@@ -16,13 +16,6 @@ import android.os.IBinder
 import android.os.Message
 import android.text.TextUtils
 import androidx.core.app.NotificationCompat
-import me.ycdev.android.devtools.R
-import me.ycdev.android.devtools.utils.AppConstants
-import me.ycdev.android.devtools.utils.AppConstants.NOTIFICATION_CHANNEL_SAMPLER
-import me.ycdev.android.lib.common.utils.DateTimeUtils
-import me.ycdev.android.lib.common.utils.IoUtils
-import me.ycdev.android.lib.common.wrapper.IntentHelper
-import timber.log.Timber
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -32,6 +25,13 @@ import java.text.ParseException
 import java.util.ArrayList
 import java.util.HashMap
 import kotlin.collections.set
+import me.ycdev.android.devtools.R
+import me.ycdev.android.devtools.utils.AppConstants
+import me.ycdev.android.devtools.utils.AppConstants.NOTIFICATION_CHANNEL_SAMPLER
+import me.ycdev.android.lib.common.utils.DateTimeUtils
+import me.ycdev.android.lib.common.utils.IoUtils
+import me.ycdev.android.lib.common.wrapper.IntentHelper
+import timber.log.Timber
 
 class AppsSamplerService : Service(), Callback {
     private lateinit var handlerThread: HandlerThread

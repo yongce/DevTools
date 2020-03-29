@@ -1,8 +1,8 @@
 package me.ycdev.android.devtools.utils
 
 import android.content.Context
-import me.ycdev.android.devtools.R.string
 import java.util.Locale
+import me.ycdev.android.devtools.R.string
 
 object FormatHelper {
     private const val SECONDS_PER_MINUTE = 60

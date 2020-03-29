@@ -1,11 +1,11 @@
 package me.ycdev.android.devtools.sampler
 
-import me.ycdev.android.lib.common.utils.DateTimeUtils.getReadableTimeStamp
-import me.ycdev.android.lib.common.utils.IoUtils.closeQuietly
-import timber.log.Timber
 import java.io.Closeable
 import java.io.FileWriter
 import java.io.IOException
+import me.ycdev.android.lib.common.utils.DateTimeUtils.getReadableTimeStamp
+import me.ycdev.android.lib.common.utils.IoUtils.closeQuietly
+import timber.log.Timber
 
 class SampleLogger : Closeable {
     private lateinit var logWriter: FileWriter

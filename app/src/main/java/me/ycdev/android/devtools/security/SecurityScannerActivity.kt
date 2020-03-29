@@ -1,10 +1,10 @@
 package me.ycdev.android.devtools.security
 
 import android.content.Intent
+import java.util.ArrayList
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.security.unmarshall.UnmarshallScannerActivity
 import me.ycdev.android.lib.commonui.activity.GridEntriesActivity
-import java.util.ArrayList
 
 class SecurityScannerActivity : GridEntriesActivity() {
     override val intents: List<IntentEntry>

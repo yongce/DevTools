@@ -1,12 +1,12 @@
 package me.ycdev.android.devtools.sampler.cpu
 
-import me.ycdev.android.lib.common.utils.IoUtils.closeQuietly
-import me.ycdev.android.lib.common.utils.StringUtils.parseLong
-import timber.log.Timber
 import java.io.BufferedReader
 import java.io.FileReader
 import java.io.IOException
 import java.util.Locale
+import me.ycdev.android.lib.common.utils.IoUtils.closeQuietly
+import me.ycdev.android.lib.common.utils.StringUtils.parseLong
+import timber.log.Timber
 
 object CpuUtils {
     private const val TAG = "CpuUtils"

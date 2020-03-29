@@ -3,13 +3,13 @@ package me.ycdev.android.devtools.sampler
 import android.app.ActivityManager
 import android.content.Context
 import android.os.SystemClock
-import me.ycdev.android.devtools.sampler.cpu.CpuUtils
-import me.ycdev.android.devtools.sampler.mem.MemoryUtils
-import me.ycdev.android.devtools.sampler.traffic.TrafficUtils
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.HashSet
 import kotlin.collections.set
+import me.ycdev.android.devtools.sampler.cpu.CpuUtils
+import me.ycdev.android.devtools.sampler.mem.MemoryUtils
+import me.ycdev.android.devtools.sampler.traffic.TrafficUtils
 
 class AppsSetStat private constructor() {
     var sampleTime: Long = 0 // in System.currentTimeMillis()

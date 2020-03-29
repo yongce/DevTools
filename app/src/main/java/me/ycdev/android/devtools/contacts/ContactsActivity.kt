@@ -15,18 +15,18 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
+import java.util.ArrayList
+import java.util.Locale
+import java.util.Random
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
-import me.ycdev.android.devtools.arch.wrapper.ToastHelper
 import me.ycdev.android.devtools.R
+import me.ycdev.android.devtools.arch.wrapper.ToastHelper
 import me.ycdev.android.devtools.databinding.ActContactsBinding
 import me.ycdev.android.lib.common.perms.PermissionCallback
 import me.ycdev.android.lib.common.perms.PermissionRequestParams
 import me.ycdev.android.lib.common.perms.PermissionUtils
 import me.ycdev.android.lib.commonui.utils.WaitingAsyncTask
 import timber.log.Timber
-import java.util.ArrayList
-import java.util.Locale
-import java.util.Random
 
 class ContactsActivity : AppCompatBaseActivity(), OnClickListener, PermissionCallback {
     private lateinit var binding: ActContactsBinding
