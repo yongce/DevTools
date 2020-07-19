@@ -88,30 +88,29 @@ class BroadcastTesterActivity : GridEntriesActivity() {
 
     override val needLoadIntentsAsync: Boolean = true
 
-    override val intents: List<IntentEntry>
-        get() {
-            val broadcasts: MutableList<MyIntentEntry> = ArrayList()
-            targetPkgName = packageName
-            testBroadcastWithPerm(broadcasts)
-            testBroadcastWithoutPerm(broadcasts)
-            testPackageAdd(broadcasts)
-            testPackageReplaced(broadcasts)
-            testPackageRemoved(broadcasts)
-            testPackageChanged(broadcasts)
-            testNewOutgoingCall(broadcasts)
-            testSmsReceived(broadcasts)
-            testSmsDeliver(broadcasts)
-            testConnectivityChange(broadcasts)
-            testWifiStateChange(broadcasts)
-            testBootComplete(broadcasts)
-            testShutdown(broadcasts)
-            testTimeSet(broadcasts)
-            testAppWidgetUpdate(broadcasts)
-            testBluetoothStateChange(broadcasts)
-            testAirplaceModeChange(broadcasts)
-            testLocationChanged(broadcasts)
-            return broadcasts
-        }
+    override fun loadIntents(): List<IntentEntry> {
+        val broadcasts: MutableList<MyIntentEntry> = ArrayList()
+        targetPkgName = packageName
+        testBroadcastWithPerm(broadcasts)
+        testBroadcastWithoutPerm(broadcasts)
+        testPackageAdd(broadcasts)
+        testPackageReplaced(broadcasts)
+        testPackageRemoved(broadcasts)
+        testPackageChanged(broadcasts)
+        testNewOutgoingCall(broadcasts)
+        testSmsReceived(broadcasts)
+        testSmsDeliver(broadcasts)
+        testConnectivityChange(broadcasts)
+        testWifiStateChange(broadcasts)
+        testBootComplete(broadcasts)
+        testShutdown(broadcasts)
+        testTimeSet(broadcasts)
+        testAppWidgetUpdate(broadcasts)
+        testBluetoothStateChange(broadcasts)
+        testAirplaceModeChange(broadcasts)
+        testLocationChanged(broadcasts)
+        return broadcasts
+    }
 
     private fun showCrashInfo(e: Exception) {
         AlertDialog.Builder(this)

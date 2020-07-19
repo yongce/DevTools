@@ -5,6 +5,7 @@ import android.content.ContentProviderOperation
 import android.content.OperationApplicationException
 import android.os.Bundle
 import android.os.RemoteException
+import android.os.SystemClock
 import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.provider.ContactsContract.CommonDataKinds.StructuredName
@@ -15,9 +16,14 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import java.util.ArrayList
 import java.util.Locale
 import java.util.Random
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.arch.wrapper.ToastHelper
@@ -25,7 +31,6 @@ import me.ycdev.android.devtools.databinding.ActContactsBinding
 import me.ycdev.android.lib.common.perms.PermissionCallback
 import me.ycdev.android.lib.common.perms.PermissionRequestParams
 import me.ycdev.android.lib.common.perms.PermissionUtils
-import me.ycdev.android.lib.commonui.utils.WaitingAsyncTask
 import timber.log.Timber
 
 class ContactsActivity : AppCompatBaseActivity(), OnClickListener, PermissionCallback {
@@ -72,8 +77,7 @@ class ContactsActivity : AppCompatBaseActivity(), OnClickListener, PermissionCal
                 refreshContactsState()
             }
             v === binding.dump -> {
-                queryContactsCounts(true)
-                queryDeletedContactsCounts(true)
+                dump()
             }
             v === binding.create -> {
                 val countStr = binding.count.text.toString()
@@ -85,39 +89,71 @@ class ContactsActivity : AppCompatBaseActivity(), OnClickListener, PermissionCal
                     return
                 }
                 val count = binding.count.text.toString().toInt()
-                WaitingAsyncTask(
-                    this,
-                    getString(R.string.contacts_msg_creating),
-                    Runnable {
-                        createContacts(count)
-                        updateState(queryContactsCounts(false), queryDeletedContactsCounts(false))
-                    }
-                ).execute()
+                createContacts(count)
             }
             v === binding.delete -> {
-                WaitingAsyncTask(
-                    this,
-                    getString(R.string.contacts_msg_deleting),
-                    Runnable {
-                        deleteContacts()
-                        updateState(queryContactsCounts(false), queryDeletedContactsCounts(false))
-                    }
-                ).execute()
+                deleteContacts()
             }
         }
     }
 
+    private fun enableButtons(enable: Boolean) {
+        binding.query.isEnabled = enable
+        binding.dump.isEnabled = enable
+        binding.create.isEnabled = enable
+        binding.delete.isEnabled = enable
+    }
+
     private fun refreshContactsState() {
-        WaitingAsyncTask(
-            this,
-            getString(R.string.contacts_msg_querying),
-            Runnable {
-                updateState(
-                    queryContactsCounts(false),
-                    queryDeletedContactsCounts(false)
-                )
+        lifecycleScope.launch {
+            binding.ongoing.visibility = View.VISIBLE
+            enableButtons(false)
+            var count: Int
+            var deletedCount: Int
+            withContext(Dispatchers.IO) {
+                val timeStart = SystemClock.elapsedRealtime()
+                count = queryContactsCounts(false)
+                deletedCount = queryDeletedContactsCounts(false)
+                val delayTime = 1000 - (SystemClock.elapsedRealtime() - timeStart)
+                if (delayTime > 0) {
+                    delay(delayTime)
+                }
             }
-        ).execute()
+            updateState(count, deletedCount)
+            binding.ongoing.visibility = View.INVISIBLE
+            enableButtons(true)
+        }
+    }
+
+    private fun dump() {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                queryContactsCounts(true)
+                queryDeletedContactsCounts(true)
+            }
+        }
+    }
+
+    private fun createContacts(count: Int) {
+        lifecycleScope.launch {
+            binding.ongoing.visibility = View.VISIBLE
+            enableButtons(false)
+            withContext(Dispatchers.IO) {
+                doCreateContacts(count)
+            }
+            refreshContactsState()
+        }
+    }
+
+    private fun deleteContacts() {
+        lifecycleScope.launch {
+            binding.ongoing.visibility = View.VISIBLE
+            enableButtons(false)
+            withContext(Dispatchers.IO) {
+                doDeleteContacts()
+            }
+            refreshContactsState()
+        }
     }
 
     private fun updateState(count: Int, deletedCount: Int) {
@@ -166,7 +202,7 @@ class ContactsActivity : AppCompatBaseActivity(), OnClickListener, PermissionCal
         }
     }
 
-    private fun createContacts(count: Int) {
+    private fun doCreateContacts(count: Int) {
         val random = Random(System.currentTimeMillis())
         val numberSet = arrayOfNulls<String>(count / 2)
         generateNumbers(numberSet, random)
@@ -247,7 +283,7 @@ class ContactsActivity : AppCompatBaseActivity(), OnClickListener, PermissionCal
         }
     }
 
-    private fun deleteContacts() {
+    private fun doDeleteContacts() {
         // delete the contacts
         val deleteUri = RawContacts.CONTENT_URI.buildUpon()
             .appendQueryParameter(ContactsContract.CALLER_IS_SYNCADAPTER, "true")

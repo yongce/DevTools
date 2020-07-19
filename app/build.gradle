@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "me.ycdev.android.devtools"
         minSdkVersion versions.minSdk
-        targetSdkVersion 29
+        targetSdkVersion 30
 
         versionName getAppVersionNameBase() // + build type suffix
         versionCode getAppVersionCodeBase() * 10000 + calculatedVersionCode
@@ -16,7 +16,7 @@ android {
         buildConfigField "boolean", "DEBUG_LOG", "false"
     }
 
-    viewBinding.enabled = true
+    buildFeatures.viewBinding = true
 
     buildTypes {
         debug {
@@ -62,7 +62,7 @@ dependencies {
     implementation deps.androidx.material
     implementation deps.androidx.constraintLayout
     implementation deps.androidx.recyclerview
-    implementation deps.lifecycle.runtime
+    implementation deps.lifecycle.runtimeKtx
     implementation deps.lifecycle.extensions
     implementation deps.lifecycle.viewModelKtx
     implementation deps.lifecycle.liveDataKtx

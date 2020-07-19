@@ -49,67 +49,66 @@ open class LauncherActivity : GridEntriesActivity(), OnNavigationItemSelectedLis
 
     override val needLoadIntentsAsync: Boolean = true
 
-    override val intents: List<Entry>
-        get() {
-            val activities: MutableList<Entry> = ArrayList()
-            activities.add(
-                IntentEntry(
-                    Intent(this, DeviceInfoActivity::class.java),
-                    getString(R.string.module_device_info_title),
-                    getString(R.string.module_device_info_desc)
-                )
+    override fun loadIntents(): List<Entry> {
+        val activities: MutableList<Entry> = ArrayList()
+        activities.add(
+            IntentEntry(
+                Intent(this, DeviceInfoActivity::class.java),
+                getString(R.string.module_device_info_title),
+                getString(R.string.module_device_info_desc)
             )
-            activities.add(
-                IntentEntry(
-                    Intent(this, SystemUtilitiesActivity::class.java),
-                    getString(R.string.module_system_utilities_title),
-                    getString(R.string.module_system_utilities_desc)
-                )
+        )
+        activities.add(
+            IntentEntry(
+                Intent(this, SystemUtilitiesActivity::class.java),
+                getString(R.string.module_system_utilities_title),
+                getString(R.string.module_system_utilities_desc)
             )
-            activities.add(
-                IntentEntry(
-                    Intent(this, InstalledAppsActivity::class.java),
-                    getString(R.string.module_installed_apps_title),
-                    getString(R.string.module_installed_apps_desc)
-                )
+        )
+        activities.add(
+            IntentEntry(
+                Intent(this, InstalledAppsActivity::class.java),
+                getString(R.string.module_installed_apps_title),
+                getString(R.string.module_installed_apps_desc)
             )
-            activities.add(
-                IntentEntry(
-                    Intent(this, BroadcastTesterActivity::class.java),
-                    getString(R.string.module_broadcast_tester_title),
-                    getString(R.string.module_broadcast_tester_desc)
-                )
+        )
+        activities.add(
+            IntentEntry(
+                Intent(this, BroadcastTesterActivity::class.java),
+                getString(R.string.module_broadcast_tester_title),
+                getString(R.string.module_broadcast_tester_desc)
             )
-            activities.add(
-                IntentEntry(
-                    Intent(this, AppsSamplerActivity::class.java),
-                    getString(R.string.apps_sampler_module_title),
-                    getString(R.string.apps_sampler_module_desc)
-                )
+        )
+        activities.add(
+            IntentEntry(
+                Intent(this, AppsSamplerActivity::class.java),
+                getString(R.string.apps_sampler_module_title),
+                getString(R.string.apps_sampler_module_desc)
             )
-            activities.add(
-                IntentEntry(
-                    Intent(this, RunningAppsActivity::class.java),
-                    getString(R.string.running_apps_module_title),
-                    getString(R.string.running_apps_module_desc)
-                )
+        )
+        activities.add(
+            IntentEntry(
+                Intent(this, RunningAppsActivity::class.java),
+                getString(R.string.running_apps_module_title),
+                getString(R.string.running_apps_module_desc)
             )
-            activities.add(
-                IntentEntry(
-                    Intent(this, SecurityScannerActivity::class.java),
-                    getString(R.string.security_scanner_module_title),
-                    getString(R.string.security_scanner_module_desc)
-                )
+        )
+        activities.add(
+            IntentEntry(
+                Intent(this, SecurityScannerActivity::class.java),
+                getString(R.string.security_scanner_module_title),
+                getString(R.string.security_scanner_module_desc)
             )
-            activities.add(
-                IntentEntry(
-                    Intent(this, ContactsActivity::class.java),
-                    getString(R.string.contacts_module_title),
-                    getString(R.string.contacts_module_desc)
-                )
+        )
+        activities.add(
+            IntentEntry(
+                Intent(this, ContactsActivity::class.java),
+                getString(R.string.contacts_module_title),
+                getString(R.string.contacts_module_desc)
             )
-            return activities
-        }
+        )
+        return activities
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean { // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
