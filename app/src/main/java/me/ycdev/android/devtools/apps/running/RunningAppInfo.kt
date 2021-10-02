@@ -1,9 +1,9 @@
 package me.ycdev.android.devtools.apps.running
 
+import me.ycdev.android.lib.common.apps.AppInfo
 import java.text.Collator
 import java.util.ArrayList
 import java.util.Comparator
-import me.ycdev.android.lib.common.apps.AppInfo
 
 data class RunningAppInfo(val pkgName: String) {
     data class ProcInfo(val pid: Int) {

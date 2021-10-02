@@ -17,9 +17,6 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import java.util.ArrayList
-import java.util.Locale
-import java.util.Random
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -32,6 +29,9 @@ import me.ycdev.android.lib.common.perms.PermissionCallback
 import me.ycdev.android.lib.common.perms.PermissionRequestParams
 import me.ycdev.android.lib.common.perms.PermissionUtils
 import timber.log.Timber
+import java.util.ArrayList
+import java.util.Locale
+import java.util.Random
 
 class ContactsActivity : AppCompatBaseActivity(), OnClickListener, PermissionCallback {
     private lateinit var binding: ActContactsBinding

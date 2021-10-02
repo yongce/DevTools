@@ -1,9 +1,9 @@
 package me.ycdev.android.devtools.device
 
 import android.content.Intent
-import java.util.ArrayList
 import me.ycdev.android.devtools.R
 import me.ycdev.android.lib.commonui.activity.GridEntriesActivity
+import java.util.ArrayList
 
 class SystemUtilitiesActivity : GridEntriesActivity() {
     override fun loadIntents(): List<IntentEntry> {

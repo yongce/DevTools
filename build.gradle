@@ -7,30 +7,30 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.0'
+        classpath 'com.android.tools.build:gradle:7.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
     }
 }
 
 // Add plugin for 'spotless'
 plugins {
-    id "com.diffplug.spotless" version "5.1.0"
+    id("com.diffplug.spotless") version "5.16.0"
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
 spotless {
     kotlin {
         target "**/*.kt"
-        ktlint(versions.ktlint).userData(['continuation_indent_size' : '8'])
+        ktlint(versions.ktlint).userData(['indent_size' : 'unset'])
     }
 }

@@ -12,7 +12,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import com.google.android.material.snackbar.Snackbar
-import java.util.ArrayList
 import me.ycdev.android.devtools.apps.installed.InstalledAppsActivity
 import me.ycdev.android.devtools.apps.running.RunningAppsActivity
 import me.ycdev.android.devtools.contacts.ContactsActivity
@@ -23,6 +22,7 @@ import me.ycdev.android.devtools.sampler.AppsSamplerActivity
 import me.ycdev.android.devtools.security.SecurityScannerActivity
 import me.ycdev.android.lib.commonui.activity.GridEntriesActivity
 import timber.log.Timber
+import java.util.ArrayList
 
 open class LauncherActivity : GridEntriesActivity(), OnNavigationItemSelectedListener {
     private lateinit var drawer: DrawerLayout

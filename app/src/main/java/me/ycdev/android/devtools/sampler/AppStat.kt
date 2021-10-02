@@ -1,11 +1,11 @@
 package me.ycdev.android.devtools.sampler
 
-import java.io.FileWriter
-import java.io.IOException
-import java.util.HashSet
 import me.ycdev.android.devtools.sampler.cpu.AppCpuStat
 import me.ycdev.android.devtools.sampler.mem.AppMemStat
 import me.ycdev.android.devtools.sampler.traffic.AppTrafficStat
+import java.io.FileWriter
+import java.io.IOException
+import java.util.HashSet
 
 class AppStat(var pkgName: String, var uid: Int) {
     var pidsSet = HashSet<Int?>()

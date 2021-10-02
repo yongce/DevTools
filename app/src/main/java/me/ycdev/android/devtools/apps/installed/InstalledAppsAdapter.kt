@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import java.util.Collections
-import java.util.Comparator
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.apps.installed.InstalledAppsAdapter.ViewHolder
 import me.ycdev.android.devtools.databinding.InstalledAppsItemBinding
 import me.ycdev.android.lib.common.apps.AppInfo
 import timber.log.Timber
+import java.util.Collections
+import java.util.Comparator
 
 internal class InstalledAppsAdapter(cxt: Context) : RecyclerView.Adapter<ViewHolder>() {
     private lateinit var defaultTextColor: ColorStateList

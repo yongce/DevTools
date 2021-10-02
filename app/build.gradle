@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
 apply from: '../build_common.gradle'
 
@@ -8,7 +7,7 @@ android {
     defaultConfig {
         applicationId "me.ycdev.android.devtools"
         minSdkVersion versions.minSdk
-        targetSdkVersion 30
+        targetSdkVersion 31
 
         versionName getAppVersionNameBase() // + build type suffix
         versionCode getAppVersionCodeBase() * 10000 + calculatedVersionCode
@@ -63,7 +62,6 @@ dependencies {
     implementation deps.androidx.constraintLayout
     implementation deps.androidx.recyclerview
     implementation deps.lifecycle.runtimeKtx
-    implementation deps.lifecycle.extensions
     implementation deps.lifecycle.viewModelKtx
     implementation deps.lifecycle.liveDataKtx
     implementation deps.gson

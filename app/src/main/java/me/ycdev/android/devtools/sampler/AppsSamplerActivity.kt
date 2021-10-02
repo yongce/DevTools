@@ -14,7 +14,6 @@ import android.view.View.OnClickListener
 import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import java.util.ArrayList
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity
@@ -29,6 +28,7 @@ import me.ycdev.android.lib.common.utils.StorageUtils
 import me.ycdev.android.lib.common.utils.WeakHandler
 import me.ycdev.android.lib.common.wrapper.IntentHelper
 import timber.log.Timber
+import java.util.ArrayList
 
 class AppsSamplerActivity : AppCompatBaseActivity(),
     OnClickListener, Callback, PermissionCallback {

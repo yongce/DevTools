@@ -1,8 +1,8 @@
 package me.ycdev.android.devtools.sampler
 
 import android.os.Environment
-import java.io.File
 import me.ycdev.android.devtools.utils.AppConstants
+import java.io.File
 
 object SamplerUtils {
     val samplerFolder: File

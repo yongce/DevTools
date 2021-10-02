@@ -3,10 +3,10 @@ package me.ycdev.android.devtools.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import java.net.URI
 import me.ycdev.android.lib.common.wrapper.IntentHelper.getBooleanExtra
 import me.ycdev.android.lib.common.wrapper.IntentHelper.getIntExtra
 import timber.log.Timber
+import java.net.URI
 
 class PackageChangeReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
