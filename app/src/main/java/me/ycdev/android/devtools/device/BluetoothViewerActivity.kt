@@ -1,5 +1,6 @@
 package me.ycdev.android.devtools.device
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
@@ -146,11 +147,13 @@ class BluetoothViewerActivity : AppCompatBaseActivity(), OnClickListener {
             return adapter?.state ?: STATE_UNKNOWN
         }
 
+    @SuppressLint("MissingPermission")
     private fun enableBluetooth() {
         val adapter = bluetoothAdapter
         adapter?.enable()
     }
 
+    @SuppressLint("MissingPermission")
     private fun disableBluetooth() {
         val adapter = bluetoothAdapter
         adapter?.disable()
