@@ -86,59 +86,35 @@
         <activity
             android:name=".device.DeviceInfoActivity"
             android:label="@string/module_device_info_title"
-            android:parentActivityName=".LauncherActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LauncherActivity" />
-        </activity>
+            android:parentActivityName=".LauncherActivity" />
 
         <activity
             android:name=".device.SystemUtilitiesActivity"
             android:label="@string/module_system_utilities_title"
             android:parentActivityName=".LauncherActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LauncherActivity" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".device.BluetoothViewerActivity"
             android:label="@string/module_bluetooth_viewer_title"
-            android:parentActivityName=".device.SystemUtilitiesActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".device.SystemUtilitiesActivity" />
-        </activity>
+            android:parentActivityName=".device.SystemUtilitiesActivity" />
 
         <activity
             android:name=".apps.installed.InstalledAppsActivity"
             android:label="@string/module_installed_apps_title"
             android:parentActivityName=".LauncherActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LauncherActivity" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".device.BroadcastTesterActivity"
             android:label="@string/module_broadcast_tester_title"
             android:parentActivityName=".LauncherActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LauncherActivity" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".sampler.AppsSamplerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/apps_sampler_module_title"
             android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".LauncherActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LauncherActivity" />
-        </activity>
+            android:parentActivityName=".LauncherActivity" />
         <service
             android:name=".sampler.AppsSamplerService"
             android:foregroundServiceType="dataSync" />
@@ -151,37 +127,21 @@
             android:name=".apps.running.RunningAppsActivity"
             android:label="@string/running_apps_module_title"
             android:parentActivityName=".LauncherActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LauncherActivity" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".security.SecurityScannerActivity"
             android:label="@string/security_scanner_module_title"
             android:parentActivityName=".LauncherActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LauncherActivity" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".security.unmarshall.UnmarshallScannerActivity"
             android:label="@string/security_scanner_unmarshall_module_title"
-            android:parentActivityName=".security.SecurityScannerActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".security.SecurityScannerActivity" />
-        </activity>
+            android:parentActivityName=".security.SecurityScannerActivity" />
 
         <activity
             android:name=".contacts.ContactsActivity"
             android:label="@string/contacts_module_title"
-            android:parentActivityName=".LauncherActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LauncherActivity" />
-        </activity>
+            android:parentActivityName=".LauncherActivity" />
 
         <service
             android:name=".sampler.SysSamplerService"
