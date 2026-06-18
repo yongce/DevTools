@@ -321,6 +321,7 @@ class AppsSamplerService :
         private const val FILENAME_SAMPLE_TASK_BACKUP = "task-backup.txt"
         private const val FILENAME_TAG_STATS = "-stats-"
         private const val FILENAME_TAG_REPORT = "-report"
+        private const val FILENAME_EXTENSION_TEXT = ".txt"
 
         private const val MSG_UNKNOWN_ACTION = 100
         private const val MSG_START_SAMPLER = 101
@@ -428,10 +429,20 @@ class AppsSamplerService :
         private fun generateStatsFileName(
             pkgName: String?,
             startTime: Long,
-        ): String = DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_STATS + pkgName + ".txt"
+        ): String = DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_STATS + pkgName + FILENAME_EXTENSION_TEXT
 
         private fun generateReportFileName(startTime: Long): String =
-            DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_REPORT + ".txt"
+            DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_REPORT + FILENAME_EXTENSION_TEXT
+
+        internal fun statsFilePackageName(fileName: String): String? {
+            val statsTagIndex = fileName.indexOf(FILENAME_TAG_STATS)
+            if (statsTagIndex == -1) {
+                return null
+            }
+            return fileName
+                .substring(statsTagIndex + FILENAME_TAG_STATS.length)
+                .removeSuffix(FILENAME_EXTENSION_TEXT)
+        }
 
         private fun createSampleReport(
             cxt: Context,
@@ -528,7 +539,7 @@ class AppsSamplerService :
                     }
                     allTasks[timeStr] = taskInfo
                 }
-                val pkgName = fileName.substring(statsTagIndex + FILENAME_TAG_STATS.length)
+                val pkgName = statsFilePackageName(fileName) ?: continue
                 taskInfo.pkgNames.add(pkgName)
             }
             // create all reports

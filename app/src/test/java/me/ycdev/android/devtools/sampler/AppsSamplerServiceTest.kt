@@ -52,4 +52,11 @@ class AppsSamplerServiceTest {
         assertThat(flags and PendingIntent.FLAG_UPDATE_CURRENT).isNotEqualTo(0)
         assertThat(flags and PendingIntent.FLAG_IMMUTABLE).isNotEqualTo(0)
     }
+
+    @Test
+    fun statsFilePackageName_removesTextFileExtension() {
+        val pkgName = AppsSamplerService.statsFilePackageName("2026-06-18-stats-com.example.app.txt")
+
+        assertThat(pkgName).isEqualTo("com.example.app")
+    }
 }
