@@ -15,6 +15,7 @@ import android.os.IBinder
 import android.os.Message
 import android.text.TextUtils
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.utils.AppConstants
 import me.ycdev.android.devtools.utils.AppConstants.NOTIFICATION_CHANNEL_SAMPLER
@@ -350,7 +351,7 @@ class AppsSamplerService :
             intent.putExtra(EXTRA_PKG_NAMES, pkgNames)
             intent.putExtra(EXTRA_INTERVAL, intervalSeconds)
             intent.putExtra(EXTRA_PERIOD, periodMinutes)
-            cxt.startService(intent)
+            ContextCompat.startForegroundService(cxt, intent)
         }
 
         fun stopSampler(cxt: Context) {
