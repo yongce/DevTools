@@ -1,6 +1,7 @@
 package me.ycdev.android.devtools.sampler.cpu
 
 import android.util.SparseArray
+import androidx.core.util.size
 
 class AppCpuStat(
     var pkgName: String,
@@ -10,7 +11,7 @@ class AppCpuStat(
     val total: Long
         get() {
             var total: Long = 0
-            val size = procSetStats.size()
+            val size = procSetStats.size
             for (i in 0 until size) {
                 val pidStat = procSetStats.valueAt(i)
                 total += pidStat?.total ?: 0
@@ -27,7 +28,7 @@ class AppCpuStat(
                 throw RuntimeException("Not same pkgName")
             }
             val usage = AppCpuStat(newStat.pkgName)
-            val size = newStat.procSetStats.size()
+            val size = newStat.procSetStats.size
             for (i in 0 until size) {
                 val pid = newStat.procSetStats.keyAt(i)
                 val newPidStat = newStat.procSetStats.valueAt(i)

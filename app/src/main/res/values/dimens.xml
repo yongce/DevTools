@@ -6,6 +6,5 @@
     <dimen name="nav_header_height">160dp</dimen>
 
     <dimen name="list_item_horizontal_space">8dp</dimen>
-    <dimen name="list_item_vertial_space">6dp</dimen>
     <dimen name="page_center_progress_bar_size">80dp</dimen>
 </resources>

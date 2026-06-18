@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
 import android.util.DisplayMetrics
-import android.view.Display
 import android.view.WindowManager
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
 import me.ycdev.android.devtools.databinding.DeviceInfoActivityBinding
@@ -22,7 +21,6 @@ import me.ycdev.android.lib.common.internalapi.android.os.EnvironmentIA.getSecur
 import me.ycdev.android.lib.common.internalapi.android.os.EnvironmentIA.getSystemSecureDirectory
 import me.ycdev.android.lib.common.internalapi.android.os.EnvironmentIA.isEncryptedFilesystemEnabled
 import me.ycdev.android.lib.common.internalapi.android.os.SystemPropertiesIA
-import me.ycdev.android.lib.common.utils.ReflectionUtils
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.FileReader
@@ -60,7 +58,11 @@ class DeviceInfoActivity : AppCompatBaseActivity() {
             screenMetrics.xdpi.toString() + " x " + screenMetrics.ydpi,
         )
         ViewHelper.addTextView(holder, "LCD density", screenMetrics.density.toDouble())
-        ViewHelper.addTextView(holder, "LCD scaledDensity", screenMetrics.scaledDensity.toDouble())
+        ViewHelper.addTextView(
+            holder,
+            "LCD scaledDensity",
+            (screenMetrics.density * resources.configuration.fontScale).toDouble(),
+        )
         ViewHelper.addTextView(holder, "LCD type", screenLayoutSizeType)
         val screenSizePt = getScreenHardwareSize(this)
         ViewHelper.addTextView(
@@ -224,7 +226,7 @@ class DeviceInfoActivity : AppCompatBaseActivity() {
             }
             val begin = content.indexOf(':')
             val end = content.indexOf('k') // 单位是KB
-            content = content.substring(begin + 1, end).trim { it <= ' ' }
+            content = content.substring(begin + 1, end).trim()
             return (content.toInt() / 1024).toLong() // 返回单位是MB
         }
 
@@ -245,20 +247,17 @@ class DeviceInfoActivity : AppCompatBaseActivity() {
 
         fun getScreenHardwareSize(cxt: Context): Point {
             val wm = cxt.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val screen = wm.defaultDisplay
-            val pt = Point()
-            try {
-                val getRealSizeMethod =
-                    ReflectionUtils.findMethod(
-                        Display::class.java,
-                        "getRealSize",
-                        Point::class.java,
-                    )
-                getRealSizeMethod.invoke(screen, pt)
-            } catch (e: Exception) {
-                Timber.tag(TAG).w(e, "Unexpected exception: ")
-                screen.getSize(pt) // exclude window decor size (eg, statusbar)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val bounds = wm.currentWindowMetrics.bounds
+                return Point(bounds.width(), bounds.height())
             }
+            return getLegacyScreenHardwareSize(wm)
+        }
+
+        @Suppress("DEPRECATION")
+        private fun getLegacyScreenHardwareSize(wm: WindowManager): Point {
+            val pt = Point()
+            wm.defaultDisplay.getRealSize(pt)
             return pt
         }
 
@@ -274,10 +273,22 @@ class DeviceInfoActivity : AppCompatBaseActivity() {
             }
 
         private fun getScreenMetrics(context: Context): DisplayMetrics {
-            val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val dm = DisplayMetrics()
-            wm.defaultDisplay.getMetrics(dm)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                dm.setTo(context.resources.displayMetrics)
+            } else {
+                getLegacyScreenMetrics(context, dm)
+            }
             return dm
+        }
+
+        @Suppress("DEPRECATION")
+        private fun getLegacyScreenMetrics(
+            context: Context,
+            dm: DisplayMetrics,
+        ) {
+            val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            wm.defaultDisplay.getMetrics(dm)
         }
     }
 }

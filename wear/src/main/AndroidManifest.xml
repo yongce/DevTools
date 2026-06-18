@@ -8,10 +8,12 @@
     <application
         android:name=".WearApp"
         android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.DeviceDefault">
+        android:theme="@style/WearAppTheme">
         <uses-library
             android:name="com.google.android.wearable"
             android:required="true" />
@@ -21,8 +23,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity="me.ycdev.android.devtools.wear.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

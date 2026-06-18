@@ -1,6 +1,7 @@
 package me.ycdev.android.devtools.sampler.mem
 
 import android.util.SparseArray
+import androidx.core.util.size
 
 class AppMemStat(
     var pkgName: String,
@@ -10,7 +11,7 @@ class AppMemStat(
     val totalPss: Int
         get() {
             var totalPss = 0
-            for (i in 0 until procSetStats.size()) {
+            for (i in 0 until procSetStats.size) {
                 val pidStat = procSetStats.valueAt(i)
                 totalPss += pidStat!!.memPss
             }
@@ -20,7 +21,7 @@ class AppMemStat(
     val totalPrivate: Int
         get() {
             var totalRss = 0
-            for (i in 0 until procSetStats.size()) {
+            for (i in 0 until procSetStats.size) {
                 val pidStat = procSetStats.valueAt(i)
                 totalRss += pidStat!!.memPrivate
             }

@@ -26,17 +26,27 @@ open class AppsSelectorAdapter(
     private val checkedChangeListener =
         OnClickListener { v ->
             val item = v.tag as AppInfo
+            val changedItems = ArrayList<AppInfo>()
             item.isSelected = !item.isSelected
             if (item.isSelected) {
                 if (!multiChoice && selectedAppsCount > 0) {
-                    oneSelectedApp?.isSelected = false
+                    oneSelectedApp?.let {
+                        it.isSelected = false
+                        changedItems.add(it)
+                    }
                     _selectedApps.clear()
                 }
                 _selectedApps.add(item)
             } else {
                 _selectedApps.remove(item)
             }
-            notifyDataSetChanged()
+            changedItems.add(item)
+            changedItems.distinct().forEach { changedItem ->
+                val position = data?.indexOf(changedItem) ?: -1
+                if (position >= 0) {
+                    notifyItemChanged(position)
+                }
+            }
             changeListener.onSelectedAppsChanged(_selectedApps.size)
         }
 
@@ -57,7 +67,7 @@ open class AppsSelectorAdapter(
     fun sort(comparator: Comparator<AppInfo>) {
         data?.let {
             Collections.sort(it, comparator)
-            notifyDataSetChanged()
+            notifyItemRangeChanged(0, it.size)
         }
     }
 

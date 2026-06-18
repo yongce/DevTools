@@ -41,6 +41,7 @@
             android:id="@+id/interval"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:importantForAutofill="no"
             android:minWidth="100dp"
             android:inputType="number"
             android:maxLines="1" />
@@ -58,6 +59,7 @@
             android:id="@+id/period"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:importantForAutofill="no"
             android:minWidth="100dp"
             android:inputType="number"
             android:maxLines="1" />

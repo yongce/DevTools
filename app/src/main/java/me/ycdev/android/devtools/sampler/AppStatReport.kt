@@ -37,7 +37,14 @@ class AppStatReport(
         var versionInfo: String? = null
         try {
             val pkgInfo = cxt.packageManager.getPackageInfo(pkgName, 0)
-            versionInfo = pkgInfo.versionName + " & " + pkgInfo.versionCode
+            val versionCode =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    pkgInfo.longVersionCode
+                } else {
+                    @Suppress("DEPRECATION")
+                    pkgInfo.versionCode.toLong()
+                }
+            versionInfo = pkgInfo.versionName + " & " + versionCode
         } catch (e: NameNotFoundException) {
             e.printStackTrace()
         }

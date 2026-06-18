@@ -62,7 +62,7 @@ android {
                 ROOT_GIT_COMMIT_SHA1: getRootProjectLastCommitSha1()
         ]
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     if (project.plugins.hasPlugin("com.android.application")) {
@@ -84,13 +84,13 @@ android {
 
         buildTypes {
             debug {
-                signingConfig signingConfigs.androidTestKey
+                signingConfig = signingConfigs.androidTestKey
             }
 
             release {
-                signingConfig signingConfigs.androidTestKey
+                signingConfig = signingConfigs.androidTestKey
 
-                minifyEnabled true
+                minifyEnabled = true
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
                 if (file('proguard-rules.pro').exists()) {
                     proguardFiles 'proguard-rules.pro'
@@ -101,10 +101,10 @@ android {
     }
 
     lint {
-        textReport true
+        textReport = true
 
-        abortOnError true
-        ignoreWarnings isIgnoreLintWarnings()
+        abortOnError = true
+        ignoreWarnings = isIgnoreLintWarnings()
     }
 
     compileOptions {
@@ -114,6 +114,8 @@ android {
 
     testOptions {
         unitTests.all {
+            jvmArgs '-Xshare:off'
+
             // All the usual Gradle options.
             testLogging {
                 events "passed", "skipped", "failed", "standardOut", "standardError"

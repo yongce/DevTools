@@ -1,6 +1,5 @@
 package me.ycdev.android.devtools.device
 
-import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.appwidget.AppWidgetManager
 import android.bluetooth.BluetoothAdapter
@@ -11,7 +10,6 @@ import android.content.IntentFilter
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
-import android.os.Build.VERSION_CODES
 import android.provider.Telephony.Sms.Intents
 import android.widget.Toast
 import me.ycdev.android.devtools.arch.wrapper.ToastHelper
@@ -222,7 +220,6 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         itemsList.add(item)
     }
 
-    @TargetApi(VERSION_CODES.KITKAT)
     private fun testSmsReceived(itemsList: MutableList<MyIntentEntry>) {
         // OK: the broadcast has no protection (last checked version: android-4.4_r1.1)
         val intent = Intent(Intents.SMS_RECEIVED_ACTION)
@@ -237,7 +234,6 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         itemsList.add(item)
     }
 
-    @TargetApi(VERSION_CODES.KITKAT)
     private fun testSmsDeliver(itemsList: MutableList<MyIntentEntry>) {
         // Permission Denial: android.permission.BROADCAST_SMS (signature protection) (Supported by android-4.4)
         val intent = Intent(Intents.SMS_DELIVER_ACTION)

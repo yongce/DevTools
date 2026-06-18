@@ -1,13 +1,13 @@
 package me.ycdev.android.devtools
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
@@ -160,7 +160,7 @@ open class LauncherActivity :
 
     private fun openHomePage() {
         val url = getString(R.string.developer_home_page_url)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
         if (intent.resolveActivity(packageManager) != null) {
             val title = getString(R.string.nav_visit_homepage)
             startActivity(Intent.createChooser(intent, title))
@@ -171,7 +171,7 @@ open class LauncherActivity :
 
     private fun sendEmail() {
         val intent = Intent(Intent.ACTION_SENDTO)
-        intent.data = Uri.parse("mailto:") // only email apps should handle this
+        intent.data = "mailto:".toUri() // only email apps should handle this
         intent.putExtra(
             Intent.EXTRA_EMAIL,
             arrayOf(getString(R.string.nav_send_email_address)),

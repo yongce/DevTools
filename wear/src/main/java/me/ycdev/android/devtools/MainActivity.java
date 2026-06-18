@@ -1,14 +1,18 @@
 package me.ycdev.android.devtools;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.wearable.activity.WearableActivity;
 import android.widget.TextView;
 
+import androidx.wear.ambient.AmbientMode;
+
 @SuppressLint("MyBaseActivity")
-public class MainActivity extends WearableActivity {
+@SuppressWarnings("deprecation")
+public class MainActivity extends Activity implements AmbientMode.AmbientCallbackProvider {
 
     private TextView mTextView;
+    private final AmbientMode.AmbientCallback mAmbientCallback = new AmbientMode.AmbientCallback() {};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +22,11 @@ public class MainActivity extends WearableActivity {
         mTextView = (TextView) findViewById(R.id.text);
 
         // Enables Always-on
-        setAmbientEnabled();
+        AmbientMode.attachAmbientSupport(this);
+    }
+
+    @Override
+    public AmbientMode.AmbientCallback getAmbientCallback() {
+        return mAmbientCallback;
     }
 }

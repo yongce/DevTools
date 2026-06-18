@@ -99,8 +99,6 @@
     <string name="contacts_create">Create Contacts</string>
     <string name="contacts_delete">Delete Contacts</string>
     <string name="contacts_msg_querying">Querying contacts…</string>
-    <string name="contacts_msg_creating">Creating contacts…</string>
-    <string name="contacts_msg_deleting">Deleting contacts…</string>
     <string name="contacts_msg_permission_denied">No permissions to visit contacts!</string>
     <string name="contacts_permissions_rationale">Contacts Creator need to read and write contacts for its features.</string>
 

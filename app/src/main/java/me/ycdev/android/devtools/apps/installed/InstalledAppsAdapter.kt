@@ -14,6 +14,7 @@ import me.ycdev.android.lib.common.apps.AppInfo
 import timber.log.Timber
 import java.util.Collections
 import java.util.Comparator
+import java.util.Locale
 
 internal class InstalledAppsAdapter(
     cxt: Context,
@@ -30,7 +31,7 @@ internal class InstalledAppsAdapter(
     fun sort(comparator: Comparator<AppInfo>) {
         data?.let {
             Collections.sort(it, comparator)
-            notifyDataSetChanged()
+            notifyItemRangeChanged(0, it.size)
         }
     }
 
@@ -56,7 +57,7 @@ internal class InstalledAppsAdapter(
         val item = getItem(position)
         holder.binding.appIcon.setImageDrawable(item.appIcon)
         holder.binding.appName.text = item.appName
-        holder.binding.appUid.text = item.appUid.toString()
+        holder.binding.appUid.text = String.format(Locale.getDefault(), "%d", item.appUid)
         holder.binding.sharedUid.text = item.sharedUid
         holder.binding.sharedUid.setTextColor(sharedAppColor)
         holder.binding.pkgName.text = item.pkgName
@@ -66,7 +67,8 @@ internal class InstalledAppsAdapter(
             holder.binding.pkgName.setTextColor(defaultTextColor)
         }
         holder.binding.versionName.text = item.versionName
-        holder.binding.versionCode.text = item.versionCode.toString()
+        holder.binding.versionCode.text =
+            String.format(Locale.getDefault(), "%d", item.versionCode)
         holder.binding.apkPath.text = item.apkPath
         val stateStr =
             holder.itemView.context.getString(

@@ -29,6 +29,7 @@ import me.ycdev.android.lib.common.utils.WeakHandler
 import me.ycdev.android.lib.common.wrapper.IntentHelper
 import timber.log.Timber
 import java.util.ArrayList
+import java.util.Locale
 
 class AppsSamplerActivity :
     AppCompatBaseActivity(),
@@ -60,8 +61,8 @@ class AppsSamplerActivity :
         binding.start.setOnClickListener(this)
         binding.stop.setOnClickListener(this)
         binding.createReport.setOnClickListener(this)
-        binding.interval.setText(interval.toString())
-        binding.period.setText(period.toString())
+        binding.interval.setText(String.format(Locale.getDefault(), "%d", interval))
+        binding.period.setText(String.format(Locale.getDefault(), "%d", period))
 
         appsAdapter = AppsSelectedAdapter()
         binding.list.apply {
@@ -166,6 +167,7 @@ class AppsSamplerActivity :
             v === binding.appsSelect -> {
                 val intent = Intent(this, AppsSelectorActivity::class.java)
                 intent.putExtra(AppsSelectorActivity.EXTRA_MULTIPLE_CHOICE, true)
+                @Suppress("DEPRECATION")
                 startActivityForResult(intent, REQUEST_CODE_APPS_SELECTOR)
             }
         }
@@ -197,8 +199,24 @@ class AppsSamplerActivity :
             val item = AppInfo(pkgName)
             appsList.add(item)
         }
+        val oldCount = appsAdapter.itemCount
         appsAdapter.data = appsList
-        appsAdapter.notifyDataSetChanged()
+        notifySelectedAppsReplaced(oldCount, appsList.size)
+    }
+
+    private fun notifySelectedAppsReplaced(
+        oldCount: Int,
+        newCount: Int,
+    ) {
+        val changedCount = minOf(oldCount, newCount)
+        if (changedCount > 0) {
+            appsAdapter.notifyItemRangeChanged(0, changedCount)
+        }
+        if (newCount > oldCount) {
+            appsAdapter.notifyItemRangeInserted(oldCount, newCount - oldCount)
+        } else if (oldCount > newCount) {
+            appsAdapter.notifyItemRangeRemoved(newCount, oldCount - newCount)
+        }
     }
 
     override fun handleMessage(msg: Message): Boolean {

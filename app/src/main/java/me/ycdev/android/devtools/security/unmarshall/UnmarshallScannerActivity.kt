@@ -108,6 +108,7 @@ class UnmarshallScannerActivity :
     override fun onClick(v: View) {
         if (v === binding.appSelect) {
             val intent = Intent(this, AppsSelectorActivity::class.java)
+            @Suppress("DEPRECATION")
             startActivityForResult(
                 intent,
                 REQUEST_CODE_APP_SELECTOR,

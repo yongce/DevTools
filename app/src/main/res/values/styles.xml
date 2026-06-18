@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Widget.AppTheme" parent="@style/YcdevWidget.Light" />
-
     <style name="Widget.AppTheme.ActivityMargin" parent="@style/YcdevWidget.ActivityMargin" />
     <style name="Widget.AppTheme.HorizontalDivider" parent="@style/YcdevWidget.HorizontalDivider" />
     <style name="Widget.AppTheme.ScrollView" parent="@style/YcdevWidget.ScrollView" />

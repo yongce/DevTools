@@ -41,11 +41,27 @@ class RunningAppsActivity : AppCompatBaseActivity() {
             this,
             Observer {
                 Timber.tag(TAG).d("apps loaded: ${it.size}")
+                val oldCount = listAdapter.itemCount
                 listAdapter.data = it
-                listAdapter.notifyDataSetChanged()
+                notifyListItemsReplaced(oldCount, it.size)
                 binding.progress.visibility = View.GONE
             },
         )
+    }
+
+    private fun notifyListItemsReplaced(
+        oldCount: Int,
+        newCount: Int,
+    ) {
+        val changedCount = minOf(oldCount, newCount)
+        if (changedCount > 0) {
+            listAdapter.notifyItemRangeChanged(0, changedCount)
+        }
+        if (newCount > oldCount) {
+            listAdapter.notifyItemRangeInserted(oldCount, newCount - oldCount)
+        } else if (oldCount > newCount) {
+            listAdapter.notifyItemRangeRemoved(newCount, oldCount - newCount)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

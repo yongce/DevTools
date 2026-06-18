@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.content.Intent
 import me.ycdev.android.devtools.security.unmarshall.UnmarshallScannerActivity
 
+@Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
 class CommonIntentService : IntentService("CommonIntentService") {
     override fun onHandleIntent(intent: Intent?) {
         val action = intent?.action

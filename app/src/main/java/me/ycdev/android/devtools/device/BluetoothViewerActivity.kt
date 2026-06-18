@@ -8,7 +8,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.view.View.OnClickListener
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
@@ -167,13 +169,23 @@ class BluetoothViewerActivity :
     @SuppressLint("MissingPermission")
     private fun enableBluetooth() {
         val adapter = bluetoothAdapter
-        adapter?.enable()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            startActivity(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+        } else {
+            @Suppress("DEPRECATION")
+            adapter?.enable()
+        }
     }
 
     @SuppressLint("MissingPermission")
     private fun disableBluetooth() {
         val adapter = bluetoothAdapter
-        adapter?.disable()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            startActivity(Intent(Settings.ACTION_BLUETOOTH_SETTINGS))
+        } else {
+            @Suppress("DEPRECATION")
+            adapter?.disable()
+        }
     }
 
     override fun onClick(v: View) {

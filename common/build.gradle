@@ -3,10 +3,10 @@ apply from: "${androidModuleCommon}"
 apply from: '../build_common.gradle'
 
 android {
-    namespace "me.ycdev.android.devtools.common"
+    namespace = "me.ycdev.android.devtools.common"
 
     defaultConfig {
-        minSdkVersion versions.minSdk
+        minSdk = versions.minSdk
     }
 }
 
@@ -27,4 +27,5 @@ dependencies {
     // Android Testing Support Library's runner and rules
     androidTestImplementation deps.test.runner
     androidTestImplementation deps.test.rules
+    androidTestImplementation deps.test.junit
 }

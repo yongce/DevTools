@@ -3,28 +3,28 @@ apply from: "${androidModuleCommon}"
 apply from: '../build_common.gradle'
 
 android {
-    namespace "me.ycdev.android.devtools"
+    namespace = "me.ycdev.android.devtools"
 
     defaultConfig {
-        applicationId "me.ycdev.android.devtools"
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
+        applicationId = "me.ycdev.android.devtools"
+        minSdk = versions.minSdk
+        targetSdk = versions.targetSdk
 
-        versionName getAppVersionNameBase() // + build type suffix
-        versionCode getAppVersionCodeBase() * 10000 + calculatedVersionCode
+        versionName = getAppVersionNameBase() // + build type suffix
+        versionCode = getAppVersionCodeBase() * 10000 + calculatedVersionCode
 
         buildConfigField "boolean", "DEBUG_LOG", "false"
     }
 
     buildTypes {
         debug {
-            versionNameSuffix "-debug"
+            versionNameSuffix = "-debug"
 
             buildConfigField "boolean", "DEBUG_LOG", "true"
         }
 
         release {
-            versionNameSuffix "-" + calculatedVersionCode + buildIdSuffix
+            versionNameSuffix = "-" + calculatedVersionCode + buildIdSuffix
 
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "proguard-rules.pro"
         }
@@ -35,7 +35,7 @@ android {
     }
 
     lint {
-        textReport true
+        textReport = true
 
         // disable category "Accessibility"
         disable += ['ClickableViewAccessibility','ContentDescription','LabelFor']
@@ -56,8 +56,6 @@ dependencies {
     implementation deps.androidx.wear
 
     compileOnly deps.google.wearableFramework
-    implementation deps.google.wearableSupport
-
     // Dependencies for local unit tests
     testImplementation deps.test.junit
     testImplementation deps.test.mockitoCore

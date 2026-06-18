@@ -53,6 +53,7 @@
                 android:id="@+id/count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:importantForAutofill="no"
                 android:inputType="number"
                 android:minWidth="100dp"
                 android:maxLines="1" />
