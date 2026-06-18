@@ -20,6 +20,7 @@ import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.apps.selector.AppsSelectorActivity
 import me.ycdev.android.devtools.arch.wrapper.ToastHelper
 import me.ycdev.android.devtools.databinding.ActAppsSamplerBinding
+import me.ycdev.android.devtools.widget.notifyItemsReplaced
 import me.ycdev.android.lib.common.apps.AppInfo
 import me.ycdev.android.lib.common.perms.PermissionCallback
 import me.ycdev.android.lib.common.perms.PermissionRequestParams
@@ -201,22 +202,7 @@ class AppsSamplerActivity :
         }
         val oldCount = appsAdapter.itemCount
         appsAdapter.data = appsList
-        notifySelectedAppsReplaced(oldCount, appsList.size)
-    }
-
-    private fun notifySelectedAppsReplaced(
-        oldCount: Int,
-        newCount: Int,
-    ) {
-        val changedCount = minOf(oldCount, newCount)
-        if (changedCount > 0) {
-            appsAdapter.notifyItemRangeChanged(0, changedCount)
-        }
-        if (newCount > oldCount) {
-            appsAdapter.notifyItemRangeInserted(oldCount, newCount - oldCount)
-        } else if (oldCount > newCount) {
-            appsAdapter.notifyItemRangeRemoved(newCount, oldCount - newCount)
-        }
+        appsAdapter.notifyItemsReplaced(oldCount, appsList.size)
     }
 
     override fun handleMessage(msg: Message): Boolean {

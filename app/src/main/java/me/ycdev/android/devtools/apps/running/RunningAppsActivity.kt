@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
 import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.databinding.ActCommonListBinding
+import me.ycdev.android.devtools.widget.notifyItemsReplaced
 import timber.log.Timber
 
 class RunningAppsActivity : AppCompatBaseActivity() {
@@ -43,25 +44,10 @@ class RunningAppsActivity : AppCompatBaseActivity() {
                 Timber.tag(TAG).d("apps loaded: ${it.size}")
                 val oldCount = listAdapter.itemCount
                 listAdapter.data = it
-                notifyListItemsReplaced(oldCount, it.size)
+                listAdapter.notifyItemsReplaced(oldCount, it.size)
                 binding.progress.visibility = View.GONE
             },
         )
-    }
-
-    private fun notifyListItemsReplaced(
-        oldCount: Int,
-        newCount: Int,
-    ) {
-        val changedCount = minOf(oldCount, newCount)
-        if (changedCount > 0) {
-            listAdapter.notifyItemRangeChanged(0, changedCount)
-        }
-        if (newCount > oldCount) {
-            listAdapter.notifyItemRangeInserted(oldCount, newCount - oldCount)
-        } else if (oldCount > newCount) {
-            listAdapter.notifyItemRangeRemoved(newCount, oldCount - newCount)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
