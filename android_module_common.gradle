@@ -6,28 +6,38 @@
  */
 
 // Define some common closures (methods) for code share
+if (!rootProject.ext.has('gitCommandOutputCache')) {
+    rootProject.ext.gitCommandOutputCache = [:]
+}
+
+ext.getGitCommandOutput = { File workingDir, List<String> commandLine ->
+    String cacheKey = workingDir.absolutePath + "|" + commandLine.join(" ")
+    if (!rootProject.ext.gitCommandOutputCache.containsKey(cacheKey)) {
+        String output = providers.exec {
+            it.workingDir = workingDir
+            it.commandLine = commandLine
+        }.standardOutput.asText.get().trim()
+        rootProject.ext.gitCommandOutputCache[cacheKey] = output
+    }
+    return rootProject.ext.gitCommandOutputCache[cacheKey]
+}
+
 ext.getModuleProjectCommitCount = {
-    String gitCommitCountCmd = "git rev-list HEAD --count"
-    Process process = gitCommitCountCmd.execute((String[])null, project.projectDir)
-    String errText = process.err.text
     try {
-        return process.text.trim().toInteger()
+        return getGitCommandOutput(project.projectDir, ["git", "rev-list", "HEAD", "--count"]).toInteger()
     } catch (Exception e) {
-        println String.format("Failed to execute #getModuleProjectCommitCount() with error [%s], " +
-                "which is caused by [%s].", e.toString(), errText)
+        println String.format("Failed to execute #getModuleProjectCommitCount() with error [%s].",
+                e.toString())
+        return 0
     }
 }
 
 ext.getModuleProjectLastCommitSha1 = {
-    String gitCommitCountCmd = "git log --format=\"%H\" -1"
-    String cmdResult = gitCommitCountCmd.execute((String[])null, project.projectDir).text
-    return cmdResult.trim().replace('\"', '')
+    return getGitCommandOutput(project.projectDir, ["git", "log", "--format=%H", "-1"])
 }
 
 ext.getRootProjectLastCommitSha1 = {
-    String gitCommitCountCmd = "git log --format=\"%H\" -1"
-    String cmdResult = gitCommitCountCmd.execute((String[])null, rootProject.projectDir).text
-    return cmdResult.trim().replace('\"', '')
+    return getGitCommandOutput(rootProject.projectDir, ["git", "log", "--format=%H", "-1"])
 }
 
 ext.getBuildIdSuffix = {
