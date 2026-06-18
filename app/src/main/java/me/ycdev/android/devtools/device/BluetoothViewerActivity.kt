@@ -1,6 +1,7 @@
 package me.ycdev.android.devtools.device
 
 import android.annotation.SuppressLint
+import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
@@ -14,7 +15,11 @@ import android.provider.Settings
 import android.view.View
 import android.view.View.OnClickListener
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
+import me.ycdev.android.devtools.R
 import me.ycdev.android.devtools.databinding.ActBluetoothViewerBinding
+import me.ycdev.android.lib.common.perms.PermissionCallback
+import me.ycdev.android.lib.common.perms.PermissionRequestParams
+import me.ycdev.android.lib.common.perms.PermissionUtils
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper.registerForExternal
 import me.ycdev.android.lib.common.wrapper.IntentHelper.getIntExtra
 import me.ycdev.android.lib.common.wrapper.IntentHelper.getStringExtra
@@ -22,10 +27,12 @@ import timber.log.Timber
 
 class BluetoothViewerActivity :
     AppCompatBaseActivity(),
-    OnClickListener {
+    OnClickListener,
+    PermissionCallback {
     private lateinit var binding: ActBluetoothViewerBinding
 
     private var logContents = ""
+    private var bluetoothReceiverRegistered = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,18 +43,18 @@ class BluetoothViewerActivity :
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         initViews()
-        registerBluetoothReceiver()
+        startBluetoothViewer()
     }
 
     private fun initViews() {
-        appendNewLog("Cur state: " + getStateString(bluetoothState))
         binding.enable.setOnClickListener(this)
         binding.disable.setOnClickListener(this)
+        binding.disable.setText(disableActionTextResId(Build.VERSION.SDK_INT))
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterBluetoothReceiver()
+        unregisterBluetoothReceiverIfNeeded()
     }
 
     private val receiver: BroadcastReceiver =
@@ -95,14 +102,21 @@ class BluetoothViewerActivity :
         }
 
     private fun registerBluetoothReceiver() {
+        if (bluetoothReceiverRegistered) {
+            return
+        }
         val intentFilter = IntentFilter()
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
         intentFilter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)
         registerForExternal(this, receiver, intentFilter)
+        bluetoothReceiverRegistered = true
     }
 
-    private fun unregisterBluetoothReceiver() {
-        unregisterReceiver(receiver)
+    private fun unregisterBluetoothReceiverIfNeeded() {
+        if (bluetoothReceiverRegistered) {
+            unregisterReceiver(receiver)
+            bluetoothReceiverRegistered = false
+        }
     }
 
     private fun addStateChangeLog(
@@ -166,8 +180,56 @@ class BluetoothViewerActivity :
             return adapter?.state ?: STATE_UNKNOWN
         }
 
+    private fun startBluetoothViewer() {
+        if (!ensureBluetoothConnectPermission()) {
+            return
+        }
+        appendNewLog("Cur state: " + getStateString(bluetoothState))
+        registerBluetoothReceiver()
+    }
+
+    private fun ensureBluetoothConnectPermission(): Boolean {
+        if (!requiresBluetoothConnectPermission(Build.VERSION.SDK_INT)) {
+            return true
+        }
+        if (PermissionUtils.hasPermissions(this, Manifest.permission.BLUETOOTH_CONNECT)) {
+            return true
+        }
+        PermissionUtils.requestPermissions(this, createPermissionRequestParams())
+        return false
+    }
+
+    private fun createPermissionRequestParams(): PermissionRequestParams {
+        val params = PermissionRequestParams()
+        params.requestCode = PERMISSION_RC_BLUETOOTH_CONNECT
+        params.permissions = arrayOf(Manifest.permission.BLUETOOTH_CONNECT)
+        params.rationaleTitle = getString(R.string.title_permission_request)
+        params.rationaleContent = getString(R.string.module_bluetooth_viewer_desc)
+        params.callback = this
+        return params
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_RC_BLUETOOTH_CONNECT &&
+            PermissionUtils.verifyPermissions(grantResults)
+        ) {
+            startBluetoothViewer()
+        }
+    }
+
+    override fun onRationaleDenied(requestCode: Int) { // ignore
+    }
+
     @SuppressLint("MissingPermission")
     private fun enableBluetooth() {
+        if (!ensureBluetoothConnectPermission()) {
+            return
+        }
         val adapter = bluetoothAdapter
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             startActivity(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
@@ -179,6 +241,9 @@ class BluetoothViewerActivity :
 
     @SuppressLint("MissingPermission")
     private fun disableBluetooth() {
+        if (!ensureBluetoothConnectPermission()) {
+            return
+        }
         val adapter = bluetoothAdapter
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             startActivity(Intent(Settings.ACTION_BLUETOOTH_SETTINGS))
@@ -199,6 +264,17 @@ class BluetoothViewerActivity :
     companion object {
         private const val TAG = "BluetoothViewerActivity"
 
+        private const val PERMISSION_RC_BLUETOOTH_CONNECT = 1
+
         private const val STATE_UNKNOWN = -1
+
+        internal fun requiresBluetoothConnectPermission(sdkInt: Int): Boolean = sdkInt >= Build.VERSION_CODES.S
+
+        internal fun disableActionTextResId(sdkInt: Int): Int =
+            if (sdkInt >= Build.VERSION_CODES.TIRAMISU) {
+                R.string.action_open_bluetooth_settings
+            } else {
+                R.string.action_disable
+            }
     }
 }

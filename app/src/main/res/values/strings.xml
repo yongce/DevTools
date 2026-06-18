@@ -14,6 +14,7 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
+    <string name="action_open_bluetooth_settings">Open settings</string>
 
     <string name="title_permission_request">Permission Request</string>
 
