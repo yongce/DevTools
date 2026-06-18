@@ -1,5 +1,6 @@
 package me.ycdev.android.devtools.sampler
 
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -42,5 +43,13 @@ class AppsSamplerServiceTest {
         verify(exactly = 1) { ContextCompat.startForegroundService(context, any()) }
         assertThat(intentSlot.captured.component?.className)
             .isEqualTo(AppsSamplerService::class.java.name)
+    }
+
+    @Test
+    fun notificationPendingIntentFlags_isImmutable() {
+        val flags = AppsSamplerService.notificationPendingIntentFlags()
+
+        assertThat(flags and PendingIntent.FLAG_UPDATE_CURRENT).isNotEqualTo(0)
+        assertThat(flags and PendingIntent.FLAG_IMMUTABLE).isNotEqualTo(0)
     }
 }

@@ -130,7 +130,7 @@ class AppsSamplerService :
                 this,
                 0,
                 samplerIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT,
+                notificationPendingIntentFlags(),
             )
         val status = getString(R.string.apps_sampler_notification_ticker)
         val title = getString(R.string.apps_sampler_module_title)
@@ -331,6 +331,8 @@ class AppsSamplerService :
 
         var lastSampleTask: SampleTaskInfo? = null
             private set
+
+        internal fun notificationPendingIntentFlags(): Int = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
 
         fun startSampler(
             cxt: Context,
