@@ -3,6 +3,7 @@ package me.ycdev.android.devtools.sampler
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Handler.Callback
@@ -24,7 +25,6 @@ import me.ycdev.android.lib.common.perms.PermissionCallback
 import me.ycdev.android.lib.common.perms.PermissionRequestParams
 import me.ycdev.android.lib.common.perms.PermissionUtils
 import me.ycdev.android.lib.common.utils.DateTimeUtils
-import me.ycdev.android.lib.common.utils.StorageUtils
 import me.ycdev.android.lib.common.utils.WeakHandler
 import me.ycdev.android.lib.common.wrapper.IntentHelper
 import timber.log.Timber
@@ -254,7 +254,7 @@ class AppsSamplerActivity :
     private fun createPermissionRequestParams(): PermissionRequestParams {
         val params = PermissionRequestParams()
         params.requestCode = PERMISSION_RC_SAMPLER
-        params.permissions = REQUESTED_PERMISSIONS
+        params.permissions = requestedPermissions()
         params.rationaleTitle = getString(R.string.title_permission_request)
         params.rationaleContent = getString(R.string.apps_sampler_permissions_rationale)
         params.callback = this
@@ -262,10 +262,6 @@ class AppsSamplerActivity :
     }
 
     private fun startSample() {
-        if (!StorageUtils.isExternalStorageAvailable()) {
-            ToastHelper.show(this, R.string.tip_no_sdcard, Toast.LENGTH_SHORT)
-            return
-        }
         val intervalStr = binding.interval.text.toString()
         if (intervalStr.isEmpty()) {
             ToastHelper.show(
@@ -283,7 +279,10 @@ class AppsSamplerActivity :
             )
             return
         }
-        if (!PermissionUtils.hasPermissions(this, *REQUESTED_PERMISSIONS)) {
+        val requestedPermissions = requestedPermissions()
+        if (requestedPermissions.isNotEmpty() &&
+            !PermissionUtils.hasPermissions(this, *requestedPermissions)
+        ) {
             Timber.tag(TAG).d(
                 "Need to request the permission",
             )
@@ -318,9 +317,13 @@ class AppsSamplerActivity :
 
         private const val MSG_REFRESH_SAMPLE_STATUS = 100
 
-        private val REQUESTED_PERMISSIONS =
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            )
+        private fun requestedPermissions(): Array<String> =
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                )
+            } else {
+                emptyArray()
+            }
     }
 }

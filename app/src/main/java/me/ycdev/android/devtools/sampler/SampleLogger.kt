@@ -1,5 +1,6 @@
 package me.ycdev.android.devtools.sampler
 
+import android.content.Context
 import me.ycdev.android.lib.common.utils.DateTimeUtils.getReadableTimeStamp
 import me.ycdev.android.lib.common.utils.IoUtils.closeQuietly
 import timber.log.Timber
@@ -7,12 +8,14 @@ import java.io.Closeable
 import java.io.FileWriter
 import java.io.IOException
 
-class SampleLogger : Closeable {
+class SampleLogger(
+    context: Context,
+) : Closeable {
     private lateinit var logWriter: FileWriter
 
     init {
         try {
-            val logFile = SamplerUtils.getFileForSampler(SAMPLER_LOG_FILENAME, true)
+            val logFile = SamplerUtils.getFileForSampler(context, SAMPLER_LOG_FILENAME, true)
             logWriter = FileWriter(logFile, true)
         } catch (e: IOException) {
             Timber.tag(TAG).w(e, "failed to create sampler log file")

@@ -8,7 +8,6 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Environment
 import android.os.Handler
 import android.os.Handler.Callback
 import android.os.HandlerThread
@@ -47,7 +46,7 @@ class AppsSamplerService :
         handlerThread = HandlerThread("AppsSampler")
         handlerThread.start()
         handler = Handler(handlerThread.looper, this)
-        sampleLogger = SampleLogger()
+        sampleLogger = SampleLogger(this)
     }
 
     override fun onDestroy() {
@@ -65,7 +64,7 @@ class AppsSamplerService :
         sampleLogger.logInfo(TAG, "requested to start sampler service: $intent")
         if (intent == null) {
             sampleLogger.logInfo(TAG, "sampling service restart and info lost")
-            val taskInfo = restoreSampleTaskInfo()
+            val taskInfo = restoreSampleTaskInfo(this)
             if (taskInfo == null) {
                 sampleLogger.logError(TAG, "cannot restore the sample task")
                 stopSelf()
@@ -78,7 +77,7 @@ class AppsSamplerService :
 
         val action = intent.action
         if (action == ACTION_START_SAMPLER) {
-            var taskInfo = restoreSampleTaskInfo()
+            var taskInfo = restoreSampleTaskInfo(this)
             if (taskInfo == null) {
                 taskInfo = SampleTaskInfo()
                 IntentHelper.getStringArrayListExtra(intent, EXTRA_PKG_NAMES)?.let {
@@ -188,7 +187,7 @@ class AppsSamplerService :
                 if (lastSampleTask != null && lastSampleTask!!.isSampling) {
                     sampleLogger.logWarning(TAG, "sampler is running, cannot clear logs")
                 } else {
-                    clearLogs()
+                    deleteSamplerLogs(this)
                     stopSelf(msg.arg1)
                 }
             }
@@ -218,11 +217,6 @@ class AppsSamplerService :
             stopSelf(startId)
             return
         }
-        if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
-            sampleLogger.logWarning(TAG, "cannot start sampler because no SD card mounted")
-            stopSelf(startId)
-            return
-        }
         sampleLogger.logDebug(TAG, "do start sampler...")
         taskInfo.isSampling = true
         taskInfo.fileWriters = ArrayList(taskInfo.pkgNames.size)
@@ -230,6 +224,7 @@ class AppsSamplerService :
             try {
                 val dataFile =
                     SamplerUtils.getFileForSampler(
+                        this,
                         generateStatsFileName(pkgName, taskInfo.startTime),
                         true,
                     )
@@ -276,7 +271,7 @@ class AppsSamplerService :
         }
         taskInfo.preAppsSetStat = appsSetStat
         // backup the current task info state
-        backupSampleTaskInfo(taskInfo)
+        backupSampleTaskInfo(this, taskInfo)
         Timber.tag(TAG).i("sample stats snapshot done")
     }
 
@@ -301,6 +296,7 @@ class AppsSamplerService :
         }
         val backupFile =
             SamplerUtils.getFileForSampler(
+                this,
                 FILENAME_SAMPLE_TASK_BACKUP,
                 false,
             )
@@ -344,6 +340,7 @@ class AppsSamplerService :
             // delete task info backup if exist
             val backupFile =
                 SamplerUtils.getFileForSampler(
+                    cxt,
                     FILENAME_SAMPLE_TASK_BACKUP,
                     false,
                 )
@@ -374,7 +371,10 @@ class AppsSamplerService :
             cxt.startService(intent)
         }
 
-        private fun backupSampleTaskInfo(taskInfo: SampleTaskInfo?) {
+        private fun backupSampleTaskInfo(
+            context: Context,
+            taskInfo: SampleTaskInfo?,
+        ) {
             if (taskInfo == null) {
                 Timber.tag(TAG).w("cannot backup sample task info, no task info yet")
                 return
@@ -387,6 +387,7 @@ class AppsSamplerService :
             try {
                 val backupFile =
                     SamplerUtils.getFileForSampler(
+                        context,
                         FILENAME_SAMPLE_TASK_BACKUP,
                         true,
                     )
@@ -396,9 +397,10 @@ class AppsSamplerService :
             }
         }
 
-        private fun restoreSampleTaskInfo(): SampleTaskInfo? {
+        private fun restoreSampleTaskInfo(context: Context): SampleTaskInfo? {
             val backupFile =
                 SamplerUtils.getFileForSampler(
+                    context,
                     FILENAME_SAMPLE_TASK_BACKUP,
                     false,
                 )
@@ -432,7 +434,7 @@ class AppsSamplerService :
             cxt: Context,
             taskInfo: SampleTaskInfo,
         ) {
-            val appDir = SamplerUtils.samplerFolder
+            val appDir = SamplerUtils.getSamplerFolder(cxt)
             val reportFile =
                 File(
                     appDir,
@@ -496,7 +498,7 @@ class AppsSamplerService :
         }
 
         private fun createAllReports(cxt: Context) {
-            val appDir = SamplerUtils.samplerFolder
+            val appDir = SamplerUtils.getSamplerFolder(cxt)
             val allFiles = appDir.listFiles()
             if (allFiles == null || allFiles.isEmpty()) {
                 return
@@ -532,8 +534,8 @@ class AppsSamplerService :
             }
         }
 
-        private fun clearLogs() {
-            val appDir = SamplerUtils.samplerFolder
+        private fun deleteSamplerLogs(context: Context) {
+            val appDir = SamplerUtils.getSamplerFolder(context)
             if (appDir.exists()) {
                 appDir.listFiles()?.forEach {
                     it.delete()
