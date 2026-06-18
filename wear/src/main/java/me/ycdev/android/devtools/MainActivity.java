@@ -1,32 +1,25 @@
 package me.ycdev.android.devtools;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
-import android.widget.TextView;
 
-import androidx.wear.ambient.AmbientMode;
+import androidx.core.app.ComponentActivity;
+import androidx.wear.ambient.AmbientLifecycleObserver;
+import androidx.wear.ambient.AmbientLifecycleObserverKt;
 
 @SuppressLint("MyBaseActivity")
-@SuppressWarnings("deprecation")
-public class MainActivity extends Activity implements AmbientMode.AmbientCallbackProvider {
+public class MainActivity extends ComponentActivity {
 
-    private TextView mTextView;
-    private final AmbientMode.AmbientCallback mAmbientCallback = new AmbientMode.AmbientCallback() {};
+    private final AmbientLifecycleObserver.AmbientLifecycleCallback mAmbientCallback =
+            new AmbientLifecycleObserver.AmbientLifecycleCallback() {};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextView = (TextView) findViewById(R.id.text);
-
         // Enables Always-on
-        AmbientMode.attachAmbientSupport(this);
-    }
-
-    @Override
-    public AmbientMode.AmbientCallback getAmbientCallback() {
-        return mAmbientCallback;
+        getLifecycle().addObserver(
+                AmbientLifecycleObserverKt.AmbientLifecycleObserver(this, mAmbientCallback));
     }
 }
