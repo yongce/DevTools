@@ -11,7 +11,7 @@ import java.io.IOException
 class SampleLogger(
     context: Context,
 ) : Closeable {
-    private lateinit var logWriter: FileWriter
+    private var logWriter: FileWriter? = null
 
     init {
         try {
@@ -26,16 +26,17 @@ class SampleLogger(
         tag: String,
         msg: String,
     ) {
+        val writer = logWriter ?: return
         val timeStamp = getReadableTimeStamp(System.currentTimeMillis())
         try {
-            logWriter
+            writer
                 .append(timeStamp)
                 .append(STAT_FILE_COLUMNS_SEP)
                 .append(tag)
                 .append(STAT_FILE_COLUMNS_SEP)
                 .append(msg)
                 .append("\n")
-            logWriter.flush()
+            writer.flush()
         } catch (e: IOException) {
             Timber.tag(TAG).w(e, "ignored IO exception")
         }
@@ -75,7 +76,8 @@ class SampleLogger(
 
     @Throws(IOException::class)
     override fun close() {
-        closeQuietly(logWriter)
+        logWriter?.let { closeQuietly(it) }
+        logWriter = null
     }
 
     protected fun finalize() {
