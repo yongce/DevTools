@@ -49,6 +49,7 @@ dependencies {
     implementation deps.ycdev.androidUi
     implementation project(':devToolsCommon')
 
+    implementation deps.androidx.activity
     implementation deps.androidx.core
     implementation deps.androidx.material
     implementation deps.gson

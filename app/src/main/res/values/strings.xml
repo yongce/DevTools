@@ -18,8 +18,6 @@
 
     <string name="title_permission_request">Permission Request</string>
 
-    <string name="tip_no_sdcard">No SD card available</string>
-
     <string name="module_device_info_title">Device Info</string>
     <string name="module_device_info_desc">Explore the device details</string>
     <string name="module_system_utilities_title">System Utilities</string>

@@ -1,7 +1,7 @@
 package me.ycdev.android.devtools.device
 
-import android.annotation.SuppressLint
 import android.Manifest
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
@@ -199,6 +199,7 @@ class BluetoothViewerActivity :
         return false
     }
 
+    @SuppressLint("InlinedApi")
     private fun createPermissionRequestParams(): PermissionRequestParams {
         val params = PermissionRequestParams()
         params.requestCode = PERMISSION_RC_BLUETOOTH_CONNECT

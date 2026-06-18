@@ -3,7 +3,7 @@ package me.ycdev.android.devtools;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
-import androidx.core.app.ComponentActivity;
+import androidx.activity.ComponentActivity;
 import androidx.wear.ambient.AmbientLifecycleObserver;
 import androidx.wear.ambient.AmbientLifecycleObserverKt;
 

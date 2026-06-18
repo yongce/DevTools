@@ -44,9 +44,10 @@ open class AppsSelectorAdapter(
             }
 
     val oneSelectedApp: AppInfo?
-        get() = selectionState.oneSelectedPackageName?.let { pkgName ->
-            data?.firstOrNull { it.pkgName == pkgName }
-        }
+        get() =
+            selectionState.oneSelectedPackageName?.let { pkgName ->
+                data?.firstOrNull { it.pkgName == pkgName }
+            }
 
     var data: List<AppInfo>? = null
 
