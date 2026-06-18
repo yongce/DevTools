@@ -10,11 +10,13 @@ object RootCommandBuilder {
     private fun getRootJarCommand(
         cxt: Context,
         cmd: String,
-        cmdParams: String
+        cmdParams: String,
     ): Array<String> {
         val exportCmd = "export CLASSPATH=" + cxt.packageCodePath
-        var rootJarCmd = ("/system/bin/app_process /system/bin " +
-                RootJarExecutor::class.java.name + " " + cmd)
+        var rootJarCmd = (
+            "/system/bin/app_process /system/bin " +
+                RootJarExecutor::class.java.name + " " + cmd
+        )
         if (!TextUtils.isEmpty(cmdParams)) {
             rootJarCmd = "$rootJarCmd $cmdParams"
         }
@@ -23,7 +25,7 @@ object RootCommandBuilder {
 
     fun forceStopPackage(
         cxt: Context,
-        pkgNames: List<String?>
+        pkgNames: List<String?>,
     ): Array<String> {
         val sb = StringBuilder()
         for (pkg in pkgNames) {
@@ -32,7 +34,7 @@ object RootCommandBuilder {
         return getRootJarCommand(
             cxt,
             RootJarExecutor.CMD_FORCE_STOP_PACKAGE,
-            sb.toString()
+            sb.toString(),
         )
     }
 }

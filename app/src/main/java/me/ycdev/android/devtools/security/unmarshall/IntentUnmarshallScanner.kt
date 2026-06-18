@@ -20,7 +20,11 @@ object IntentUnmarshallScanner {
         return intent
     }
 
-    private fun scanReceiverTarget(cxt: Context, target: ComponentName, perm: String?): Boolean {
+    private fun scanReceiverTarget(
+        cxt: Context,
+        target: ComponentName,
+        perm: String?,
+    ): Boolean {
         Timber.tag(TAG).i("scan receiver: $target, with perm: $perm")
         try {
             val intent = buildScanIntent(target)
@@ -32,7 +36,10 @@ object IntentUnmarshallScanner {
         return false
     }
 
-    private fun scanServiceTarget(cxt: Context, target: ComponentName): Boolean {
+    private fun scanServiceTarget(
+        cxt: Context,
+        target: ComponentName,
+    ): Boolean {
         Timber.tag(TAG).i("scan service: %s", target)
         try {
             val intent = buildScanIntent(target)
@@ -44,12 +51,17 @@ object IntentUnmarshallScanner {
         return false
     }
 
-    private fun scanActivityTarget(cxt: Context, target: ComponentName): Boolean {
+    private fun scanActivityTarget(
+        cxt: Context,
+        target: ComponentName,
+    ): Boolean {
         Timber.tag(TAG).i("scan activity: %s", target)
         try {
             val intent = buildScanIntent(target)
-            intent.flags = (Intent.FLAG_ACTIVITY_NEW_TASK
-                    or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.flags = (
+                Intent.FLAG_ACTIVITY_NEW_TASK
+                    or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            )
             cxt.startActivity(intent)
             return true
         } catch (e: Exception) {
@@ -58,7 +70,10 @@ object IntentUnmarshallScanner {
         return false
     }
 
-    fun scanAllReceivers(cxt: Context, controller: IScanController) {
+    fun scanAllReceivers(
+        cxt: Context,
+        controller: IScanController,
+    ) {
         val pkgName = controller.targetPackageName
         val allReceivers = PackageUtils.getAllReceivers(cxt, pkgName, true)
         if (allReceivers.isEmpty()) {
@@ -87,7 +102,10 @@ object IntentUnmarshallScanner {
         Timber.tag(TAG).i("receivers scan done")
     }
 
-    fun scanAllServices(cxt: Context, controller: IScanController) {
+    fun scanAllServices(
+        cxt: Context,
+        controller: IScanController,
+    ) {
         val pkgName = controller.targetPackageName
         val allServices = PackageUtils.getAllServices(cxt, pkgName, true)
         if (allServices.isEmpty()) {
@@ -115,7 +133,10 @@ object IntentUnmarshallScanner {
         Timber.tag(TAG).i("services scan done")
     }
 
-    fun scanAllActivities(cxt: Context, controller: IScanController) {
+    fun scanAllActivities(
+        cxt: Context,
+        controller: IScanController,
+    ) {
         val pkgName = controller.targetPackageName
         val allActivities = PackageUtils.getAllActivities(cxt, pkgName, true)
         if (allActivities.isEmpty()) {

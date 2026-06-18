@@ -33,7 +33,9 @@ import java.util.ArrayList
 import java.util.HashMap
 import kotlin.collections.set
 
-class AppsSamplerService : Service(), Callback {
+class AppsSamplerService :
+    Service(),
+    Callback {
     private lateinit var handlerThread: HandlerThread
     private lateinit var handler: Handler
     private lateinit var sampleLogger: SampleLogger
@@ -55,7 +57,11 @@ class AppsSamplerService : Service(), Callback {
         super.onDestroy()
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int,
+    ): Int {
         sampleLogger.logInfo(TAG, "requested to start sampler service: $intent")
         if (intent == null) {
             sampleLogger.logInfo(TAG, "sampling service restart and info lost")
@@ -98,9 +104,7 @@ class AppsSamplerService : Service(), Callback {
         return START_STICKY
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent): IBinder? = null
 
     private fun createChannelIfNeeded() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
@@ -109,24 +113,29 @@ class AppsSamplerService : Service(), Callback {
         val notifyMgr = getSystemService(NotificationManager::class.java) ?: return
         var channel = notifyMgr.getNotificationChannel(NOTIFICATION_CHANNEL_SAMPLER)
         if (channel == null) {
-            channel = NotificationChannel(
-                NOTIFICATION_CHANNEL_SAMPLER,
-                getString(R.string.apps_sampler_notification_channel),
-                NotificationManager.IMPORTANCE_LOW
-            )
+            channel =
+                NotificationChannel(
+                    NOTIFICATION_CHANNEL_SAMPLER,
+                    getString(R.string.apps_sampler_notification_channel),
+                    NotificationManager.IMPORTANCE_LOW,
+                )
             notifyMgr.createNotificationChannel(channel)
         }
     }
 
     private fun buildNotification(): Notification {
         val samplerIntent = Intent(this, AppsSamplerActivity::class.java)
-        val pi = PendingIntent.getActivity(
-            this, 0, samplerIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val pi =
+            PendingIntent.getActivity(
+                this,
+                0,
+                samplerIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT,
+            )
         val status = getString(R.string.apps_sampler_notification_ticker)
         val title = getString(R.string.apps_sampler_module_title)
-        return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_SAMPLER)
+        return NotificationCompat
+            .Builder(this, NOTIFICATION_CHANNEL_SAMPLER)
             .setTicker(status)
             .setContentTitle(title)
             .setContentText(status)
@@ -145,6 +154,7 @@ class AppsSamplerService : Service(), Callback {
             MSG_START_SAMPLER -> {
                 doStartSampler(msg.arg1, msg.obj as SampleTaskInfo)
             }
+
             MSG_SAMPLE_STATS -> {
                 doSampleSnapshot(lastSampleTask)
                 if (lastSampleTask!!.samplePeriod == 0 ||
@@ -152,17 +162,19 @@ class AppsSamplerService : Service(), Callback {
                 ) {
                     handler.sendEmptyMessageDelayed(
                         MSG_SAMPLE_STATS,
-                        lastSampleTask!!.sampleInterval * 1000.toLong()
+                        lastSampleTask!!.sampleInterval * 1000.toLong(),
                     )
                 } else {
                     createSampleReport(this)
                     stopSampler(this)
                 }
             }
+
             MSG_STOP_SAMPLER -> {
                 doStopSampler(lastSampleTask)
                 stopSelf(msg.arg1)
             }
+
             MSG_CREATE_REPORT -> {
                 if (lastSampleTask != null && lastSampleTask!!.isSampling) {
                     createSampleReport(this, lastSampleTask!!)
@@ -171,6 +183,7 @@ class AppsSamplerService : Service(), Callback {
                     stopSelf(msg.arg1)
                 }
             }
+
             MSG_CLEAR_LOGS -> {
                 if (lastSampleTask != null && lastSampleTask!!.isSampling) {
                     sampleLogger.logWarning(TAG, "sampler is running, cannot clear logs")
@@ -179,6 +192,7 @@ class AppsSamplerService : Service(), Callback {
                     stopSelf(msg.arg1)
                 }
             }
+
             else -> {
                 done = false
             }
@@ -186,7 +200,10 @@ class AppsSamplerService : Service(), Callback {
         return done
     }
 
-    private fun doStartSampler(startId: Int, taskInfo: SampleTaskInfo) {
+    private fun doStartSampler(
+        startId: Int,
+        taskInfo: SampleTaskInfo,
+    ) {
         if (lastSampleTask != null && lastSampleTask!!.isSampling) {
             Timber.tag(TAG).i("the sampler is running, igonre the new request")
             return
@@ -194,7 +211,7 @@ class AppsSamplerService : Service(), Callback {
         sampleLogger.logInfo(
             TAG,
             "try to start sampler, interval: " + taskInfo.sampleInterval +
-                    ", period: " + taskInfo.samplePeriod
+                ", period: " + taskInfo.samplePeriod,
         )
         if (taskInfo.pkgNames.size == 0 || taskInfo.sampleInterval <= 0) {
             sampleLogger.logWarning(TAG, "cannot start sampler because of wrong parameters")
@@ -211,10 +228,11 @@ class AppsSamplerService : Service(), Callback {
         taskInfo.fileWriters = ArrayList(taskInfo.pkgNames.size)
         for (pkgName in taskInfo.pkgNames) {
             try {
-                val dataFile = SamplerUtils.getFileForSampler(
-                    generateStatsFileName(pkgName, taskInfo.startTime),
-                    true
-                )
+                val dataFile =
+                    SamplerUtils.getFileForSampler(
+                        generateStatsFileName(pkgName, taskInfo.startTime),
+                        true,
+                    )
                 val writer = FileWriter(dataFile, true)
                 AppStat.appendHeader(writer)
                 writer.flush()
@@ -230,7 +248,7 @@ class AppsSamplerService : Service(), Callback {
         val notification = buildNotification()
         startForeground(
             AppConstants.NOTIFICATION_ID_PROC_MEM_SAMPLER,
-            notification
+            notification,
         )
         handler.obtainMessage(MSG_SAMPLE_STATS).sendToTarget()
     }
@@ -241,8 +259,8 @@ class AppsSamplerService : Service(), Callback {
         if (taskInfo.preAppsSetStat != null) {
             val appsUsage = AppsSetStat.computeUsage(taskInfo.preAppsSetStat!!, appsSetStat)
             val timeStamp = DateTimeUtils.getReadableTimeStamp(appsUsage.sampleTime)
-            val N = taskInfo.pkgNames.size
-            for (i in 0 until N) {
+            val appCount = taskInfo.pkgNames.size
+            for (i in 0 until appCount) {
                 val pkgName = taskInfo.pkgNames[i]
                 val appStat = appsUsage.appsStat[pkgName] ?: continue
                 val writer = taskInfo.fileWriters!![i]
@@ -269,21 +287,23 @@ class AppsSamplerService : Service(), Callback {
             return
         }
         handler.removeMessages(MSG_SAMPLE_STATS)
-        val N = taskInfo.fileWriters!!.size
-        for (i in 0 until N) {
+        val writerCount = taskInfo.fileWriters!!.size
+        for (i in 0 until writerCount) {
             val writer = taskInfo.fileWriters!![i]
             try {
                 writer!!.flush()
                 writer.close()
             } catch (e: IOException) {
-                Timber.tag(TAG)
+                Timber
+                    .tag(TAG)
                     .w(e, "failed to flush data: %s", taskInfo.pkgNames[i])
             }
         }
-        val backupFile = SamplerUtils.getFileForSampler(
-            FILENAME_SAMPLE_TASK_BACKUP,
-            false
-        )
+        val backupFile =
+            SamplerUtils.getFileForSampler(
+                FILENAME_SAMPLE_TASK_BACKUP,
+                false,
+            )
         backupFile.delete()
         taskInfo.isSampling = false
         stopForeground(true)
@@ -319,13 +339,14 @@ class AppsSamplerService : Service(), Callback {
             cxt: Context,
             pkgNames: ArrayList<String>?,
             intervalSeconds: Int,
-            periodMinutes: Int
+            periodMinutes: Int,
         ) {
             // delete task info backup if exist
-            val backupFile = SamplerUtils.getFileForSampler(
-                FILENAME_SAMPLE_TASK_BACKUP,
-                false
-            )
+            val backupFile =
+                SamplerUtils.getFileForSampler(
+                    FILENAME_SAMPLE_TASK_BACKUP,
+                    false,
+                )
             backupFile.delete()
             val intent = Intent(cxt, AppsSamplerService::class.java)
             intent.action = ACTION_START_SAMPLER
@@ -364,10 +385,11 @@ class AppsSamplerService : Service(), Callback {
                 return
             }
             try {
-                val backupFile = SamplerUtils.getFileForSampler(
-                    FILENAME_SAMPLE_TASK_BACKUP,
-                    true
-                )
+                val backupFile =
+                    SamplerUtils.getFileForSampler(
+                        FILENAME_SAMPLE_TASK_BACKUP,
+                        true,
+                    )
                 IoUtils.saveAsFile(taskInfoBackup, backupFile.absolutePath)
             } catch (e: IOException) {
                 Timber.tag(TAG).w(e, "failed to save sample task info into backup file")
@@ -375,20 +397,22 @@ class AppsSamplerService : Service(), Callback {
         }
 
         private fun restoreSampleTaskInfo(): SampleTaskInfo? {
-            val backupFile = SamplerUtils.getFileForSampler(
-                FILENAME_SAMPLE_TASK_BACKUP,
-                false
-            )
+            val backupFile =
+                SamplerUtils.getFileForSampler(
+                    FILENAME_SAMPLE_TASK_BACKUP,
+                    false,
+                )
             if (!backupFile.exists()) {
                 return null
             }
             val taskInfoBackup: String
-            taskInfoBackup = try {
-                IoUtils.readAllLines(backupFile.absolutePath)
-            } catch (e: IOException) {
-                Timber.tag(TAG).w(e, "failed to create sampler log file")
-                return null
-            }
+            taskInfoBackup =
+                try {
+                    IoUtils.readAllLines(backupFile.absolutePath)
+                } catch (e: IOException) {
+                    Timber.tag(TAG).w(e, "failed to create sampler log file")
+                    return null
+                }
             if (TextUtils.isEmpty(taskInfoBackup)) {
                 Timber.tag(TAG).w("no task info backup")
                 return null
@@ -396,27 +420,33 @@ class AppsSamplerService : Service(), Callback {
             return SampleTaskInfo.restoreTaskInfo(taskInfoBackup)
         }
 
-        private fun generateStatsFileName(pkgName: String?, startTime: Long): String {
-            return DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_STATS + pkgName + ".txt"
-        }
+        private fun generateStatsFileName(
+            pkgName: String?,
+            startTime: Long,
+        ): String = DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_STATS + pkgName + ".txt"
 
-        private fun generateReportFileName(startTime: Long): String {
-            return DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_REPORT + ".txt"
-        }
+        private fun generateReportFileName(startTime: Long): String =
+            DateTimeUtils.generateFileName(startTime) + FILENAME_TAG_REPORT + ".txt"
 
-        private fun createSampleReport(cxt: Context, taskInfo: SampleTaskInfo) {
+        private fun createSampleReport(
+            cxt: Context,
+            taskInfo: SampleTaskInfo,
+        ) {
             val appDir = SamplerUtils.samplerFolder
-            val reportFile = File(
-                appDir,
-                generateReportFileName(taskInfo.startTime)
-            )
+            val reportFile =
+                File(
+                    appDir,
+                    generateReportFileName(taskInfo.startTime),
+                )
             var writer: FileWriter? = null
             try {
                 writer = FileWriter(reportFile, false)
                 for (pkgName in taskInfo.pkgNames) {
-                    val statFile = File(
-                        appDir, generateStatsFileName(pkgName, taskInfo.startTime)
-                    )
+                    val statFile =
+                        File(
+                            appDir,
+                            generateStatsFileName(pkgName, taskInfo.startTime),
+                        )
                     val reader = BufferedReader(FileReader(statFile))
                     try {
                         val appReport = AppStatReport(pkgName)

@@ -15,7 +15,9 @@ import timber.log.Timber
 import java.util.Collections
 import java.util.Comparator
 
-internal class InstalledAppsAdapter(cxt: Context) : RecyclerView.Adapter<ViewHolder>() {
+internal class InstalledAppsAdapter(
+    cxt: Context,
+) : RecyclerView.Adapter<ViewHolder>() {
     private lateinit var defaultTextColor: ColorStateList
     private var sysAppColor: Int = ContextCompat.getColor(cxt, R.color.apps_sys_app_color)
     private val sharedAppColor: Int = ContextCompat.getColor(cxt, R.color.apps_shared_uid_color)
@@ -23,9 +25,7 @@ internal class InstalledAppsAdapter(cxt: Context) : RecyclerView.Adapter<ViewHol
 
     var data: List<AppInfo>? = null
 
-    private fun getItem(position: Int): AppInfo {
-        return data!![position]
-    }
+    private fun getItem(position: Int): AppInfo = data!![position]
 
     fun sort(comparator: Comparator<AppInfo>) {
         data?.let {
@@ -34,19 +34,25 @@ internal class InstalledAppsAdapter(cxt: Context) : RecyclerView.Adapter<ViewHol
         }
     }
 
-    override fun getItemCount(): Int {
-        return data?.size ?: 0
-    }
+    override fun getItemCount(): Int = data?.size ?: 0
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.installed_apps_item, parent, false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder {
+        val itemView =
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.installed_apps_item, parent, false)
         return ViewHolder(itemView).also {
             defaultTextColor = it.binding.appName.textColors
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         val item = getItem(position)
         holder.binding.appIcon.setImageDrawable(item.appIcon)
         holder.binding.appName.text = item.appName
@@ -62,11 +68,12 @@ internal class InstalledAppsAdapter(cxt: Context) : RecyclerView.Adapter<ViewHol
         holder.binding.versionName.text = item.versionName
         holder.binding.versionCode.text = item.versionCode.toString()
         holder.binding.apkPath.text = item.apkPath
-        val stateStr = holder.itemView.context.getString(
-            R.string.apps_app_state,
-            item.isDisabled.toString(),
-            item.isUnmounted.toString()
-        )
+        val stateStr =
+            holder.itemView.context.getString(
+                R.string.apps_app_state,
+                item.isDisabled.toString(),
+                item.isUnmounted.toString(),
+            )
         holder.binding.state.text = stateStr
         if (item.isDisabled || item.isUnmounted) {
             holder.binding.appIcon.imageAlpha = ALPHA_DISABLED
@@ -76,18 +83,21 @@ internal class InstalledAppsAdapter(cxt: Context) : RecyclerView.Adapter<ViewHol
             holder.binding.state.setTextColor(defaultTextColor)
         }
 
-        holder.binding.targetMinSdk.text = holder.itemView.context.getString(
-            R.string.apps_app_target_min_sdk,
-            item.targetSdkVersion,
-            item.minSdkVersion
-        )
+        holder.binding.targetMinSdk.text =
+            holder.itemView.context.getString(
+                R.string.apps_app_target_min_sdk,
+                item.targetSdkVersion,
+                item.minSdkVersion,
+            )
 
         holder.itemView.setOnClickListener {
             Timber.tag(TAG).i("clicked item: %s", item)
         }
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(
+        itemView: View,
+    ) : RecyclerView.ViewHolder(itemView) {
         val binding: InstalledAppsItemBinding = InstalledAppsItemBinding.bind(itemView)
     }
 

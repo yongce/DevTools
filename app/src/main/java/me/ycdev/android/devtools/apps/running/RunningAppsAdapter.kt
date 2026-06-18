@@ -12,22 +12,26 @@ import me.ycdev.android.devtools.databinding.RunningAppsItemBinding
 class RunningAppsAdapter : RecyclerView.Adapter<ViewHolder>() {
     var data: List<RunningAppInfo>? = null
 
-    private fun getItem(position: Int): RunningAppInfo {
-        return data!![position]
-    }
+    private fun getItem(position: Int): RunningAppInfo = data!![position]
 
-    override fun getItemCount(): Int {
-        return data?.size ?: 0
-    }
+    override fun getItemCount(): Int = data?.size ?: 0
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.running_apps_item, parent, false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder {
+        val itemView =
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.running_apps_item, parent, false)
         return ViewHolder(itemView)
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         val item = getItem(position)
         holder.binding.appIcon.setImageDrawable(item.appInfo.appIcon)
         holder.binding.appName.text = item.appInfo.appName
@@ -45,7 +49,9 @@ class RunningAppsAdapter : RecyclerView.Adapter<ViewHolder>() {
         holder.binding.processesHolder.text = sb.toString()
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(
+        itemView: View,
+    ) : RecyclerView.ViewHolder(itemView) {
         val binding: RunningAppsItemBinding = RunningAppsItemBinding.bind(itemView)
     }
 }

@@ -18,7 +18,10 @@ class AppsSetStat private constructor() {
     var appsStat = HashMap<String, AppStat>()
 
     companion object {
-        fun computeUsage(oldStat: AppsSetStat, newStat: AppsSetStat): AppsSetStat {
+        fun computeUsage(
+            oldStat: AppsSetStat,
+            newStat: AppsSetStat,
+        ): AppsSetStat {
             val usage = AppsSetStat()
             usage.sampleTime = newStat.sampleTime
             usage.clockTime = newStat.clockTime - oldStat.clockTime
@@ -35,7 +38,10 @@ class AppsSetStat private constructor() {
             return usage
         }
 
-        fun createSnapshot(cxt: Context, pkgNames: ArrayList<String>?): AppsSetStat {
+        fun createSnapshot(
+            cxt: Context,
+            pkgNames: ArrayList<String>?,
+        ): AppsSetStat {
             val appsSetStat = AppsSetStat()
             appsSetStat.sampleTime = System.currentTimeMillis()
             appsSetStat.clockTime = SystemClock.uptimeMillis()

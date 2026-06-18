@@ -10,11 +10,14 @@ object SamplerUtils {
             val sdRoot = Environment.getExternalStorageDirectory()
             return File(
                 sdRoot,
-                AppConstants.EXTERNAL_STORAGE_PATH_APPS_SAMPLER
+                AppConstants.EXTERNAL_STORAGE_PATH_APPS_SAMPLER,
             )
         }
 
-    fun getFileForSampler(fileName: String, mkdir: Boolean): File {
+    fun getFileForSampler(
+        fileName: String,
+        mkdir: Boolean,
+    ): File {
         val appDir = samplerFolder
         if (mkdir) {
             appDir.mkdirs()

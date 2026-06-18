@@ -18,7 +18,9 @@ import me.ycdev.android.lib.common.wrapper.IntentHelper.getIntExtra
 import me.ycdev.android.lib.common.wrapper.IntentHelper.getStringExtra
 import timber.log.Timber
 
-class BluetoothViewerActivity : AppCompatBaseActivity(), OnClickListener {
+class BluetoothViewerActivity :
+    AppCompatBaseActivity(),
+    OnClickListener {
     private lateinit var binding: ActBluetoothViewerBinding
 
     private var logContents = ""
@@ -46,39 +48,49 @@ class BluetoothViewerActivity : AppCompatBaseActivity(), OnClickListener {
         unregisterBluetoothReceiver()
     }
 
-    private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val action = intent.action
-            if (BluetoothAdapter.ACTION_STATE_CHANGED == action) {
-                val preState = getIntExtra(
-                    intent,
-                    BluetoothAdapter.EXTRA_PREVIOUS_STATE,
-                    STATE_UNKNOWN
-                )
-                val newState = getIntExtra(
-                    intent,
-                    BluetoothAdapter.EXTRA_STATE, STATE_UNKNOWN
-                )
-                addStateChangeLog(preState, newState)
-            } else if (BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED == action) {
-                val preState = getIntExtra(
-                    intent,
-                    BluetoothAdapter.EXTRA_PREVIOUS_CONNECTION_STATE,
-                    STATE_UNKNOWN
-                )
-                val newState = getIntExtra(
-                    intent,
-                    BluetoothAdapter.EXTRA_CONNECTION_STATE,
-                    STATE_UNKNOWN
-                )
-                val remoteDevice = getStringExtra(
-                    intent,
-                    BluetoothDevice.EXTRA_DEVICE
-                )
-                addConnectionChangeLog(preState, newState, remoteDevice)
+    private val receiver: BroadcastReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context,
+                intent: Intent,
+            ) {
+                val action = intent.action
+                if (BluetoothAdapter.ACTION_STATE_CHANGED == action) {
+                    val preState =
+                        getIntExtra(
+                            intent,
+                            BluetoothAdapter.EXTRA_PREVIOUS_STATE,
+                            STATE_UNKNOWN,
+                        )
+                    val newState =
+                        getIntExtra(
+                            intent,
+                            BluetoothAdapter.EXTRA_STATE,
+                            STATE_UNKNOWN,
+                        )
+                    addStateChangeLog(preState, newState)
+                } else if (BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED == action) {
+                    val preState =
+                        getIntExtra(
+                            intent,
+                            BluetoothAdapter.EXTRA_PREVIOUS_CONNECTION_STATE,
+                            STATE_UNKNOWN,
+                        )
+                    val newState =
+                        getIntExtra(
+                            intent,
+                            BluetoothAdapter.EXTRA_CONNECTION_STATE,
+                            STATE_UNKNOWN,
+                        )
+                    val remoteDevice =
+                        getStringExtra(
+                            intent,
+                            BluetoothDevice.EXTRA_DEVICE,
+                        )
+                    addConnectionChangeLog(preState, newState, remoteDevice)
+                }
             }
         }
-    }
 
     private fun registerBluetoothReceiver() {
         val intentFilter = IntentFilter()
@@ -91,7 +103,10 @@ class BluetoothViewerActivity : AppCompatBaseActivity(), OnClickListener {
         unregisterReceiver(receiver)
     }
 
-    private fun addStateChangeLog(preState: Int, newState: Int) {
+    private fun addStateChangeLog(
+        preState: Int,
+        newState: Int,
+    ) {
         val log =
             "State changed: " + getStateString(preState) + " -> " + getStateString(newState)
         appendNewLog(log)
@@ -100,11 +115,13 @@ class BluetoothViewerActivity : AppCompatBaseActivity(), OnClickListener {
     private fun addConnectionChangeLog(
         preState: Int,
         newState: Int,
-        remoteDevice: String?
+        remoteDevice: String?,
     ) {
         val log =
-            ("Connection changed: " + getStateString(preState) + " -> " + getStateString(newState) +
-                    ", remoteDevice: " + remoteDevice)
+            (
+                "Connection changed: " + getStateString(preState) + " -> " + getStateString(newState) +
+                    ", remoteDevice: " + remoteDevice
+            )
         appendNewLog(log)
     }
 

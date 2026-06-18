@@ -3,7 +3,9 @@ package me.ycdev.android.devtools.root
 import me.ycdev.android.lib.common.internalapi.android.app.ActivityManagerIA
 import timber.log.Timber
 
-class RootJarExecutor private constructor(private val args: Array<String>) {
+class RootJarExecutor private constructor(
+    private val args: Array<String>,
+) {
     private fun execute() {
         val cmd = args[0]
         if (cmd == CMD_FORCE_STOP_PACKAGE) {
@@ -24,7 +26,8 @@ class RootJarExecutor private constructor(private val args: Array<String>) {
         @JvmStatic
         fun main(args: Array<String>) {
             Timber.tag(TAG).d(
-                "Received params: %s", args.contentToString()
+                "Received params: %s",
+                args.contentToString(),
             )
             if (args.isEmpty()) {
                 Timber.tag(TAG).e("Usage: RootJarExecutor <command> [command parameters]")
@@ -39,7 +42,7 @@ class RootJarExecutor private constructor(private val args: Array<String>) {
             if (service != null) {
                 Timber.tag(TAG).d(
                     "to kill apps: %s",
-                    pkgNames.contentToString()
+                    pkgNames.contentToString(),
                 )
                 for (pkg in pkgNames) {
                     ActivityManagerIA.forceStopPackage(service, pkg)

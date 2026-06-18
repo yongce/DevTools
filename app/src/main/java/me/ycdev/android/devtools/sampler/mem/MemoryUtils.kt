@@ -9,7 +9,7 @@ object MemoryUtils {
      */
     fun getProcessMemoryStat(
         cxt: Context,
-        pids: IntArray
+        pids: IntArray,
     ): Array<ProcMemStat?> {
         val am = cxt.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val pidsMemInfo = am.getProcessMemoryInfo(pids)

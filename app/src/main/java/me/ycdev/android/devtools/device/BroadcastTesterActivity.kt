@@ -31,7 +31,7 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         intent: Intent,
         title: String,
         desc: String,
-        perm: String? = null
+        perm: String? = null,
     ) : IntentEntry(type, intent, title, desc, perm) {
         override fun onItemClicked(context: Context) {
             try {
@@ -44,39 +44,45 @@ class BroadcastTesterActivity : GridEntriesActivity() {
     }
 
     private var targetPkgName: String? = null
-    private val receiver1: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(
-            context: Context,
-            intent: Intent
-        ) {
-            ToastHelper.show(
-                applicationContext, "Received1: " + intent.action,
-                Toast.LENGTH_LONG
-            )
+    private val receiver1: BroadcastReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context,
+                intent: Intent,
+            ) {
+                ToastHelper.show(
+                    applicationContext,
+                    "Received1: " + intent.action,
+                    Toast.LENGTH_LONG,
+                )
+            }
         }
-    }
-    private val receiver2: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(
-            context: Context,
-            intent: Intent
-        ) {
-            ToastHelper.show(
-                applicationContext, "Received2: " + intent.action,
-                Toast.LENGTH_LONG
-            )
+    private val receiver2: BroadcastReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context,
+                intent: Intent,
+            ) {
+                ToastHelper.show(
+                    applicationContext,
+                    "Received2: " + intent.action,
+                    Toast.LENGTH_LONG,
+                )
+            }
         }
-    }
 
     override fun onResume() {
         super.onResume()
         @Suppress("DEPRECATION")
         registerForExternal(
-            this, receiver1,
-            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+            this,
+            receiver1,
+            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION),
         )
         registerForInternal(
-            this, receiver2,
-            IntentFilter(AppConstants.ACTION_DYNAMIC_BROADCAST_TEST)
+            this,
+            receiver2,
+            IntentFilter(AppConstants.ACTION_DYNAMIC_BROADCAST_TEST),
         )
     }
 
@@ -113,7 +119,8 @@ class BroadcastTesterActivity : GridEntriesActivity() {
     }
 
     private fun showCrashInfo(e: Exception) {
-        AlertDialog.Builder(this)
+        AlertDialog
+            .Builder(this)
             .setTitle("Crashe Info")
             .setMessage(e.toString())
             .show()
@@ -121,20 +128,26 @@ class BroadcastTesterActivity : GridEntriesActivity() {
 
     private fun testBroadcastWithPerm(itemsList: MutableList<MyIntentEntry>) {
         val intent = Intent(AppConstants.ACTION_DYNAMIC_BROADCAST_TEST)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "Broadcast#1",
-            "Send Broadcast with perm: " + intent.action,
-            getInternalBroadcastPerm(this)
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "Broadcast#1",
+                "Send Broadcast with perm: " + intent.action,
+                getInternalBroadcastPerm(this),
+            )
         itemsList.add(item)
     }
 
     private fun testBroadcastWithoutPerm(itemsList: MutableList<MyIntentEntry>) {
         val intent = Intent(AppConstants.ACTION_DYNAMIC_BROADCAST_TEST)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "Broadcast#2",
-            "Send Broadcast without perm: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "Broadcast#2",
+                "Send Broadcast without perm: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -142,10 +155,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // SecurityException: protected-broadcast
         val intent = Intent(Intent.ACTION_PACKAGE_ADDED)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "PackageAdded",
-            "Send package added broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "PackageAdded",
+                "Send package added broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -153,10 +169,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // SecurityException: protected-broadcast
         val intent = Intent(Intent.ACTION_PACKAGE_REPLACED)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "PackageReplaced",
-            "Send package replaced broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "PackageReplaced",
+                "Send package replaced broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -164,10 +183,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // SecurityException: protected-broadcast
         val intent = Intent(Intent.ACTION_PACKAGE_REMOVED)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "PackageRemoved",
-            "Send package removed broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "PackageRemoved",
+                "Send package removed broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -175,10 +197,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // SecurityException: protected-broadcast
         val intent = Intent(Intent.ACTION_PACKAGE_CHANGED)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "PackageChanged",
-            "Send package changed broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "PackageChanged",
+                "Send package changed broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -187,10 +212,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // SecurityException: protected-broadcast
         val intent = Intent(Intent.ACTION_NEW_OUTGOING_CALL)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "NewOutgoingCall",
-            "Send new outgoing call broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "NewOutgoingCall",
+                "Send new outgoing call broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -199,10 +227,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // OK: the broadcast has no protection (last checked version: android-4.4_r1.1)
         val intent = Intent(Intents.SMS_RECEIVED_ACTION)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "SmsReceived",
-            "Send SMS received broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "SmsReceived",
+                "Send SMS received broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -211,10 +242,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // Permission Denial: android.permission.BROADCAST_SMS (signature protection) (Supported by android-4.4)
         val intent = Intent(Intents.SMS_DELIVER_ACTION)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "SmsDeliver",
-            "Send SMS deliver broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "SmsDeliver",
+                "Send SMS deliver broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -225,10 +259,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         @Suppress("DEPRECATION")
         val intent = Intent(ConnectivityManager.CONNECTIVITY_ACTION)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "ConnectChange",
-            "Send network connectivity change broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "ConnectChange",
+                "Send network connectivity change broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -237,10 +274,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // b) SecurityException: protected-broadcast (android-4.2.2_r1+)
         val intent = Intent(WifiManager.WIFI_STATE_CHANGED_ACTION)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "WifiChange",
-            "Send wifi state change broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "WifiChange",
+                "Send wifi state change broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -248,10 +288,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // SecurityException: protected-broadcast
         val intent = Intent(Intent.ACTION_BOOT_COMPLETED)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "BootCompleted",
-            "Send boot completed broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "BootCompleted",
+                "Send boot completed broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -259,10 +302,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // SecurityException: protected-broadcast
         val intent = Intent(Intent.ACTION_SHUTDOWN)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "Shutdown",
-            "Send shutdown broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "Shutdown",
+                "Send shutdown broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -271,10 +317,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // b) SecurityException: protected-broadcast (android-4.4_r0.7+)
         val intent = Intent(Intent.ACTION_TIME_CHANGED)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "TimeSet",
-            "Send time set broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "TimeSet",
+                "Send time set broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -282,10 +331,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // OK: no protection (last checked version: android-4.4_r1.1)
         val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "AppWidgetUpdate",
-            "Send app widget update broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "AppWidgetUpdate",
+                "Send app widget update broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -293,10 +345,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // SecurityException: protected-broadcast
         val intent = Intent(BluetoothAdapter.ACTION_STATE_CHANGED)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "BluetoothChange",
-            "Send bluetooth state change broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "BluetoothChange",
+                "Send bluetooth state change broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -305,10 +360,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // b) SecurityException: protected-broadcast (android-4.3_r0.9+)
         val intent = Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "AirplaceChange",
-            "Send airplane mode change broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "AirplaceChange",
+                "Send airplane mode change broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 
@@ -317,10 +375,13 @@ class BroadcastTesterActivity : GridEntriesActivity() {
         // b) SecurityException: protected-broadcast (android-4.4_r0.7+)
         val intent = Intent(LocationManager.PROVIDERS_CHANGED_ACTION)
         intent.setPackage(targetPkgName)
-        val item = MyIntentEntry(
-            INTENT_TYPE_BROADCAST, intent, "LocationChange",
-            "Send location change broadcast: " + intent.action
-        )
+        val item =
+            MyIntentEntry(
+                INTENT_TYPE_BROADCAST,
+                intent,
+                "LocationChange",
+                "Send location change broadcast: " + intent.action,
+            )
         itemsList.add(item)
     }
 }

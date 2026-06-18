@@ -18,7 +18,10 @@ import me.ycdev.android.lib.common.utils.WeakHandler
 import me.ycdev.android.lib.common.wrapper.IntentHelper
 import timber.log.Timber
 
-class UnmarshallScannerActivity : AppCompatBaseActivity(), OnClickListener, Callback {
+class UnmarshallScannerActivity :
+    AppCompatBaseActivity(),
+    OnClickListener,
+    Callback {
     private lateinit var binding: ActUnmarshallScannerBinding
 
     private var mTargetPkgName: String? = null
@@ -65,15 +68,20 @@ class UnmarshallScannerActivity : AppCompatBaseActivity(), OnClickListener, Call
         Timber.tag(TAG).i("onDestroy()")
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+    ) {
         super.onActivityResult(requestCode, resultCode, data)
         Timber.tag(TAG).i("onActivityResult, requestCode: $requestCode, resultCode: $resultCode")
         if (requestCode == REQUEST_CODE_APP_SELECTOR) {
             if (resultCode == Activity.RESULT_OK) {
-                val pkgNames = IntentHelper.getStringArrayListExtra(
-                    data,
-                    AppsSelectorActivity.RESULT_EXTRA_APPS_PKG_NAMES
-                )
+                val pkgNames =
+                    IntentHelper.getStringArrayListExtra(
+                        data,
+                        AppsSelectorActivity.RESULT_EXTRA_APPS_PKG_NAMES,
+                    )
                 Timber.tag(TAG).i("selected app: $pkgNames")
                 if (pkgNames != null && pkgNames.size > 0) {
                     updateSelectedApp(pkgNames[0])
@@ -89,10 +97,11 @@ class UnmarshallScannerActivity : AppCompatBaseActivity(), OnClickListener, Call
         } else {
             binding.testAll.isEnabled = false
         }
-        val appSelected = getString(
-            R.string.security_scanner_unmarshall_app_selected_state,
-            if (mTargetPkgName != null) mTargetPkgName else ""
-        )
+        val appSelected =
+            getString(
+                R.string.security_scanner_unmarshall_app_selected_state,
+                if (mTargetPkgName != null) mTargetPkgName else "",
+            )
         binding.appSelectedState.text = appSelected
     }
 
@@ -101,7 +110,7 @@ class UnmarshallScannerActivity : AppCompatBaseActivity(), OnClickListener, Call
             val intent = Intent(this, AppsSelectorActivity::class.java)
             startActivityForResult(
                 intent,
-                REQUEST_CODE_APP_SELECTOR
+                REQUEST_CODE_APP_SELECTOR,
             )
         } else if (v === binding.testAll) {
             if (scanTask != null) {
@@ -129,7 +138,9 @@ class UnmarshallScannerActivity : AppCompatBaseActivity(), OnClickListener, Call
         mHandler.sendEmptyMessageDelayed(MSG_CHECK_DONE, 3000)
     }
 
-    private class MyScanController(targetPkgName: String) : IScanController {
+    private class MyScanController(
+        targetPkgName: String,
+    ) : IScanController {
         private var _needKillApp: Boolean = false
         private var _isCanceled: Boolean = false
 

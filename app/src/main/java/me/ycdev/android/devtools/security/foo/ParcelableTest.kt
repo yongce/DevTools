@@ -15,24 +15,21 @@ class ParcelableTest : Parcelable {
         oomValue = `in`.readInt()
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
-    override fun writeToParcel(dest: Parcel, flags: Int) {
+    override fun writeToParcel(
+        dest: Parcel,
+        flags: Int,
+    ) {
         dest.writeInt(oomValue)
     }
 
     companion object {
         @JvmField val CREATOR: Creator<ParcelableTest> =
             object : Creator<ParcelableTest> {
-                override fun createFromParcel(`in`: Parcel): ParcelableTest? {
-                    return ParcelableTest(`in`)
-                }
+                override fun createFromParcel(`in`: Parcel): ParcelableTest? = ParcelableTest(`in`)
 
-                override fun newArray(size: Int): Array<ParcelableTest?> {
-                    return arrayOfNulls(size)
-                }
+                override fun newArray(size: Int): Array<ParcelableTest?> = arrayOfNulls(size)
             }
     }
 }

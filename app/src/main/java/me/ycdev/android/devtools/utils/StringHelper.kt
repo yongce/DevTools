@@ -7,7 +7,7 @@ object StringHelper {
         strBuilder: StringBuilder,
         prefix: String?,
         context: Context,
-        macroSeconds: Long
+        macroSeconds: Long,
     ) {
         val timeUnit = 1000 * 1000.toLong()
         strBuilder.append(prefix)
@@ -19,7 +19,7 @@ object StringHelper {
     fun addCountEntry(
         strBuilder: StringBuilder,
         prefix: String?,
-        count: Int
+        count: Int,
     ) {
         strBuilder.append(prefix)
         strBuilder.append(count)
@@ -29,7 +29,7 @@ object StringHelper {
     fun addBooleanEntry(
         strBuilder: StringBuilder,
         prefix: String?,
-        yesNo: Boolean
+        yesNo: Boolean,
     ) {
         strBuilder.append(prefix)
         strBuilder.append(yesNo)
@@ -40,7 +40,7 @@ object StringHelper {
         strBuilder: StringBuilder,
         prefix: String?,
         context: Context?,
-        bytes: Long
+        bytes: Long,
     ) {
         strBuilder.append(prefix)
         strBuilder.append(FormatHelper.formatBytes(context, bytes))
@@ -50,7 +50,7 @@ object StringHelper {
     fun addDoubleEntry(
         strBuilder: StringBuilder,
         prefix: String?,
-        value: Double
+        value: Double,
     ) {
         strBuilder.append(prefix)
         strBuilder.append(value)
@@ -60,7 +60,7 @@ object StringHelper {
     fun addStringEntry(
         strBuilder: StringBuilder,
         prefix: String?,
-        str: String?
+        str: String?,
     ) {
         strBuilder.append(prefix)
         strBuilder.append(str)

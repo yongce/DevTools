@@ -8,15 +8,22 @@ import timber.log.Timber
  * and disabled dynamically.
  */
 data class SysCpuStat(
-    var utime: Long = 0, // user mode
-    var ntime: Long = 0, // user mode with low priority (nice)
-    var stime: Long = 0 // kernel mode
+    // user mode
+    var utime: Long = 0,
+    // user mode with low priority (nice)
+    var ntime: Long = 0,
+    // kernel mode
+    var stime: Long = 0,
 ) {
     val timeUsed: Long get() = utime + ntime + stime
 
-    fun sum(previousSnapshot: SysCpuStat, curSnapshot: SysCpuStat) {
+    fun sum(
+        previousSnapshot: SysCpuStat,
+        curSnapshot: SysCpuStat,
+    ) {
         if (!checkStatSnapshot(previousSnapshot, curSnapshot)) {
-            Timber.tag(TAG)
+            Timber
+                .tag(TAG)
                 .w("bad CPU stats, previous: %s, current: %s", previousSnapshot, curSnapshot)
             return
         }
@@ -30,15 +37,14 @@ data class SysCpuStat(
 
         fun checkStatSnapshot(
             previousSnapshot: SysCpuStat?,
-            curSnapshot: SysCpuStat
-        ): Boolean {
-            return if (previousSnapshot == null) {
+            curSnapshot: SysCpuStat,
+        ): Boolean =
+            if (previousSnapshot == null) {
                 curSnapshot.utime >= 0 && curSnapshot.ntime >= 0 && curSnapshot.stime >= 0
             } else {
                 curSnapshot.utime >= previousSnapshot.utime &&
-                        curSnapshot.ntime >= previousSnapshot.ntime &&
-                        curSnapshot.stime >= previousSnapshot.stime
+                    curSnapshot.ntime >= previousSnapshot.ntime &&
+                    curSnapshot.stime >= previousSnapshot.stime
             }
-        }
     }
 }

@@ -7,30 +7,39 @@ import android.widget.LinearLayout
 import android.widget.TextView
 
 object ViewHelper {
-    fun addTextView(holder: ViewGroup, itemValue: String?) {
+    fun addTextView(
+        holder: ViewGroup,
+        itemValue: String?,
+    ) {
         val itemView = TextView(holder.context)
-        itemView.layoutParams = LayoutParams(
-            LayoutParams.WRAP_CONTENT,
-            LayoutParams.WRAP_CONTENT
-        )
+        itemView.layoutParams =
+            LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
+            )
         itemView.text = itemValue
         holder.addView(itemView)
     }
 
-    fun addLineView(holder: ViewGroup, color: Int) {
+    fun addLineView(
+        holder: ViewGroup,
+        color: Int,
+    ) {
         val context = holder.context
         val lineView = ImageView(context)
-        lineView.layoutParams = LayoutParams(
-            LayoutParams.MATCH_PARENT,
-            1
-        )
+        lineView.layoutParams =
+            LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                1,
+            )
         lineView.setBackgroundColor(color)
         val marginView = LinearLayout(context)
         marginView.setPadding(0, 6, 0, 6)
-        marginView.layoutParams = LayoutParams(
-            LayoutParams.MATCH_PARENT,
-            LayoutParams.WRAP_CONTENT
-        )
+        marginView.layoutParams =
+            LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT,
+            )
         marginView.addView(lineView)
         holder.addView(marginView)
     }
@@ -38,7 +47,7 @@ object ViewHelper {
     fun addTextView(
         holder: ViewGroup,
         itemName: String,
-        itemValue: String?
+        itemValue: String?,
     ) {
         addTextView(holder, "$itemName: $itemValue")
     }
@@ -46,7 +55,7 @@ object ViewHelper {
     fun addTextView(
         holder: ViewGroup,
         itemName: String,
-        itemValue: Boolean
+        itemValue: Boolean,
     ) {
         addTextView(holder, itemName, itemValue.toString())
     }
@@ -54,7 +63,7 @@ object ViewHelper {
     fun addTextView(
         holder: ViewGroup,
         itemName: String,
-        itemValue: Int
+        itemValue: Int,
     ) {
         addTextView(holder, itemName, itemValue.toString())
     }
@@ -62,7 +71,7 @@ object ViewHelper {
     fun addTextView(
         holder: ViewGroup,
         itemName: String,
-        itemValue: Double
+        itemValue: Double,
     ) {
         addTextView(holder, itemName, itemValue.toString())
     }
@@ -70,7 +79,7 @@ object ViewHelper {
     fun addTimeTextView(
         holder: ViewGroup,
         itemName: String,
-        macroSeconds: Long
+        macroSeconds: Long,
     ) {
         val seconds = (macroSeconds / (1000 * 1000)).toInt()
         val timeStr = FormatHelper.formatElapsedTime(holder.context, seconds)
@@ -80,7 +89,7 @@ object ViewHelper {
     fun addBytesTextView(
         holder: ViewGroup,
         itemName: String,
-        bytes: Long
+        bytes: Long,
     ) {
         val bytesStr = FormatHelper.formatBytes(holder.context, bytes)
         addTextView(holder, itemName, bytesStr)

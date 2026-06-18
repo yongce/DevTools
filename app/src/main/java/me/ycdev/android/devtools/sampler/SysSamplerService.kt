@@ -16,7 +16,9 @@ import me.ycdev.android.lib.common.utils.DateTimeUtils
 import me.ycdev.android.lib.common.wrapper.IntentHelper
 import timber.log.Timber
 
-class SysSamplerService : Service(), Callback {
+class SysSamplerService :
+    Service(),
+    Callback {
     private var sampleInterval = 0 // milliseconds
     private var sampleTime = 0 // milliseconds
     private var keepSnapshots = false
@@ -25,11 +27,13 @@ class SysSamplerService : Service(), Callback {
     private var sysCpuTracker: SysCpuTracker? = null
     private var wakeLock: WakeLock? = null
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent): IBinder? = null
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int,
+    ): Int {
         if (intent == null) {
             return START_STICKY
         }
@@ -41,23 +45,25 @@ class SysSamplerService : Service(), Callback {
             sampleInterval = IntentHelper.getIntExtra(
                 intent,
                 EXTRA_SAMPLE_INTERVAL,
-                DEFAULT_SAMPLE_INTERVAL
+                DEFAULT_SAMPLE_INTERVAL,
             ) * 1000
             sampleTime = IntentHelper.getIntExtra(
                 intent,
                 EXTRA_SAMPLE_TIME,
-                DEFAULT_SAMPLE_TIME
+                DEFAULT_SAMPLE_TIME,
             ) * 1000
-            keepSnapshots = IntentHelper.getBooleanExtra(
-                intent,
-                EXTRA_KEEP_SNAPSHOTS,
-                DEFAULT_KEEP_SNAPSHOTS
-            )
-            keepWakelock = IntentHelper.getBooleanExtra(
-                intent,
-                EXTRA_KEEP_WAKELOCK,
-                DEFAULT_KEEP_WAKELOCK
-            )
+            keepSnapshots =
+                IntentHelper.getBooleanExtra(
+                    intent,
+                    EXTRA_KEEP_SNAPSHOTS,
+                    DEFAULT_KEEP_SNAPSHOTS,
+                )
+            keepWakelock =
+                IntentHelper.getBooleanExtra(
+                    intent,
+                    EXTRA_KEEP_WAKELOCK,
+                    DEFAULT_KEEP_WAKELOCK,
+                )
             startTracker()
         }
         return START_STICKY
@@ -90,7 +96,7 @@ class SysSamplerService : Service(), Callback {
         handler.sendEmptyMessage(MSG_SAMPLE)
         handler.sendEmptyMessageDelayed(
             MSG_SAMPLE,
-            sampleTime.toLong()
+            sampleTime.toLong(),
         )
     }
 
@@ -102,19 +108,23 @@ class SysSamplerService : Service(), Callback {
             "stats report (%s ~ %s, %d samples)",
             DateTimeUtils.getReadableTimeStamp(sysCpuTracker!!.startSysTime),
             DateTimeUtils.getReadableTimeStamp(sysCpuTracker!!.endSysTime),
-            sysCpuTracker!!.sampleCount
+            sysCpuTracker!!.sampleCount,
         )
         Timber.tag(TAG).i(
             "utime: %d, ntime: %d, stime: %d",
-            sysCpuUsage!!.utime, sysCpuUsage.ntime, sysCpuUsage.stime
+            sysCpuUsage!!.utime,
+            sysCpuUsage.ntime,
+            sysCpuUsage.stime,
         )
         Timber.tag(TAG).i(
-            "cpu time used: %d, natural time used: %d", sysCpuUsage.timeUsed,
-            sysCpuTracker!!.naturalTimeUsed
+            "cpu time used: %d, natural time used: %d",
+            sysCpuUsage.timeUsed,
+            sysCpuTracker!!.naturalTimeUsed,
         )
         val snapshotList = sysCpuTracker!!.snapshotList
         if (snapshotList != null) {
-            Timber.tag(TAG)
+            Timber
+                .tag(TAG)
                 .i("snapshot list: %s", Gson().toJson(snapshotList))
         }
         stopSelf()
@@ -130,7 +140,7 @@ class SysSamplerService : Service(), Callback {
             } else {
                 handler.sendEmptyMessageDelayed(
                     MSG_SAMPLE,
-                    sampleInterval.toLong()
+                    sampleInterval.toLong(),
                 )
             }
         }

@@ -1,9 +1,10 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 apply from: "${androidModuleCommon}"
 apply from: '../build_common.gradle'
 
 android {
+    namespace "me.ycdev.android.devtools.common"
+
     defaultConfig {
         minSdkVersion versions.minSdk
     }

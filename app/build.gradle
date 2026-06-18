@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
 apply from: "${androidModuleCommon}"
 apply from: '../build_common.gradle'
 
 android {
+    namespace "me.ycdev.android.devtools"
+
     defaultConfig {
         applicationId "me.ycdev.android.devtools"
         minSdkVersion versions.minSdk
-        targetSdkVersion 31
+        targetSdkVersion versions.targetSdk
 
         versionName getAppVersionNameBase() // + build type suffix
         versionCode getAppVersionCodeBase() * 10000 + calculatedVersionCode
@@ -15,7 +16,10 @@ android {
         buildConfigField "boolean", "DEBUG_LOG", "false"
     }
 
-    buildFeatures.viewBinding = true
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
 
     buildTypes {
         debug {
@@ -27,24 +31,23 @@ android {
         release {
             versionNameSuffix "-" + calculatedVersionCode + buildIdSuffix
 
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), "proguard-rules.txt"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "proguard-rules.txt"
         }
     }
 
-    lintOptions {
+    lint {
         textReport true
-        textOutput 'stdout'
 
         // disable category "Accessibility"
-        disable 'ClickableViewAccessibility','ContentDescription','LabelFor'
-        disable 'IconMissingDensityFolder'
-        disable 'GoogleAppIndexingWarning'
+        disable += ['ClickableViewAccessibility','ContentDescription','LabelFor']
+        disable += ['IconMissingDensityFolder']
+        disable += ['GoogleAppIndexingWarning']
 
         // for 'src/main/assets/busybox_static'
-        disable 'UnsafeNativeCodeLocation'
+        disable += ['UnsafeNativeCodeLocation']
 
         // for http://code.google.com/p/android/issues/detail?id=223795
-        disable 'PrivateResource'
+        disable += ['PrivateResource']
     }
 }
 

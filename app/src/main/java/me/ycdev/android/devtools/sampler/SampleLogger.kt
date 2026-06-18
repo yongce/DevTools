@@ -19,34 +19,53 @@ class SampleLogger : Closeable {
         }
     }
 
-    private fun addLog(tag: String, msg: String) {
+    private fun addLog(
+        tag: String,
+        msg: String,
+    ) {
         val timeStamp = getReadableTimeStamp(System.currentTimeMillis())
         try {
-            logWriter.append(timeStamp).append(STAT_FILE_COLUMNS_SEP)
-                .append(tag).append(STAT_FILE_COLUMNS_SEP)
-                .append(msg).append("\n")
+            logWriter
+                .append(timeStamp)
+                .append(STAT_FILE_COLUMNS_SEP)
+                .append(tag)
+                .append(STAT_FILE_COLUMNS_SEP)
+                .append(msg)
+                .append("\n")
             logWriter.flush()
         } catch (e: IOException) {
             Timber.tag(TAG).w(e, "ignored IO exception")
         }
     }
 
-    fun logDebug(tag: String, msg: String) {
+    fun logDebug(
+        tag: String,
+        msg: String,
+    ) {
         Timber.tag(tag).d(msg)
         addLog(tag, msg)
     }
 
-    fun logInfo(tag: String, msg: String) {
+    fun logInfo(
+        tag: String,
+        msg: String,
+    ) {
         Timber.tag(tag).i(msg)
         addLog(tag, msg)
     }
 
-    fun logWarning(tag: String, msg: String) {
+    fun logWarning(
+        tag: String,
+        msg: String,
+    ) {
         Timber.tag(tag).w(msg)
         addLog(tag, msg)
     }
 
-    fun logError(tag: String, msg: String) {
+    fun logError(
+        tag: String,
+        msg: String,
+    ) {
         Timber.tag(tag).e(msg)
         addLog(tag, msg)
     }

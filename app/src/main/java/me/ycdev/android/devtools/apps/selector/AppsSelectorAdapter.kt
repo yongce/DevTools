@@ -17,28 +17,28 @@ import java.util.HashSet
 
 open class AppsSelectorAdapter(
     private val changeListener: SelectedAppsChangeListener,
-    private val multiChoice: Boolean
+    private val multiChoice: Boolean,
 ) : RecyclerView.Adapter<ViewHolder>() {
-
     interface SelectedAppsChangeListener {
         fun onSelectedAppsChanged(newCount: Int)
     }
 
-    private val checkedChangeListener = OnClickListener { v ->
-        val item = v.tag as AppInfo
-        item.isSelected = !item.isSelected
-        if (item.isSelected) {
-            if (!multiChoice && selectedAppsCount > 0) {
-                oneSelectedApp?.isSelected = false
-                _selectedApps.clear()
+    private val checkedChangeListener =
+        OnClickListener { v ->
+            val item = v.tag as AppInfo
+            item.isSelected = !item.isSelected
+            if (item.isSelected) {
+                if (!multiChoice && selectedAppsCount > 0) {
+                    oneSelectedApp?.isSelected = false
+                    _selectedApps.clear()
+                }
+                _selectedApps.add(item)
+            } else {
+                _selectedApps.remove(item)
             }
-            _selectedApps.add(item)
-        } else {
-            _selectedApps.remove(item)
+            notifyDataSetChanged()
+            changeListener.onSelectedAppsChanged(_selectedApps.size)
         }
-        notifyDataSetChanged()
-        changeListener.onSelectedAppsChanged(_selectedApps.size)
-    }
 
     private val _selectedApps = HashSet<AppInfo>()
     val selectedAppsCount: Int
@@ -61,22 +61,26 @@ open class AppsSelectorAdapter(
         }
     }
 
-    private fun getItem(position: Int): AppInfo {
-        return data!![position]
-    }
+    private fun getItem(position: Int): AppInfo = data!![position]
 
-    override fun getItemCount(): Int {
-        return data?.size ?: 0
-    }
+    override fun getItemCount(): Int = data?.size ?: 0
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.apps_selector_list_item, parent, false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder {
+        val itemView =
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.apps_selector_list_item, parent, false)
         return ViewHolder(itemView)
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         val item = getItem(position)
         holder.binding.appIcon.setImageDrawable(item.appIcon)
         holder.binding.appName.text = item.appName
@@ -86,7 +90,9 @@ open class AppsSelectorAdapter(
         holder.binding.checkbox.setOnClickListener(checkedChangeListener)
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(
+        itemView: View,
+    ) : RecyclerView.ViewHolder(itemView) {
         val binding: AppsSelectorListItemBinding = AppsSelectorListItemBinding.bind(itemView)
     }
 }

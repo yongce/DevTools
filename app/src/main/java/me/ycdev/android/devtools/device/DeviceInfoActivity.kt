@@ -55,30 +55,33 @@ class DeviceInfoActivity : AppCompatBaseActivity() {
         ViewHelper.addLineView(holder, 0xff0100) // green
         ViewHelper.addTextView(holder, "LCD densityDpi", screenMetrics.densityDpi)
         ViewHelper.addTextView(
-            holder, "LCD real X&Y densityDPI",
-            screenMetrics.xdpi.toString() + " x " + screenMetrics.ydpi
+            holder,
+            "LCD real X&Y densityDPI",
+            screenMetrics.xdpi.toString() + " x " + screenMetrics.ydpi,
         )
         ViewHelper.addTextView(holder, "LCD density", screenMetrics.density.toDouble())
         ViewHelper.addTextView(holder, "LCD scaledDensity", screenMetrics.scaledDensity.toDouble())
         ViewHelper.addTextView(holder, "LCD type", screenLayoutSizeType)
         val screenSizePt = getScreenHardwareSize(this)
         ViewHelper.addTextView(
-            holder, "LCD size in pixels",
-            screenSizePt.x.toString() + " x " + screenSizePt.y
+            holder,
+            "LCD size in pixels",
+            screenSizePt.x.toString() + " x " + screenSizePt.y,
         )
         ViewHelper.addTextView(
-            holder, "LCD size in DIP",
-            (screenMetrics.widthPixels / screenMetrics.density).toString() + " x " + screenMetrics.heightPixels / screenMetrics.density
+            holder,
+            "LCD size in DIP",
+            (screenMetrics.widthPixels / screenMetrics.density).toString() + " x " + screenMetrics.heightPixels / screenMetrics.density,
         )
         ViewHelper.addTextView(
             holder,
             "VM heap",
-            SystemPropertiesIA.get("dalvik.vm.heapsize", "N/A")
+            SystemPropertiesIA.get("dalvik.vm.heapsize", "N/A"),
         )
         ViewHelper.addTextView(
             holder,
             "ANR trace",
-            SystemPropertiesIA.get("dalvik.vm.stack-trace-file", "N/A")
+            SystemPropertiesIA.get("dalvik.vm.stack-trace-file", "N/A"),
         )
         ViewHelper.addLineView(holder, -0xff0100) // green
         ViewHelper.addTextView(holder, "DNS1", SystemPropertiesIA.get("dhcp.eth0.dns1", "N/A"))
@@ -87,81 +90,99 @@ class DeviceInfoActivity : AppCompatBaseActivity() {
         ViewHelper.addTextView(
             holder,
             "Gateway",
-            SystemPropertiesIA.get("dhcp.eth0.gateway", "N/A")
+            SystemPropertiesIA.get("dhcp.eth0.gateway", "N/A"),
         )
         ViewHelper.addTextView(holder, "Mask", SystemPropertiesIA.get("dhcp.eth0.mask", "N/A"))
         ViewHelper.addLineView(holder, -0xff0100) // green
         ViewHelper.addTextView(
-            holder, "Encrypted FS: " + isEncryptedFilesystemEnabled()
-        )
-        ViewHelper.addTextView(
-            holder, "Data Dir: " + Environment.getDataDirectory().absolutePath
-        )
-        ViewHelper.addTextView(
-            holder, "Download Cache Dir: " + Environment.getDownloadCacheDirectory()
-        )
-        ViewHelper.addTextView(
-            holder, "Android Secure Data Dir: " + getSecureDataDirectory()
-        )
-        ViewHelper.addTextView(
-            holder, "Android System Secure Dir: " + getSystemSecureDirectory()
-        )
-        ViewHelper.addTextView(
-            holder, "External Storage Dir: " +
-                    Environment.getExternalStorageDirectory()
-        )
-        ViewHelper.addTextView(holder, "app#getExternalFilesDir(): " + getExternalFilesDir(null))
-        ViewHelper.addTextView(
-            holder, "External Storage state: " +
-                    Environment.getExternalStorageState()
+            holder,
+            "Encrypted FS: " + isEncryptedFilesystemEnabled(),
         )
         ViewHelper.addTextView(
             holder,
-            "External Storage size: $externalStorageSize"
+            "Data Dir: " + Environment.getDataDirectory().absolutePath,
         )
         ViewHelper.addTextView(
-            holder, "External storage removable: " +
-                    Environment.isExternalStorageRemovable()
+            holder,
+            "Download Cache Dir: " + Environment.getDownloadCacheDirectory(),
         )
         ViewHelper.addTextView(
-            holder, "External Storage Data Dir: " +
-                    getExternalStorageAndroidDataDir()
+            holder,
+            "Android Secure Data Dir: " + getSecureDataDirectory(),
         )
         ViewHelper.addTextView(
-            holder, "Alarms audio: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS)
+            holder,
+            "Android System Secure Dir: " + getSystemSecureDirectory(),
         )
         ViewHelper.addTextView(
-            holder, "DCIM: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            holder,
+            "External Storage Dir: " +
+                Environment.getExternalStorageDirectory(),
+        )
+        ViewHelper.addTextView(holder, "app#getExternalFilesDir(): " + getExternalFilesDir(null))
+        ViewHelper.addTextView(
+            holder,
+            "External Storage state: " +
+                Environment.getExternalStorageState(),
         )
         ViewHelper.addTextView(
-            holder, "Download: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            holder,
+            "External Storage size: $externalStorageSize",
         )
         ViewHelper.addTextView(
-            holder, "Movies: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
+            holder,
+            "External storage removable: " +
+                Environment.isExternalStorageRemovable(),
         )
         ViewHelper.addTextView(
-            holder, "Music: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+            holder,
+            "External Storage Data Dir: " +
+                getExternalStorageAndroidDataDir(),
         )
         ViewHelper.addTextView(
-            holder, "Notification audio: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS)
+            holder,
+            "Alarms audio: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS),
         )
         ViewHelper.addTextView(
-            holder, "Pictures: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            holder,
+            "DCIM: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
         )
         ViewHelper.addTextView(
-            holder, "Podcasts: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS)
+            holder,
+            "Download: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
         )
         ViewHelper.addTextView(
-            holder, "Ringtones: " +
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES)
+            holder,
+            "Movies: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES),
+        )
+        ViewHelper.addTextView(
+            holder,
+            "Music: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC),
+        )
+        ViewHelper.addTextView(
+            holder,
+            "Notification audio: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS),
+        )
+        ViewHelper.addTextView(
+            holder,
+            "Pictures: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+        )
+        ViewHelper.addTextView(
+            holder,
+            "Podcasts: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS),
+        )
+        ViewHelper.addTextView(
+            holder,
+            "Ringtones: " +
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES),
         )
     }
 
@@ -227,11 +248,12 @@ class DeviceInfoActivity : AppCompatBaseActivity() {
             val screen = wm.defaultDisplay
             val pt = Point()
             try {
-                val getRealSizeMethod = ReflectionUtils.findMethod(
-                    Display::class.java,
-                    "getRealSize",
-                    Point::class.java
-                )
+                val getRealSizeMethod =
+                    ReflectionUtils.findMethod(
+                        Display::class.java,
+                        "getRealSize",
+                        Point::class.java,
+                    )
                 getRealSizeMethod.invoke(screen, pt)
             } catch (e: Exception) {
                 Timber.tag(TAG).w(e, "Unexpected exception: ")

@@ -18,7 +18,8 @@ class SysCpuTrackerTest {
 
     @Test
     fun testTracker() {
-        val jsonData = "[{\"ntime\":38606,\"stime\":1314050,\"utime\":2164513}," +
+        val jsonData =
+            "[{\"ntime\":38606,\"stime\":1314050,\"utime\":2164513}," +
                 "{\"ntime\":38606,\"stime\":1314167,\"utime\":2164612}," +
                 "{\"ntime\":38610,\"stime\":1314305,\"utime\":2164690}," +
                 "{\"ntime\":38611,\"stime\":1314411,\"utime\":2164779}," +
@@ -31,10 +32,11 @@ class SysCpuTrackerTest {
                 "{\"ntime\":38611,\"stime\":1315255,\"utime\":2165277}," +
                 "{\"ntime\":38611,\"stime\":1315353,\"utime\":2165330}," +
                 "{\"ntime\":38611,\"stime\":1315426,\"utime\":2165377}]"
-        val snapshots = Gson().fromJson<List<SysCpuStat>>(
-            jsonData,
-            object : TypeToken<List<SysCpuStat?>?>() {}.type
-        )
+        val snapshots =
+            Gson().fromJson<List<SysCpuStat>>(
+                jsonData,
+                object : TypeToken<List<SysCpuStat?>?>() {}.type,
+            )
         mockkStatic(SystemClock::class)
         mockkStatic(CpuUtils::class)
         every { SystemClock.elapsedRealtime() } returns System.currentTimeMillis()

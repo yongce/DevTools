@@ -32,17 +32,20 @@ class RunningAppsActivity : AppCompatBaseActivity() {
             adapter = listAdapter
             layoutManager = LinearLayoutManager(this@RunningAppsActivity)
             addItemDecoration(
-                DividerItemDecoration(this@RunningAppsActivity, DividerItemDecoration.VERTICAL)
+                DividerItemDecoration(this@RunningAppsActivity, DividerItemDecoration.VERTICAL),
             )
         }
 
         viewModel = ViewModelProvider(this).get(RunningAppsViewModel::class.java)
-        viewModel.apps.observe(this, Observer {
-            Timber.tag(TAG).d("apps loaded: ${it.size}")
-            listAdapter.data = it
-            listAdapter.notifyDataSetChanged()
-            binding.progress.visibility = View.GONE
-        })
+        viewModel.apps.observe(
+            this,
+            Observer {
+                Timber.tag(TAG).d("apps loaded: ${it.size}")
+                listAdapter.data = it
+                listAdapter.notifyDataSetChanged()
+                binding.progress.visibility = View.GONE
+            },
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

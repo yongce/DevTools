@@ -2,7 +2,9 @@ package me.ycdev.android.devtools.sampler.cpu
 
 import android.util.SparseArray
 
-class AppCpuStat(var pkgName: String) {
+class AppCpuStat(
+    var pkgName: String,
+) {
     var procSetStats = SparseArray<ProcCpuStat?>()
 
     val total: Long
@@ -17,7 +19,10 @@ class AppCpuStat(var pkgName: String) {
         }
 
     companion object {
-        fun computeUsage(oldStat: AppCpuStat, newStat: AppCpuStat): AppCpuStat {
+        fun computeUsage(
+            oldStat: AppCpuStat,
+            newStat: AppCpuStat,
+        ): AppCpuStat {
             if (oldStat.pkgName != newStat.pkgName) {
                 throw RuntimeException("Not same pkgName")
             }

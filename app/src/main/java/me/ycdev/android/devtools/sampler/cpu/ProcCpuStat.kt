@@ -1,13 +1,18 @@
 package me.ycdev.android.devtools.sampler.cpu
 
-data class ProcCpuStat(var pid: Int) {
+data class ProcCpuStat(
+    var pid: Int,
+) {
     var utime: Long = 0 // user mode
     var stime: Long = 0 // kernel mode
 
     val total: Long get() = utime + stime
 
     companion object {
-        fun computeUsage(oldStat: ProcCpuStat, newStat: ProcCpuStat?): ProcCpuStat? {
+        fun computeUsage(
+            oldStat: ProcCpuStat,
+            newStat: ProcCpuStat?,
+        ): ProcCpuStat? {
             if (oldStat.pid != newStat!!.pid) {
                 return null
             }

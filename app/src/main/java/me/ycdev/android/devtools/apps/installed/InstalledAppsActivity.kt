@@ -38,17 +38,20 @@ class InstalledAppsActivity : AppCompatBaseActivity() {
             adapter = listAdapter
             layoutManager = LinearLayoutManager(this@InstalledAppsActivity)
             addItemDecoration(
-                DividerItemDecoration(this@InstalledAppsActivity, DividerItemDecoration.VERTICAL)
+                DividerItemDecoration(this@InstalledAppsActivity, DividerItemDecoration.VERTICAL),
             )
         }
 
         val viewModel = ViewModelProvider(this).get(InstalledAppsViewModel::class.java)
-        viewModel.apps.observe(this, Observer {
-            Timber.tag(TAG).d("apps loaded: ${it.size}")
-            listAdapter.data = it
-            listAdapter.sort(AppNameComparator())
-            binding.progress.visibility = View.GONE
-        })
+        viewModel.apps.observe(
+            this,
+            Observer {
+                Timber.tag(TAG).d("apps loaded: ${it.size}")
+                listAdapter.data = it
+                listAdapter.sort(AppNameComparator())
+                binding.progress.visibility = View.GONE
+            },
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -64,37 +67,46 @@ class InstalledAppsActivity : AppCompatBaseActivity() {
                 item.isChecked = true
                 return true
             }
+
             R.id.action_sort_by_pkg_name -> {
                 listAdapter.sort(PkgNameComparator())
                 item.isChecked = true
                 return true
             }
+
             R.id.action_sort_by_uid -> {
                 listAdapter.sort(UidComparator())
                 item.isChecked = true
                 return true
             }
+
             R.id.action_sort_by_install_time -> {
                 listAdapter.sort(InstallTimeComparator())
                 item.isChecked = true
                 return true
             }
+
             R.id.action_sort_by_update_time -> {
                 listAdapter.sort(UpdateTimeComparator())
                 item.isChecked = true
                 return true
             }
+
             R.id.action_sort_by_target_sdk -> {
                 listAdapter.sort(TargetSdkComparator())
                 item.isChecked = true
                 return true
             }
+
             R.id.action_sort_byt_min_sdk -> {
                 listAdapter.sort(MinSdkComparator())
                 item.isChecked = true
                 return true
             }
-            else -> return super.onOptionsItemSelected(item)
+
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
         }
     }
 

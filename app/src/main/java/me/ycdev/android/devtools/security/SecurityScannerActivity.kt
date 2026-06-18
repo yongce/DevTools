@@ -13,8 +13,8 @@ class SecurityScannerActivity : GridEntriesActivity() {
             IntentEntry(
                 Intent(this, UnmarshallScannerActivity::class.java),
                 getString(R.string.security_scanner_unmarshall_module_title),
-                getString(R.string.security_scanner_unmarshall_module_desc)
-            )
+                getString(R.string.security_scanner_unmarshall_module_desc),
+            ),
         )
         return activities
     }

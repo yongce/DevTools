@@ -2,7 +2,9 @@ package me.ycdev.android.devtools.sampler.mem
 
 import android.util.SparseArray
 
-class AppMemStat(var pkgName: String) {
+class AppMemStat(
+    var pkgName: String,
+) {
     var procSetStats = SparseArray<ProcMemStat?>()
 
     val totalPss: Int

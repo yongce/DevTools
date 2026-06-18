@@ -16,11 +16,19 @@ object ToastHelper {
     @Retention(AnnotationRetention.SOURCE)
     annotation class ToastDuration
 
-    fun show(cxt: Context, @StringRes msgResId: Int, @ToastDuration duration: Int) {
+    fun show(
+        cxt: Context,
+        @StringRes msgResId: Int,
+        @ToastDuration duration: Int,
+    ) {
         Toast.makeText(cxt, msgResId, duration).show()
     }
 
-    fun show(cxt: Context, msg: CharSequence, @ToastDuration duration: Int) {
+    fun show(
+        cxt: Context,
+        msg: CharSequence,
+        @ToastDuration duration: Int,
+    ) {
         Toast.makeText(cxt, msg, duration).show()
     }
 }

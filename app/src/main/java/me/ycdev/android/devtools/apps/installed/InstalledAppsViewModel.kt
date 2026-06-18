@@ -18,7 +18,9 @@ import me.ycdev.android.lib.common.apps.AppsLoadListener
 import me.ycdev.android.lib.common.apps.AppsLoader
 import timber.log.Timber
 
-class InstalledAppsViewModel(app: Application) : AndroidViewModel(app) {
+class InstalledAppsViewModel(
+    app: Application,
+) : AndroidViewModel(app) {
     private var _apps: MutableLiveData<List<AppInfo>> = MutableLiveData()
     val apps: LiveData<List<AppInfo>> = _apps
 
@@ -28,31 +30,35 @@ class InstalledAppsViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    private suspend fun loadApps(): List<AppInfo> = withContext(Dispatchers.Default) {
-        Timber.tag(TAG).d("loading apps...")
-        val timeStart = SystemClock.elapsedRealtime()
+    private suspend fun loadApps(): List<AppInfo> =
+        withContext(Dispatchers.Default) {
+            Timber.tag(TAG).d("loading apps...")
+            val timeStart = SystemClock.elapsedRealtime()
 
-        val filter = AppsLoadFilter()
-        filter.onlyMounted = false
-        filter.onlyEnabled = false
-        val config = AppsLoadConfig()
-        val listener: AppsLoadListener = object : AppsLoadListener {
-            override fun isCancelled(): Boolean {
-                return !isActive
+            val filter = AppsLoadFilter()
+            filter.onlyMounted = false
+            filter.onlyEnabled = false
+            val config = AppsLoadConfig()
+            val listener: AppsLoadListener =
+                object : AppsLoadListener {
+                    override fun isCancelled(): Boolean = !isActive
+
+                    override fun onProgressUpdated(
+                        percent: Int,
+                        appInfo: AppInfo,
+                    ) {
+                        Timber.tag(TAG).d("onProgressUpdated: $percent")
+                    }
+                }
+
+            val timeUsed = SystemClock.elapsedRealtime() - timeStart
+            if (timeUsed < 500) {
+                delay(500 - timeUsed)
             }
-
-            override fun onProgressUpdated(percent: Int, appInfo: AppInfo) {
-                Timber.tag(TAG).d("onProgressUpdated: $percent")
-            }
+            return@withContext AppsLoader
+                .getInstance(getApplication())
+                .loadInstalledApps(filter, config, listener)
         }
-
-        val timeUsed = SystemClock.elapsedRealtime() - timeStart
-        if (timeUsed < 500) {
-            delay(500 - timeUsed)
-        }
-        return@withContext AppsLoader.getInstance(getApplication())
-            .loadInstalledApps(filter, config, listener)
-    }
 
     override fun onCleared() {
         Timber.tag(TAG).d("onCleared")

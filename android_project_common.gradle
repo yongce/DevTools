@@ -28,62 +28,63 @@ ext {
 
     versions = [
             // compile
-            'compileSdk'       : 31,
+            'compileSdk'       : 37,
+            'targetSdk'        : 37,
 
             // Android official support
-            'kotlin'           : '1.6.10',
-            'kotlinCoroutine'  : "1.5.2",
+            'kotlin'           : '2.4.0',
+            'kotlinCoroutine'  : "1.11.0",
             'multidexLib'      : "2.0.1",
-            'androidxCore'     : '1.7.0',
-            'fragment'         : '1.4.1',
-            'preference'       : "1.2.0",
+            'androidxCore'     : '1.19.0',
+            'fragment'         : '1.8.9',
+            'preference'       : "1.2.1",
             'palette'          : "1.0.0",
-            'recyclerView'     : "1.2.1",
-            'constraintLayout' : "2.1.3",
+            'recyclerView'     : "1.4.0",
+            'constraintLayout' : "2.2.1",
             'vectorDrawable'   : "1.1.0",
-            'lintLib'          : '30.0.2',
-            'archCore'         : "2.1.0",
-            'lifecycle'        : "2.4.1",
-            'room'             : '2.4.1',
-            'sqlite'           : "2.2.0",
-            'navigation'       : "2.4.1",
-            'paging'           : "3.1.0",
-            'work'             : "2.7.1",
+            'lintLib'          : '31.13.2',
+            'archCore'         : "2.2.0",
+            'lifecycle'        : "2.10.0",
+            'room'             : '2.8.4',
+            'sqlite'           : "2.6.2",
+            'navigation'       : "2.9.6",
+            'paging'           : "3.3.6",
+            'work'             : "2.11.0",
             'media2'           : "1.2.1",
 
             // test
-            'testCore'         : "1.4.0",
-            'espresso'         : "3.4.0",
-            'uiautomator'      : "2.2.0",
-            'truth'            : '1.0.1',
-            'hamcrest'         : '2.2',
-            'mockito'          : "3.5.11",
+            'testCore'         : "1.7.0",
+            'espresso'         : "3.7.0",
+            'uiautomator'      : "2.3.0",
+            'truth'            : '1.4.5',
+            'hamcrest'         : '3.0',
+            'mockito'          : "5.23.0",
             'powermock'        : '1.6.6',
-            'robolectric'      : '4.5.1',
-            'mockk'            : "1.10.0",
+            'robolectric'      : '4.16.1',
+            'mockk'            : "1.14.11",
 
             // google
             'gms'              : '18.0.0',
-            'wearableSupport'  : "2.3.0",
+            'wearableSupport'  : "2.9.0",
 
             // infrastructure
             'butterknife'      : "10.2.3",
             'timber'           : "5.0.1",
-            'guava'            : "29.0-android",
+            'guava'            : "33.6.0-android",
 
             // debug
-            'leakcanary'       : "2.5",
+            'leakcanary'       : "2.14",
             'stetho'           : '1.5.1',
-            'ktlint'           : "0.41.0",
+            'ktlint'           : "1.8.0",
 
             // serializing
-            'gson'             : '2.8.6',
+            'gson'             : '2.14.0',
             'protobuf'         : "3.1.0",
 
             // network & image
-            'okhttp'           : '4.9.0',
-            'retrofit'         : '2.9.0',
-            'glide'            : '4.11.0',
+            'okhttp'           : '5.3.2',
+            'retrofit'         : '3.0.0',
+            'glide'            : '5.0.7',
             'glideTrans'       : "4.3.0",
 
             // rx
@@ -91,7 +92,7 @@ ext {
             'rxandroid'        : "2.1.1",
 
             // ycdev
-            'androidLib'       : "2.0.1",
+            'androidLib'       : "2.0.2",
 
             // others
             'zxing'            : '3.4.0',
@@ -106,17 +107,17 @@ ext {
             ],
             'androidx': [
                     // core
-                    'annotation'       : "androidx.annotation:annotation:1.3.0",
+                    'annotation'       : "androidx.annotation:annotation:1.10.0",
                     'core'             : "androidx.core:core:${versions.androidxCore}",
                     'coreKtx'          : "androidx.core:core-ktx:${versions.androidxCore}",
                     'fragment'         : "androidx.fragment:fragment:${versions.fragment}",
                     'fragmentKtx'      : "androidx.fragment:fragment-ktx:${versions.fragment}",
                     'localBroadcast'   : "androidx.localbroadcastmanager:localbroadcastmanager:1.1.0",
-                    'collection'       : "androidx.collection:collection:1.2.0",
-                    'collectionKtx'    : "androidx.collection:collection-ktx:1.2.0",
+                    'collection'       : "androidx.collection:collection:1.6.0",
+                    'collectionKtx'    : "androidx.collection:collection-ktx:1.6.0",
                     // UI
-                    'appcompat'        : "androidx.appcompat:appcompat:1.4.1",
-                    'material'         : "com.google.android.material:material:1.5.0",
+                    'appcompat'        : "androidx.appcompat:appcompat:1.7.1",
+                    'material'         : "com.google.android.material:material:1.14.0",
                     'preference'       : "androidx.preference:preference:${versions.preference}",
                     'preferenceKtx'    : "androidx.preference:preference-ktx:${versions.preference}",
                     'constraintLayout' : "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}",
@@ -127,22 +128,22 @@ ext {
                     'recyclerview'     : "androidx.recyclerview:recyclerview:${versions.recyclerView}",
                     'recyclerviewSelection' : "androidx.recyclerview:recyclerview:${versions.recyclerView}",
                     'percent'          : "androidx.percentlayout:percentlayout:1.0.0",
-                    'coordinatorLayout' : "androidx.coordinatorlayout:coordinatorlayout:1.2.0",
-                    'drawerLayout'     : "androidx.drawerlayout:drawerlayout:1.1.1",
-                    'swipeRefreshLayout' : "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0",
+                    'coordinatorLayout' : "androidx.coordinatorlayout:coordinatorlayout:1.3.0",
+                    'drawerLayout'     : "androidx.drawerlayout:drawerlayout:1.2.0",
+                    'swipeRefreshLayout' : "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0",
                     'viewPager'        : "androidx.viewpager:viewpager:1.0.0",
                     'viewPager2'       : "androidx.viewpager2:viewpager2:1.0.0",
                     'vectorDrawable'   : "androidx.vectordrawable:vectordrawable:${versions.vectorDrawable}",
                     'animatedVectorDrawable' : "androidx.vectordrawable:vectordrawable-animated:${versions.vectorDrawable}",
-                    'browser'          : "androidx.browser:browser:1.4.0",
-                    'transition'       : "androidx.transition:transition:1.4.1",
+                    'browser'          : "androidx.browser:browser:1.9.0",
+                    'transition'       : "androidx.transition:transition:1.6.0",
                     // others
                     'multidex'         : "androidx.multidex:multidex:${versions.multidexLib}",
                     'mediaSession'     : "androidx.media2:media2-session:${versions.media2}",
                     'mediaExoPlayer'   : "androidx.media2:media2-exoplayer:${versions.media2}",
                     'mediarouter'      : "androidx.mediarouter:mediarouter:1.2.6",
-                    'exifinterface'    : "androidx.exifinterface:exifinterface:1.3.3",
-                    'wear'             : "androidx.wear:wear:1.0.0",
+                    'exifinterface'    : "androidx.exifinterface:exifinterface:1.4.1",
+                    'wear'             : "androidx.wear:wear:1.4.0",
                     // legacy
                     'coreUtils'        : "androidx.legacy:legacy-support-core-utils:1.0.0",
                     'coreUi'           : "androidx.legacy:legacy-support-core-ui:1.0.0",
@@ -213,9 +214,9 @@ ext {
                     'monitor'          : "androidx.test:monitor:${versions.testCore}",
                     'orchestrator'     : "androidx.test:orchestrator:${versions.testCore}",
                     // ext
-                    'junit'            : "androidx.test.ext:junit:1.1.3",
-                    'junitKtx'         : "androidx.test.ext:junit-ktx:1.1.3",
-                    'truthAndroidX'    : "androidx.test.ext:truth:1.4.0",
+                    'junit'            : "androidx.test.ext:junit:1.3.0",
+                    'junitKtx'         : "androidx.test.ext:junit-ktx:1.3.0",
+                    'truthAndroidX'    : "androidx.test.ext:truth:1.7.0",
                     'truth'            : "com.google.truth:truth:${versions.truth}",
                     'truthJava8'       : "com.google.truth.extensions:truth-java8-extension:${versions.truth}",
                     // espresso

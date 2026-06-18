@@ -19,5 +19,5 @@ ext.getAppVersionCodeBase = {
 }
 
 ext {
-    versions.minSdk = 23
+    versions.minSdk = 24
 }

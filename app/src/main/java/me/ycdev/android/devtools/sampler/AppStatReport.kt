@@ -8,7 +8,9 @@ import me.ycdev.android.lib.common.utils.DateTimeUtils.getReadableTimeUsage
 import java.io.IOException
 import java.io.Writer
 
-class AppStatReport(var pkgName: String) {
+class AppStatReport(
+    var pkgName: String,
+) {
     var sysTimeStampStart: String? = null
     var sysTimeStampEnd: String? = null
 
@@ -28,7 +30,10 @@ class AppStatReport(var pkgName: String) {
     var totalTrafficSend: Long = 0
 
     @Throws(IOException::class)
-    fun dumpStat(cxt: Context, writer: Writer) {
+    fun dumpStat(
+        cxt: Context,
+        writer: Writer,
+    ) {
         var versionInfo: String? = null
         try {
             val pkgInfo = cxt.packageManager.getPackageInfo(pkgName, 0)
@@ -36,15 +41,22 @@ class AppStatReport(var pkgName: String) {
         } catch (e: NameNotFoundException) {
             e.printStackTrace()
         }
-        writer.append("System time: ").append(sysTimeStampStart).append(" ~ ")
-            .append(sysTimeStampEnd).append("\n")
+        writer
+            .append("System time: ")
+            .append(sysTimeStampStart)
+            .append(" ~ ")
+            .append(sysTimeStampEnd)
+            .append("\n")
         writer.append("Package name: $pkgName").append("\n")
         writer.append("Version: $versionInfo").append("\n")
         writer.append("Phone model: " + Build.MODEL).append("\n")
         writer.append("Android OS: " + VERSION.RELEASE).append("\n")
         writer.append("Sample count: $sampleCount").append("\n")
         val timeUsageStr = getReadableTimeUsage(totalTimeUsage)
-        writer.append("Time usage (ms): $totalTimeUsage").append(", str: ").append(timeUsageStr)
+        writer
+            .append("Time usage (ms): $totalTimeUsage")
+            .append(", str: ")
+            .append(timeUsageStr)
             .append("\n")
         writer.append("Total CPU time (ms): $totalCpuTime").append("\n")
         var averageCpu = totalCpuTime * 60 * 1000.toDouble()

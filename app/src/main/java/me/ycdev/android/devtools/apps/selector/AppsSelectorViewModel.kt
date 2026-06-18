@@ -25,7 +25,7 @@ class AppsSelectorViewModel(
     app: Application,
     private val excludeUninstalled: Boolean,
     private val excludeDisabled: Boolean,
-    private val excludeSystem: Boolean
+    private val excludeSystem: Boolean,
 ) : AndroidViewModel(app) {
     private var _apps: MutableLiveData<List<AppInfo>> = MutableLiveData()
     val apps: LiveData<List<AppInfo>> = _apps
@@ -36,32 +36,36 @@ class AppsSelectorViewModel(
         }
     }
 
-    private suspend fun loadApps(): List<AppInfo> = withContext(Dispatchers.Default) {
-        Timber.tag(TAG).d("loading apps...")
-        val timeStart = SystemClock.elapsedRealtime()
+    private suspend fun loadApps(): List<AppInfo> =
+        withContext(Dispatchers.Default) {
+            Timber.tag(TAG).d("loading apps...")
+            val timeStart = SystemClock.elapsedRealtime()
 
-        val filter = AppsLoadFilter()
-        filter.onlyMounted = excludeUninstalled
-        filter.onlyEnabled = excludeDisabled
-        filter.includeSysApp = !excludeSystem
-        val config = AppsLoadConfig()
-        val listener: AppsLoadListener = object : AppsLoadListener {
-            override fun isCancelled(): Boolean {
-                return !isActive
+            val filter = AppsLoadFilter()
+            filter.onlyMounted = excludeUninstalled
+            filter.onlyEnabled = excludeDisabled
+            filter.includeSysApp = !excludeSystem
+            val config = AppsLoadConfig()
+            val listener: AppsLoadListener =
+                object : AppsLoadListener {
+                    override fun isCancelled(): Boolean = !isActive
+
+                    override fun onProgressUpdated(
+                        percent: Int,
+                        appInfo: AppInfo,
+                    ) {
+                        Timber.tag(TAG).d("onProgressUpdated: $percent")
+                    }
+                }
+
+            val timeUsed = SystemClock.elapsedRealtime() - timeStart
+            if (timeUsed < 500) {
+                delay(500 - timeUsed)
             }
-
-            override fun onProgressUpdated(percent: Int, appInfo: AppInfo) {
-                Timber.tag(TAG).d("onProgressUpdated: $percent")
-            }
+            return@withContext AppsLoader
+                .getInstance(getApplication())
+                .loadInstalledApps(filter, config, listener)
         }
-
-        val timeUsed = SystemClock.elapsedRealtime() - timeStart
-        if (timeUsed < 500) {
-            delay(500 - timeUsed)
-        }
-        return@withContext AppsLoader.getInstance(getApplication())
-            .loadInstalledApps(filter, config, listener)
-    }
 
     override fun onCleared() {
         Timber.tag(TAG).d("onCleared")
@@ -71,7 +75,7 @@ class AppsSelectorViewModel(
         private val app: Application,
         private val excludeUninstalled: Boolean,
         private val excludeDisabled: Boolean,
-        private val excludeSystem: Boolean
+        private val excludeSystem: Boolean,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -80,7 +84,7 @@ class AppsSelectorViewModel(
                     app,
                     excludeUninstalled,
                     excludeDisabled,
-                    excludeSystem
+                    excludeSystem,
                 ) as T
             } else {
                 return AndroidViewModelFactory.getInstance(app).create(modelClass)

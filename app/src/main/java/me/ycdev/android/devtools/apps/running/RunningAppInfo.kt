@@ -5,8 +5,12 @@ import java.text.Collator
 import java.util.ArrayList
 import java.util.Comparator
 
-data class RunningAppInfo(val pkgName: String) {
-    data class ProcInfo(val pid: Int) {
+data class RunningAppInfo(
+    val pkgName: String,
+) {
+    data class ProcInfo(
+        val pid: Int,
+    ) {
         var procName: String? = null
         var multiplePkgNames = false
         var memPss = 0 // KB
@@ -19,8 +23,9 @@ data class RunningAppInfo(val pkgName: String) {
     class AppNameComparator : Comparator<RunningAppInfo> {
         private val collator = Collator.getInstance()
 
-        override fun compare(lhs: RunningAppInfo, rhs: RunningAppInfo): Int {
-            return collator.compare(lhs.appInfo.appName, rhs.appInfo.appName)
-        }
+        override fun compare(
+            lhs: RunningAppInfo,
+            rhs: RunningAppInfo,
+        ): Int = collator.compare(lhs.appInfo.appName, rhs.appInfo.appName)
     }
 }

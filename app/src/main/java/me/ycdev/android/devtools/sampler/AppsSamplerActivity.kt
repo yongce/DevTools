@@ -30,9 +30,11 @@ import me.ycdev.android.lib.common.wrapper.IntentHelper
 import timber.log.Timber
 import java.util.ArrayList
 
-class AppsSamplerActivity : AppCompatBaseActivity(),
-    OnClickListener, Callback, PermissionCallback {
-
+class AppsSamplerActivity :
+    AppCompatBaseActivity(),
+    OnClickListener,
+    Callback,
+    PermissionCallback {
     private lateinit var binding: ActAppsSamplerBinding
 
     private lateinit var appsAdapter: AppsSelectedAdapter
@@ -66,7 +68,7 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
             adapter = appsAdapter
             layoutManager = LinearLayoutManager(this@AppsSamplerActivity)
             addItemDecoration(
-                DividerItemDecoration(this@AppsSamplerActivity, DividerItemDecoration.VERTICAL)
+                DividerItemDecoration(this@AppsSamplerActivity, DividerItemDecoration.VERTICAL),
             )
         }
         binding.appsSelect.setOnClickListener(this)
@@ -80,7 +82,7 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
         // refresh the UI later for killed
         handler.sendEmptyMessageDelayed(
             MSG_REFRESH_SAMPLE_STATUS,
-            interval * 1000.toLong()
+            interval * 1000.toLong(),
         )
     }
 
@@ -99,16 +101,17 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
     private fun refreshSamplingInfo() {
         val taskInfo: SampleTaskInfo? = AppsSamplerService.lastSampleTask
         if (taskInfo != null && taskInfo.isSampling) {
-            val status = getString(
-                R.string.apps_sampler_sample_status,
-                DateTimeUtils.getReadableTimeStamp(taskInfo.startTime),
-                taskInfo.sampleClockTime / 1000,
-                taskInfo.sampleCount
-            )
+            val status =
+                getString(
+                    R.string.apps_sampler_sample_status,
+                    DateTimeUtils.getReadableTimeStamp(taskInfo.startTime),
+                    taskInfo.sampleClockTime / 1000,
+                    taskInfo.sampleCount,
+                )
             binding.sampleStatus.text = status
             handler.sendEmptyMessageDelayed(
                 MSG_REFRESH_SAMPLE_STATUS,
-                interval * 1000.toLong()
+                interval * 1000.toLong(),
             )
         } else {
             refreshButtonsState(false)
@@ -125,8 +128,9 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
         if (item.itemId == R.id.clear) {
             AppsSamplerService.clearLogs(this)
             ToastHelper.show(
-                this, R.string.apps_sampler_clear_logs_toast,
-                Toast.LENGTH_SHORT
+                this,
+                R.string.apps_sampler_clear_logs_toast,
+                Toast.LENGTH_SHORT,
             )
             return true
         }
@@ -138,22 +142,27 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
             v === binding.start -> {
                 startSample()
             }
+
             v === binding.stop -> {
                 AppsSamplerService.createSampleReport(this)
                 AppsSamplerService.stopSampler(this)
                 ToastHelper.show(
-                    this, R.string.apps_sampler_stop_sampling_toast,
-                    Toast.LENGTH_SHORT
+                    this,
+                    R.string.apps_sampler_stop_sampling_toast,
+                    Toast.LENGTH_SHORT,
                 )
                 refreshButtonsState(false)
             }
+
             v === binding.createReport -> {
                 AppsSamplerService.createSampleReport(this)
                 ToastHelper.show(
-                    this, R.string.apps_sampler_create_report_toast,
-                    Toast.LENGTH_SHORT
+                    this,
+                    R.string.apps_sampler_create_report_toast,
+                    Toast.LENGTH_SHORT,
                 )
             }
+
             v === binding.appsSelect -> {
                 val intent = Intent(this, AppsSelectorActivity::class.java)
                 intent.putExtra(AppsSelectorActivity.EXTRA_MULTIPLE_CHOICE, true)
@@ -162,14 +171,19 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+    ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_APPS_SELECTOR) {
             if (resultCode == Activity.RESULT_OK) {
-                val pkgNames = IntentHelper.getStringArrayListExtra(
-                    data,
-                    AppsSelectorActivity.RESULT_EXTRA_APPS_PKG_NAMES
-                )
+                val pkgNames =
+                    IntentHelper.getStringArrayListExtra(
+                        data,
+                        AppsSelectorActivity.RESULT_EXTRA_APPS_PKG_NAMES,
+                    )
                 updateSelectedApps(pkgNames!!)
             }
         }
@@ -203,13 +217,13 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         val permissionsGranted = PermissionUtils.verifyPermissions(grantResults)
         Timber.tag(TAG).d(
             "onRequestPermissionsResult: %s",
-            permissionsGranted
+            permissionsGranted,
         )
         if (permissionsGranted) {
             startSample()
@@ -237,21 +251,23 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
         val intervalStr = binding.interval.text.toString()
         if (intervalStr.isEmpty()) {
             ToastHelper.show(
-                this, R.string.apps_sampler_sample_interval_input_toast,
-                Toast.LENGTH_SHORT
+                this,
+                R.string.apps_sampler_sample_interval_input_toast,
+                Toast.LENGTH_SHORT,
             )
             return
         }
         if (pkgNames.size == 0) {
             ToastHelper.show(
-                this, R.string.apps_sampler_no_apps_toast,
-                Toast.LENGTH_SHORT
+                this,
+                R.string.apps_sampler_no_apps_toast,
+                Toast.LENGTH_SHORT,
             )
             return
         }
         if (!PermissionUtils.hasPermissions(this, *REQUESTED_PERMISSIONS)) {
             Timber.tag(TAG).d(
-                "Need to request the permission"
+                "Need to request the permission",
             )
             PermissionUtils.requestPermissions(this, createPermissionRequestParams())
             return
@@ -264,13 +280,14 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
         interval = intervalStr.toInt()
         AppsSamplerService.startSampler(this, pkgNames, interval, period)
         ToastHelper.show(
-            this, R.string.apps_sampler_start_sampling_toast,
-            Toast.LENGTH_SHORT
+            this,
+            R.string.apps_sampler_start_sampling_toast,
+            Toast.LENGTH_SHORT,
         )
         refreshButtonsState(true)
         handler.sendEmptyMessageDelayed(
             MSG_REFRESH_SAMPLE_STATUS,
-            interval * 1000.toLong()
+            interval * 1000.toLong(),
         )
     }
 
@@ -283,8 +300,9 @@ class AppsSamplerActivity : AppCompatBaseActivity(),
 
         private const val MSG_REFRESH_SAMPLE_STATUS = 100
 
-        private val REQUESTED_PERMISSIONS = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
+        private val REQUESTED_PERMISSIONS =
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            )
     }
 }

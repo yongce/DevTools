@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
 apply from: "${androidModuleCommon}"
 apply from: '../build_common.gradle'
 
 android {
+    namespace "me.ycdev.android.devtools"
+
     defaultConfig {
         applicationId "me.ycdev.android.devtools"
-        minSdkVersion 23
-        targetSdkVersion 31
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
 
         versionName getAppVersionNameBase() // + build type suffix
         versionCode getAppVersionCodeBase() * 10000 + calculatedVersionCode
@@ -25,18 +26,21 @@ android {
         release {
             versionNameSuffix "-" + calculatedVersionCode + buildIdSuffix
 
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), "proguard-rules.txt"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "proguard-rules.pro"
         }
     }
 
-    lintOptions {
+    buildFeatures {
+        buildConfig = true
+    }
+
+    lint {
         textReport true
-        textOutput 'stdout'
 
         // disable category "Accessibility"
-        disable 'ClickableViewAccessibility','ContentDescription','LabelFor'
-        disable 'IconMissingDensityFolder'
-        disable 'GoogleAppIndexingWarning'
+        disable += ['ClickableViewAccessibility','ContentDescription','LabelFor']
+        disable += ['IconMissingDensityFolder']
+        disable += ['GoogleAppIndexingWarning']
     }
 }
 

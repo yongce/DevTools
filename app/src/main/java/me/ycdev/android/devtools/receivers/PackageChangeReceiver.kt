@@ -9,14 +9,20 @@ import timber.log.Timber
 import java.net.URI
 
 class PackageChangeReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         val pkgName = URI.create(intent.dataString!!).schemeSpecificPart
         val uid = getIntExtra(intent, Intent.EXTRA_UID, -1)
         val replacing =
             getBooleanExtra(intent, Intent.EXTRA_REPLACING, false)
         Timber.tag(TAG).i(
             "Received: %s, pkgName: %s, uid: %s, replacing: %s",
-            intent.action, pkgName, uid, replacing
+            intent.action,
+            pkgName,
+            uid,
+            replacing,
         )
     }
 

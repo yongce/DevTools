@@ -54,7 +54,7 @@ ext {
 }
 
 android {
-    compileSdkVersion versions.compileSdk
+    compileSdk = versions.compileSdk
 
     defaultConfig {
         manifestPlaceholders = [
@@ -91,57 +91,25 @@ android {
                 signingConfig signingConfigs.androidTestKey
 
                 minifyEnabled true
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            }
-        }
-
-        applicationVariants.all { variant ->
-            variant.outputs.each { output ->
-                String buildType = variant.buildType.name
-                String abi = output.getFilter("ABI")
-                if (buildType != "debug") {
-                    String fileName = "${project.name}"
-                    if (variant.flavorName != null && !variant.flavorName.isEmpty()) {
-                        fileName += "-${variant.flavorName}"
-                    }
-                    if (abi != null && !abi.isEmpty()) {
-                        fileName += "-${abi}"
-                    }
-                    fileName += "-${variant.versionName}-${variant.versionCode}"
-                    output.outputFileName = "${fileName}.apk"
-                }
-
-                if (buildType == 'release') {
-                    variant.getAssembleProvider().configure() {
-                        it.doLast {
-                            copy {
-                                from output.outputFile.getAbsolutePath()
-                                into "${rootProject.ext.appsOutDir}"
-                            }
-                        }
-                    }
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+                if (file('proguard-rules.pro').exists()) {
+                    proguardFiles 'proguard-rules.pro'
                 }
             }
         }
+
     }
 
-    lintOptions {
+    lint {
         textReport true
-        textOutput 'stdout'
 
         abortOnError true
         ignoreWarnings isIgnoreLintWarnings()
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
-
-    pluginManager.withPlugin('kotlin-android') {
-        kotlinOptions {
-            jvmTarget = "11"
-        }
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     testOptions {

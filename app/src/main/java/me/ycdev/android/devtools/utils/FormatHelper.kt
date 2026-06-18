@@ -7,10 +7,14 @@ import java.util.Locale
 object FormatHelper {
     private const val SECONDS_PER_MINUTE = 60
     private const val SECONDS_PER_HOUR = 60 * 60
+
     /**
      * Formats elapsed time for the given seconds.
      */
-    fun formatElapsedTime(context: Context, seconds: Int): String {
+    fun formatElapsedTime(
+        context: Context,
+        seconds: Int,
+    ): String {
         var secondsRemaining = seconds
         var hours = 0
         var minutes = 0
@@ -38,13 +42,15 @@ object FormatHelper {
     /**
      * Formats data size in KB, MB, from the given bytes.
      */
-    fun formatBytes(context: Context?, bytes: Long): String {
-        return if (bytes > 1000 * 1000) {
+    fun formatBytes(
+        context: Context?,
+        bytes: Long,
+    ): String =
+        if (bytes > 1000 * 1000) {
             String.format(Locale.US, "%.2f MB", bytes / 1000 / 1000.0f)
         } else if (bytes > 1024) {
             String.format(Locale.US, "%.2f KB", bytes / 10 / 100.0f)
         } else {
             String.format(Locale.US, "%d B", bytes.toInt())
         }
-    }
 }

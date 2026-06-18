@@ -19,6 +19,7 @@ class SysCpuTracker {
     var sampleCount = 0
         private set
     private var _snapshotList: MutableList<SysCpuStat>? = null
+
     fun startTracker(keepSnapshot: Boolean) {
         startSysTime = 0
         startClockTime = 0
@@ -27,11 +28,12 @@ class SysCpuTracker {
         baseCpuStat = null
         cpuUsage = SysCpuStat()
         sampleCount = 0
-        _snapshotList = if (keepSnapshot) {
-            LinkedList()
-        } else {
-            null
-        }
+        _snapshotList =
+            if (keepSnapshot) {
+                LinkedList()
+            } else {
+                null
+            }
     }
 
     fun sample() {
@@ -64,11 +66,12 @@ class SysCpuTracker {
     }
 
     val naturalTimeUsed: Long
-        get() = if (endClockTime > 0) {
-            endClockTime - startClockTime
-        } else {
-            SystemClock.elapsedRealtime() - startClockTime
-        }
+        get() =
+            if (endClockTime > 0) {
+                endClockTime - startClockTime
+            } else {
+                SystemClock.elapsedRealtime() - startClockTime
+            }
 
     val snapshotList: List<SysCpuStat>?
         get() = _snapshotList

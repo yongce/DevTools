@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -24,7 +25,9 @@ import me.ycdev.android.lib.commonui.activity.GridEntriesActivity
 import timber.log.Timber
 import java.util.ArrayList
 
-open class LauncherActivity : GridEntriesActivity(), OnNavigationItemSelectedListener {
+open class LauncherActivity :
+    GridEntriesActivity(),
+    OnNavigationItemSelectedListener {
     private lateinit var drawer: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,14 +38,32 @@ open class LauncherActivity : GridEntriesActivity(), OnNavigationItemSelectedLis
         setSupportActionBar(toolbar)
 
         drawer = findViewById(R.id.drawer_layout)
-        val toggle = ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close
-        )
+        val toggle =
+            ActionBarDrawerToggle(
+                this,
+                drawer,
+                toolbar,
+                R.string.nav_drawer_open,
+                R.string.nav_drawer_close,
+            )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
 
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (drawer.isDrawerOpen(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START)
+                    } else {
+                        isEnabled = false
+                        onBackPressedDispatcher.onBackPressed()
+                    }
+                }
+            },
+        )
     }
 
     override val contentViewLayout: Int = R.layout.act_main
@@ -55,57 +76,57 @@ open class LauncherActivity : GridEntriesActivity(), OnNavigationItemSelectedLis
             IntentEntry(
                 Intent(this, DeviceInfoActivity::class.java),
                 getString(R.string.module_device_info_title),
-                getString(R.string.module_device_info_desc)
-            )
+                getString(R.string.module_device_info_desc),
+            ),
         )
         activities.add(
             IntentEntry(
                 Intent(this, SystemUtilitiesActivity::class.java),
                 getString(R.string.module_system_utilities_title),
-                getString(R.string.module_system_utilities_desc)
-            )
+                getString(R.string.module_system_utilities_desc),
+            ),
         )
         activities.add(
             IntentEntry(
                 Intent(this, InstalledAppsActivity::class.java),
                 getString(R.string.module_installed_apps_title),
-                getString(R.string.module_installed_apps_desc)
-            )
+                getString(R.string.module_installed_apps_desc),
+            ),
         )
         activities.add(
             IntentEntry(
                 Intent(this, BroadcastTesterActivity::class.java),
                 getString(R.string.module_broadcast_tester_title),
-                getString(R.string.module_broadcast_tester_desc)
-            )
+                getString(R.string.module_broadcast_tester_desc),
+            ),
         )
         activities.add(
             IntentEntry(
                 Intent(this, AppsSamplerActivity::class.java),
                 getString(R.string.apps_sampler_module_title),
-                getString(R.string.apps_sampler_module_desc)
-            )
+                getString(R.string.apps_sampler_module_desc),
+            ),
         )
         activities.add(
             IntentEntry(
                 Intent(this, RunningAppsActivity::class.java),
                 getString(R.string.running_apps_module_title),
-                getString(R.string.running_apps_module_desc)
-            )
+                getString(R.string.running_apps_module_desc),
+            ),
         )
         activities.add(
             IntentEntry(
                 Intent(this, SecurityScannerActivity::class.java),
                 getString(R.string.security_scanner_module_title),
-                getString(R.string.security_scanner_module_desc)
-            )
+                getString(R.string.security_scanner_module_desc),
+            ),
         )
         activities.add(
             IntentEntry(
                 Intent(this, ContactsActivity::class.java),
                 getString(R.string.contacts_module_title),
-                getString(R.string.contacts_module_desc)
-            )
+                getString(R.string.contacts_module_desc),
+            ),
         )
         return activities
     }
@@ -137,14 +158,6 @@ open class LauncherActivity : GridEntriesActivity(), OnNavigationItemSelectedLis
         return true
     }
 
-    override fun onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     private fun openHomePage() {
         val url = getString(R.string.developer_home_page_url)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -161,7 +174,7 @@ open class LauncherActivity : GridEntriesActivity(), OnNavigationItemSelectedLis
         intent.data = Uri.parse("mailto:") // only email apps should handle this
         intent.putExtra(
             Intent.EXTRA_EMAIL,
-            arrayOf(getString(R.string.nav_send_email_address))
+            arrayOf(getString(R.string.nav_send_email_address)),
         )
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.nav_send_subject))
         if (intent.resolveActivity(packageManager) != null) {
@@ -180,7 +193,8 @@ open class LauncherActivity : GridEntriesActivity(), OnNavigationItemSelectedLis
             val title = getString(R.string.nav_share)
             startActivity(Intent.createChooser(intent, title))
         } else {
-            Snackbar.make(gridView, R.string.nav_tip_no_available_apps, Snackbar.LENGTH_SHORT)
+            Snackbar
+                .make(gridView, R.string.nav_tip_no_available_apps, Snackbar.LENGTH_SHORT)
                 .show()
         }
     }
