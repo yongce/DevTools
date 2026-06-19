@@ -233,7 +233,7 @@ class ContactsActivity :
 
     private fun doCreateContacts(count: Int) {
         val random = Random(System.currentTimeMillis())
-        val numberSet = arrayOfNulls<String>(count / 2)
+        val numberSet = arrayOfNulls<String>(contactNumberPoolSize(count))
         generateNumbers(numberSet, random)
 
         val numberTypeSet =
@@ -396,5 +396,7 @@ class ContactsActivity :
                 permission.READ_CONTACTS,
                 permission.WRITE_CONTACTS,
             )
+
+        internal fun contactNumberPoolSize(contactCount: Int): Int = maxOf(1, contactCount / 2)
     }
 }
