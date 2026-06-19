@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ycdev.android.devtools.apps.running.RunningAppInfo.AppNameComparator
 import me.ycdev.android.devtools.apps.running.RunningAppInfo.ProcInfo
+import me.ycdev.android.devtools.utils.RunningProcessUtils
 import timber.log.Timber
 import java.util.ArrayList
 import java.util.Collections
@@ -44,7 +45,7 @@ class RunningAppsViewModel(
 
             val pm = app.packageManager
             val am = app.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-            val runningProcesses = am.runningAppProcesses
+            val runningProcesses = RunningProcessUtils.validProcesses(am.runningAppProcesses)
             val runningApps = HashMap<String, RunningAppInfo>()
             // Get all running processes' info
             val totalProcesses = runningProcesses.size
@@ -60,7 +61,7 @@ class RunningAppsViewModel(
                 procItem.multiplePkgNames = procInfo.pkgList.size > 1
                 pidsList[i] = procInfo.pid
                 procInfoList[i] = procItem
-                val pkgName = procInfo.pkgList[0]
+                val pkgName = RunningProcessUtils.primaryPackageName(procInfo) ?: continue
                 var appItem = runningApps[pkgName]
                 if (appItem == null) {
                     appItem = RunningAppInfo(pkgName)

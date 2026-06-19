@@ -6,6 +6,7 @@ import android.os.SystemClock
 import me.ycdev.android.devtools.sampler.cpu.CpuUtils
 import me.ycdev.android.devtools.sampler.mem.MemoryUtils
 import me.ycdev.android.devtools.sampler.traffic.TrafficUtils
+import me.ycdev.android.devtools.utils.RunningProcessUtils
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.HashSet
@@ -49,10 +50,10 @@ class AppsSetStat private constructor() {
                 appsSetStat.targetApps.addAll(pkgNames)
             }
             val am = cxt.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-            val runningApps = am.runningAppProcesses
+            val runningApps = RunningProcessUtils.validProcesses(am.runningAppProcesses)
             val allPidsSet = HashSet<Int>()
             for (procInfo in runningApps) {
-                for (pkgName in procInfo.pkgList) {
+                for (pkgName in RunningProcessUtils.packageNames(procInfo)) {
                     if (appsSetStat.targetApps.contains(pkgName)) {
                         allPidsSet.add(procInfo.pid)
                         var appStat = appsSetStat.appsStat[pkgName]
