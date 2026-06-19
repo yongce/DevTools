@@ -12,9 +12,9 @@ class AppStat(
     var uid: Int,
 ) {
     var pidsSet = HashSet<Int?>()
-    lateinit var memStat: AppMemStat
-    lateinit var cpuStat: AppCpuStat
-    lateinit var trafficStat: AppTrafficStat
+    var memStat = AppMemStat(pkgName)
+    var cpuStat = AppCpuStat(pkgName)
+    var trafficStat = AppTrafficStat(uid)
 
     @Throws(IOException::class)
     fun dumpStat(
