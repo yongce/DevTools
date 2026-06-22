@@ -5,24 +5,6 @@
  * All android projects can copy and include this file.
  */
 
-allprojects {
-    configurations.all {
-        resolutionStrategy {
-            eachDependency { details ->
-                if (details.requested.group == 'androidx.arch.core') {
-                    details.useVersion versions.archCore
-                } else if (details.requested.group == 'androidx.lifecycle') {
-                    details.useVersion versions.lifecycle
-                } else if (details.requested.group == 'androidx.room') {
-                    details.useVersion versions.room
-                } else if (details.requested.group == 'org.jetbrains.kotlin') {
-                    details.useVersion versions.kotlin
-                }
-            }
-        }
-    }
-}
-
 ext {
     appsOutDir = "${rootProject.rootDir}/apps_out"
 
@@ -291,4 +273,24 @@ ext {
             'zxingCore'                : "com.google.zxing:core:${versions.zxing}",
     ]
 
+}
+
+def projectVersions = ext.versions
+
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            eachDependency { details ->
+                if (details.requested.group == 'androidx.arch.core') {
+                    details.useVersion projectVersions.archCore
+                } else if (details.requested.group == 'androidx.lifecycle') {
+                    details.useVersion projectVersions.lifecycle
+                } else if (details.requested.group == 'androidx.room') {
+                    details.useVersion projectVersions.room
+                } else if (details.requested.group == 'org.jetbrains.kotlin') {
+                    details.useVersion projectVersions.kotlin
+                }
+            }
+        }
+    }
 }

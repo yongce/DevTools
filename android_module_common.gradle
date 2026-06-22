@@ -64,7 +64,7 @@ ext {
 }
 
 android {
-    compileSdk = versions.compileSdk
+    compileSdk = rootProject.ext.versions.compileSdk
 
     defaultConfig {
         manifestPlaceholders = [

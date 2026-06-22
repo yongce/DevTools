@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
-apply from: "${androidModuleCommon}"
+apply from: rootProject.ext.androidModuleCommon
 apply from: '../build_common.gradle'
+
+def versions = rootProject.ext.versions
+def deps = rootProject.ext.deps
 
 android {
     namespace = "me.ycdev.android.devtools"
@@ -47,7 +50,7 @@ android {
 dependencies {
     implementation deps.ycdev.androidBase
     implementation deps.ycdev.androidUi
-    implementation project(':devToolsCommon')
+    implementation project(path: ':devToolsCommon')
 
     implementation deps.androidx.activity
     implementation deps.androidx.core

@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
-apply from: "${androidModuleCommon}"
+apply from: rootProject.ext.androidModuleCommon
 apply from: '../build_common.gradle'
+
+def versions = rootProject.ext.versions
+def deps = rootProject.ext.deps
 
 android {
     namespace = "me.ycdev.android.devtools.common"
