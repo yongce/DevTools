@@ -22,7 +22,6 @@ import me.ycdev.android.lib.common.perms.PermissionRequestParams
 import me.ycdev.android.lib.common.perms.PermissionUtils
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper.registerForExternal
 import me.ycdev.android.lib.common.wrapper.IntentHelper.getIntExtra
-import me.ycdev.android.lib.common.wrapper.IntentHelper.getStringExtra
 import timber.log.Timber
 
 class BluetoothViewerActivity :
@@ -92,10 +91,7 @@ class BluetoothViewerActivity :
                             STATE_UNKNOWN,
                         )
                     val remoteDevice =
-                        getStringExtra(
-                            intent,
-                            BluetoothDevice.EXTRA_DEVICE,
-                        )
+                        remoteDeviceLogName(intent)
                     addConnectionChangeLog(preState, newState, remoteDevice)
                 }
             }
@@ -277,5 +273,17 @@ class BluetoothViewerActivity :
             } else {
                 R.string.action_disable
             }
+
+        @SuppressLint("MissingPermission")
+        internal fun remoteDeviceLogName(intent: Intent): String? {
+            val device =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java)
+                } else {
+                    @Suppress("DEPRECATION")
+                    intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                }
+            return device?.address ?: device?.name
+        }
     }
 }
