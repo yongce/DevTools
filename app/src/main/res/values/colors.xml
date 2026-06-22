@@ -4,6 +4,13 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="ic_launcher_background">#102A33</color>
+    <color name="ic_launcher_grid">#1D4651</color>
+    <color name="ic_launcher_panel">#173B45</color>
+    <color name="ic_launcher_primary">#B7FFF1</color>
+    <color name="ic_launcher_secondary">#44D7C4</color>
+    <color name="ic_launcher_warning">#FFB84D</color>
+
     <color name="apps_shared_uid_color">#008800</color>
     <color name="apps_sys_app_color">#0088ff</color>
     <color name="apps_unavailable_color">#880000</color>
