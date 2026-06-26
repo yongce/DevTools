@@ -12,6 +12,7 @@ import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.provider.Telephony.Sms.Intents
 import android.widget.Toast
+import me.ycdev.android.devtools.arch.activity.EdgeToEdgeGridEntriesActivity
 import me.ycdev.android.devtools.arch.wrapper.ToastHelper
 import me.ycdev.android.devtools.utils.AppConstants
 import me.ycdev.android.lib.common.utils.IntentUtils
@@ -20,10 +21,9 @@ import me.ycdev.android.lib.common.utils.IntentUtils.INTENT_TYPE_BROADCAST
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper.getInternalBroadcastPerm
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper.registerForExternal
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper.registerForInternal
-import me.ycdev.android.lib.commonui.activity.GridEntriesActivity
 import java.util.ArrayList
 
-class BroadcastTesterActivity : GridEntriesActivity() {
+class BroadcastTesterActivity : EdgeToEdgeGridEntriesActivity() {
     private inner class MyIntentEntry(
         @IntentUtils.IntentType type: Int = INTENT_TYPE_ACTIVITY,
         intent: Intent,

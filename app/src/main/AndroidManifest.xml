@@ -86,7 +86,8 @@
         <activity
             android:name=".device.DeviceInfoActivity"
             android:label="@string/module_device_info_title"
-            android:parentActivityName=".LauncherActivity" />
+            android:parentActivityName=".LauncherActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".device.SystemUtilitiesActivity"
@@ -96,7 +97,8 @@
         <activity
             android:name=".device.BluetoothViewerActivity"
             android:label="@string/module_bluetooth_viewer_title"
-            android:parentActivityName=".device.SystemUtilitiesActivity" />
+            android:parentActivityName=".device.SystemUtilitiesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".apps.installed.InstalledAppsActivity"
@@ -114,7 +116,8 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/apps_sampler_module_title"
             android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".LauncherActivity" />
+            android:parentActivityName=".LauncherActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <service
             android:name=".sampler.AppsSamplerService"
             android:foregroundServiceType="dataSync" />
@@ -122,7 +125,8 @@
         <activity
             android:name=".apps.selector.AppsSelectorActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/apps_selector_title" />
+            android:label="@string/apps_selector_title"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".apps.running.RunningAppsActivity"
             android:label="@string/running_apps_module_title"
@@ -136,12 +140,14 @@
         <activity
             android:name=".security.unmarshall.UnmarshallScannerActivity"
             android:label="@string/security_scanner_unmarshall_module_title"
-            android:parentActivityName=".security.SecurityScannerActivity" />
+            android:parentActivityName=".security.SecurityScannerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".contacts.ContactsActivity"
             android:label="@string/contacts_module_title"
-            android:parentActivityName=".LauncherActivity" />
+            android:parentActivityName=".LauncherActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".sampler.SysSamplerService"

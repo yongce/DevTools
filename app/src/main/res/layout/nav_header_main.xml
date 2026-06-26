@@ -8,15 +8,14 @@
     android:paddingBottom="?attr/ycdevActivityVerticalMargin"
     android:paddingLeft="?attr/ycdevActivityHorizontalMargin"
     android:paddingRight="?attr/ycdevActivityHorizontalMargin"
-    android:paddingTop="?attr/ycdevActivityVerticalMargin"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:paddingTop="?attr/ycdevActivityVerticalMargin">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:contentDescription="@string/app_name"
-        android:paddingTop="6dp"
+        android:padding="3dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_launcher_legacy" />
 
@@ -25,12 +24,14 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/developer_name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textColor="?attr/colorOnPrimaryContainer"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?attr/colorOnPrimaryContainer"
         android:text="@string/developer_home_page_url" />
 
 </LinearLayout>

@@ -1,5 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Widget.AppTheme.Toolbar" parent="@style/Widget.Material3.Toolbar.Surface">
+        <item name="titleTextColor">?attr/colorOnPrimaryContainer</item>
+        <item name="subtitleTextColor">?attr/colorOnPrimaryContainer</item>
+        <item name="navigationIconTint">?attr/colorOnPrimaryContainer</item>
+    </style>
+
+    <style name="Widget.AppTheme.Button" parent="@style/Widget.Material3.Button.TonalButton" />
+
+    <style name="Widget.AppTheme.Button.Outlined" parent="@style/Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="strokeColor">?attr/colorOutline</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="iconTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.AppTheme.ProgressBar" parent="@android:style/Widget.Material.ProgressBar">
+        <item name="android:indeterminateTint">?attr/colorSecondary</item>
+        <item name="android:progressTint">?attr/colorSecondary</item>
+        <item name="android:secondaryProgressTint">?attr/colorSecondary</item>
+    </style>
+
+    <style name="Widget.AppTheme.CheckBox" parent="@style/Widget.Material3.CompoundButton.CheckBox">
+        <item name="buttonTint">@color/form_control_tint</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="Widget.AppTheme.GridEntriesItem" parent="@style/YcdevWidget.GridEntriesItem">
+        <item name="android:background">@drawable/grid_entries_item_background</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppTheme.GridEntriesItem</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextAppearance.AppTheme.GridEntriesItem" parent="@style/TextAppearance.Material3.LabelLarge">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
     <style name="Widget.AppTheme.ActivityMargin" parent="@style/YcdevWidget.ActivityMargin" />
     <style name="Widget.AppTheme.HorizontalDivider" parent="@style/YcdevWidget.HorizontalDivider" />
     <style name="Widget.AppTheme.ScrollView" parent="@style/YcdevWidget.ScrollView" />
@@ -7,5 +43,10 @@
     <style name="Widget.AppTheme.ListViewItem" parent="@style/YcdevWidget.ListViewItem"/>
 
     <style name="Widget.AppTheme.RecyclerView" parent="@style/YcdevWidget.RecyclerView" />
-    <style name="Widget.AppTheme.RecyclerView.FastScroll" parent="@style/YcdevWidget.RecyclerView.FastScroll" />
+    <style name="Widget.AppTheme.RecyclerView.FastScroll" parent="@style/YcdevWidget.RecyclerView.FastScroll">
+        <item name="fastScrollHorizontalTrackDrawable">@drawable/ycdev_scrollbar_track</item>
+        <item name="fastScrollHorizontalThumbDrawable">@drawable/ycdev_scrollbar_thumb</item>
+        <item name="fastScrollVerticalTrackDrawable">@drawable/ycdev_scrollbar_track</item>
+        <item name="fastScrollVerticalThumbDrawable">@drawable/ycdev_scrollbar_thumb</item>
+    </style>
 </resources>

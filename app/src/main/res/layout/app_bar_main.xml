@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".LauncherActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -13,11 +12,11 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="?attr/colorPrimaryContainer"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -31,6 +30,7 @@
 
     <ProgressBar
         android:id="@+id/progress"
+        style="@style/Widget.AppTheme.ProgressBar"
         android:layout_width="@dimen/ycdev_page_center_progress_bar_size"
         android:layout_height="@dimen/ycdev_page_center_progress_bar_size"
         android:layout_gravity="center" />

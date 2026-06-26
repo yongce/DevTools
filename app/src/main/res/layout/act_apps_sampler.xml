@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.AppTheme.ActivityMargin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="ButtonStyle">
-        <Button
+        android:layout_height="wrap_content">
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="@string/apps_sampler_start_sampling" />
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="@string/apps_sampler_stop_sampling" />
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/create_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,7 +79,7 @@
         style="@style/Widget.AppTheme.RecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/apps_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

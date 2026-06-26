@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.AppTheme.ActivityMargin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        tools:ignore="ButtonStyle">
-        <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/enable"
+            style="@style/Widget.AppTheme.Button.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_enable" />
-        <Button
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/disable"
+            style="@style/Widget.AppTheme.Button.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/action_disable"
-            android:layout_marginStart="10dp" />
+            android:layout_marginStart="@dimen/list_item_horizontal_space"
+            android:text="@string/action_disable" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:clipToPadding="false">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/list_item_horizontal_space">
+
         <TextView
             android:id="@+id/log_viewer"
             android:layout_width="match_parent"

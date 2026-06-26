@@ -143,7 +143,7 @@ class AppsSamplerService :
             .setOngoing(true)
             .setAutoCancel(false)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_notification_sampler)
             .build()
     }
 

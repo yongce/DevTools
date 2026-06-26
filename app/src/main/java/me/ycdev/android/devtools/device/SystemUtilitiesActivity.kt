@@ -2,10 +2,10 @@ package me.ycdev.android.devtools.device
 
 import android.content.Intent
 import me.ycdev.android.devtools.R
-import me.ycdev.android.lib.commonui.activity.GridEntriesActivity
+import me.ycdev.android.devtools.arch.activity.EdgeToEdgeGridEntriesActivity
 import java.util.ArrayList
 
-class SystemUtilitiesActivity : GridEntriesActivity() {
+class SystemUtilitiesActivity : EdgeToEdgeGridEntriesActivity() {
     override fun loadIntents(): List<IntentEntry> {
         val activities: MutableList<IntentEntry> =
             ArrayList()

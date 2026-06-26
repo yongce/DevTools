@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/security_scanner_unmarshall_app_selected_state" />
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/app_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,28 +24,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/option_receiver"
+            style="@style/Widget.AppTheme.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/security_scanner_unmarshall_option_receiver"
             android:checked="true" />
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/option_service"
+            style="@style/Widget.AppTheme.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/security_scanner_unmarshall_option_service"
             android:checked="true" />
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/option_activity"
+            style="@style/Widget.AppTheme.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/security_scanner_unmarshall_option_activity"
             android:checked="true" />
     </LinearLayout>
 
-    <CheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/option_needkill"
+        style="@style/Widget.AppTheme.CheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/security_scanner_unmarshall_option_needkill"
@@ -53,7 +57,7 @@
 
     <View style="@style/Widget.AppTheme.HorizontalDivider" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/test_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

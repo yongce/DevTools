@@ -2,12 +2,14 @@ package me.ycdev.android.devtools
 
 import android.app.Application
 import android.os.Process
+import com.google.android.material.color.DynamicColors
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 class PhoneApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        DynamicColors.applyToActivitiesIfAvailable(this)
         Timber.plant(DebugTree())
         Timber.tag(TAG).i("app start...")
         checkAppReplacingState()

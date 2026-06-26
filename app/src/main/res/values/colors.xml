@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#006A60</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorPrimaryContainer">#9EF2E4</color>
+    <color name="colorOnPrimaryContainer">#00201C</color>
+    <color name="colorSecondary">#4A635F</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="colorSecondaryContainer">#CCE8E2</color>
+    <color name="colorOnSecondaryContainer">#05201C</color>
+    <color name="colorTertiary">#46617A</color>
+    <color name="colorOnTertiary">#FFFFFF</color>
+    <color name="colorTertiaryContainer">#CCE5FF</color>
+    <color name="colorOnTertiaryContainer">#001E31</color>
+    <color name="colorSurface">#F7FAF8</color>
+    <color name="colorOnSurface">#181C1B</color>
+    <color name="colorSurfaceVariant">#DAE5E1</color>
+    <color name="colorOnSurfaceVariant">#3F4946</color>
+    <color name="colorOutline">#6F7976</color>
+    <color name="colorAccent">#006A60</color>
+    <color name="colorPrimaryDark">#006A60</color>
 
     <color name="ic_launcher_background">#102A33</color>
     <color name="ic_launcher_grid">#1D4651</color>

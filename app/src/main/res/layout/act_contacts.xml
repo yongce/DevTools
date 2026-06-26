@@ -20,19 +20,19 @@
                 tools:text="5 contacts found" />
             <ProgressBar
                 android:id="@+id/ongoing"
+                style="@style/Widget.AppTheme.ProgressBar"
                 android:layout_width="40dp"
                 android:layout_height="40dp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:ignore="ButtonStyle">
-            <Button
+            android:layout_height="wrap_content">
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/query"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/contacts_query" />
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/dump"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 android:maxLines="1" />
         </LinearLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
 
         <View style="@style/Widget.AppTheme.HorizontalDivider" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

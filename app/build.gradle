@@ -63,6 +63,7 @@ dependencies {
     implementation deps.kotlin.coroutinesCore
     implementation deps.kotlin.coroutinesAndroid
 
+    implementation deps.androidx.activity
     implementation deps.androidx.coreKtx
     implementation deps.androidx.material
     implementation deps.androidx.constraintLayout
